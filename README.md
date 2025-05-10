@@ -17,148 +17,174 @@
 
 ## 💎 Overview
 
-**Cryage** transforms the way traders analyze cryptocurrency markets by combining cutting-edge AI technology with real-time data streams and advanced technical analysis. Stop spending hours manually analyzing charts and indicators - let our intelligent system identify opportunities and deliver actionable insights directly to your dashboard.
+**Cryage** is designed to be a helpful tool for cryptocurrency traders. Analyzing the crypto market manually can be overwhelming and takes a lot of time. Cryage aims to simplify this by automatically gathering market data, performing common technical analysis, and using Artificial Intelligence (AI) to provide quick insights.
 
-Built with a modern tech stack including **FastAPI** for a high-performance asynchronous backend and **Next.js** for a reactive frontend, Cryage is designed for speed, scalability, and a smooth user experience. **Docker Compose** orchestrates the development environment, ensuring consistency and ease of setup.
+Built with a modern tech stack including **FastAPI** (Python) for a high-performance asynchronous backend, **Next.js** (React) for a reactive frontend, and **Pydantic** for robust data validation, Cryage is designed for speed, scalability, and a smooth user experience. **Docker Compose** orchestrates the development environment, ensuring consistency and ease of setup. The project emphasizes an **Async First** approach in the backend for optimal performance.
 
 > "Trading is statistics, and Cryage brings those statistics to life through AI interpretation and real-time visualization."
 
 ### ✨ What Makes Cryage Special?
 
-- **AI-Powered Analysis**: Google Gemini AI interprets market conditions based on price, volume, and indicators to deliver actionable insights.
-- **Real-Time Updates**: Connect directly to Binance data streams via WebSockets for immediate price movements.
-- **Efficient Backend**: **FastAPI** provides a high-performance asynchronous API and WebSocket handling, ideal for real-time data.
-- **Data Validation**: **Pydantic** ensures data integrity and consistency throughout the backend, reducing errors.
-- **Technical Indicator Suite**: Automatically calculate and visualize key indicators like RSI, EMAs, and volume patterns using Pandas.
-- **Beautiful Visualization**: Modern, responsive UI with interactive TradingView charts, built with **Next.js**, **Tailwind CSS**, and **Shadcn/ui**.
-- **Consistent Development**: **Docker Compose** manages backend (FastAPI), frontend (Next.js), and Redis services for a streamlined, reproducible development workflow.
+- **AI-Powered Analysis**: Google Gemini AI interprets market conditions based on price, volume, and indicators to deliver actionable insights, orchestrated via the Agno Framework.
+- **Real-Time Updates**: Connect directly to Binance data streams (REST & WebSocket) for immediate price movements.
+- **Efficient Backend**: **FastAPI** provides a high-performance asynchronous API and WebSocket handling (via `python-socketio` ASGI), ideal for real-time data, running on Uvicorn.
+- **Data Validation**: **Pydantic** ensures data integrity and consistency throughout the backend (API I/O, WS messages, cache data), reducing errors and auto-generating API docs.
+- **Technical Indicator Suite**: Automatically calculate and visualize key indicators like RSI and EMAs using Pandas.
+- **Beautiful Visualization**: Modern, responsive UI with interactive TradingView Lightweight Charts, built with **Next.js**, **Tailwind CSS**, **Shadcn/ui**, Lucide Icons, and Framer Motion for animations. Priority on a **Dark AMOLED Theme** (#000000).
+- **Consistent Development & Deployment**: **Docker Compose** manages backend (FastAPI), frontend (Next.js), and Redis services for a streamlined, reproducible development workflow. Production builds utilize **Dockerfiles** for creating optimized images.
+- **Frontend State Management**: Efficient data fetching and state management with **TanStack Query** and **Zustand**.
+- **Caching**: **Async Redis client** for effective caching of market data and AI-generated insights to improve performance and reduce API load.
 
 ### ✅ Core MVP Checklist
 
-This project aims to deliver the following core features in its Minimum Viable Product (target completion: end of Phase 5):
+This project aims to deliver the following core features in its Minimum Viable Product (target completion: end of Phase 5), as defined in `Plan.md` Section 3.3:
 
-- [ ] **Real-time Data:** Display live Binance candlestick data (selected pairs/timeframes).
-- [ ] **Historical Data:** Load historical chart data via API.
-- [ ] **TA Indicator: RSI:** Calculate and display RSI (14).
-- [ ] **TA Indicator: EMAs:** Calculate and display EMAs (34, 89, 200) on chart.
-- [ ] **TA Indicator: Volume:** Display volume bars.
-- [ ] **Live TA Updates:** Ensure indicators update with new data.
-- [ ] **AI Insight:** Integrate Gemini to show one basic consolidated sentiment/signal.
-- [ ] **Caching:** Use Redis (async) to cache AI results & market data.
-- [ ] **Basic UI:** Functional single-page dashboard with chart, selectors, TA/AI cards.
-- [ ] **Responsiveness:** Usable on desktop, basic readability/functionality on mobile.
-- [ ] **Theme Toggle:** Basic Light/Dark mode switch.
-- [ ] **Deployment:** MVP deployed and accessible via URL using Docker images on a PaaS.
+- [ ] **Market Data:**
+    - [ ] Show live price updates (candlesticks) from Binance.
+    - [ ] Load historical price data from Binance.
+    - [ ] Allow users to select different timeframes (e.g., 15m, 1h, 4h, 1d).
+    - [ ] Start with a small, fixed list of cryptocurrencies (e.g., BTC/USDT, ETH/USDT).
+- [ ] **Technical Analysis (TA):**
+    - [ ] Calculate and display RSI (period 14).
+    - [ ] Calculate and display three EMAs (34, 89, 200) on the price chart.
+    - [ ] Show trading volume bars.
+    - [ ] Ensure TA indicators update in real-time.
+- [ ] **AI Analysis:**
+    - [ ] Connect to Google Gemini (via Agno).
+    - [ ] Send current market info (price, volume, indicators) to AI.
+    - [ ] Display one simple, consolidated AI insight (e.g., sentiment or signal).
+    - [ ] Update AI insight periodically (with caching).
+- [ ] **User Interface (UI) & Design:**
+    - [ ] **Visual Theme:** Implement **Dark AMOLED Theme** (#000000) as default; provide light mode toggle.
+    - [ ] **Modern, Clean Design:** Minimalist approach, sufficient whitespace.
+    - [ ] **Soft UI Elements:** Consistently rounded corners (min 8px) for interactive components.
+    - [ ] **Layout:** Single-page dashboard, TradingView chart as main element, separate cards for TA/AI.
+    - [ ] **Responsiveness:** Fully responsive design (desktop to mobile), touch-friendly elements (min 44x44px).
+    - [ ] **Interaction & Animation:** Subtle transitions (Framer Motion), interactive feedback, loading states.
+    - [ ] **Accessibility:** Sufficient color contrast, keyboard navigation, ARIA attributes.
+- [ ] **Functionality & Stability:**
+    - [ ] Application running live and accessible via URL.
+    - [ ] Users can successfully choose crypto pairs and timeframes.
+    - [ ] TradingView chart displays accurate live/historical data.
+    - [ ] Core features are stable (reliable data streams, correct calculations, AI calls succeed generally).
+- [ ] **Deployment:** MVP deployed using Docker images on a PaaS.
 
 ## 🚀 Current Project Status & Phases
 
-The project is being developed iteratively through distinct phases, focusing on both feature delivery and developer learning. **We are currently in Phase 1.**
+The project is being developed iteratively through distinct, fluid development streams as outlined in `Plan.md` Section 7. **We are currently in Phase 1: Foundation Stream.**
 
 <table>
   <thead>
     <tr>
-      <th>Phase</th>
+      <th>Phase (Stream)</th>
       <th>Status</th>
-      <th>Objective</th>
-      <th>Key Deliverables / Focus</th>
+      <th>Objective (Focus from Plan.md)</th>
+      <th>Key Deliverables / Focus (from Plan.md)</th>
+      <th>Integration Milestone (Goal from Plan.md)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td align="center" width="100px">
-        <img src="https://img.shields.io/badge/PHASE-1-blue?style=for-the-badge"/>
-        <h3>Foundation</h3>
+      <td align="center" width="150px"> <!-- Adjusted width -->
+        <img src="https://img.shields.io/badge/STREAM%201-FOUNDATION-blue?style=for-the-badge"/>
+        <h3>Foundation Stream</h3>
+        <small>(Weeks 1-3)</small>
       </td>
       <td><b>Active</b></td>
-      <td>Establish core project structure, services (via <b>Docker Compose</b>), and basic real-time communication between frontend and backend. Solidify understanding of basic FastAPI, Next.js, Socket.IO, and Docker Compose.</td>
+      <td>Building the substrate that enables all future development.</td>
       <td>
         <ul>
-          <li>Setup Backend (FastAPI) & Frontend (Next.js) project structures</li>
-          <li>Configure <b>Docker Compose</b> for multi-service development (BE, FE, Redis) with volumes for hot-reloading</li>
-          <li>Implement basic WebSocket connection (FE <-> BE via Socket.IO ASGI)</li>
-          <li>Display empty TradingView chart on frontend</li>
-          <li><i><b>Goal:</b> Stable base environment running via <code>docker-compose up</code>. Developer comfortable with basic toolchain.</i></li>
+          <li>Functioning multi-container <b>Docker Compose</b> setup (backend, frontend, Redis)</li>
+          <li>Complete project architecture with proper folder structures (FastAPI backend, Next.js frontend)</li>
+          <li>Established communication channels (WebSocket via Socket.IO ASGI, core API schemas)</li>
+          <li>Empty but functional UI with basic TradingView chart component</li>
+          <li>State management foundations (TanStack Query, Zustand)</li>
         </ul>
       </td>
+      <td><i>Running multi-container system with basic frontend-backend communication and empty chart component.</i></td>
     </tr>
     <tr>
-      <td align="center" width="100px">
-        <img src="https://img.shields.io/badge/PHASE-2-green?style=for-the-badge"/>
-        <h3>Core TA</h3>
+      <td align="center" width="150px">
+        <img src="https://img.shields.io/badge/STREAM%202-MARKET%20DATA-green?style=for-the-badge"/>
+        <h3>Market Data Stream</h3>
+        <small>(Weeks 3-7)</small>
       </td>
       <td>Upcoming</td>
-      <td>Implement essential technical indicators (RSI, EMAs, Vol) in the backend and display them on the frontend chart. Learn Pandas for TA and FastAPI async routes with Pydantic.</td>
+      <td>Creating the complete market data pipeline that powers the application.</td>
       <td>
         <ul>
-          <li>Backend TA calculation logic (Pandas) integrated into async service</li>
-          <li>Backend API endpoint (FastAPI) for historical data + TA (Pydantic models)</li>
-          <li>Frontend chart displaying price, volume, EMAs, RSI via API/WS</li>
-          <li>Real-time TA updates via WebSocket</li>
-          <li>Implement TanStack Query for frontend data fetching</li>
-          <li><i><b>Goal:</b> Live charts showing price & core indicators, updating dynamically.</i></li>
+          <li>Complete Binance API integration (REST + WebSocket)</li>
+          <li>Functional data processing pipeline with Redis caching</li>
+          <li>Technical analysis calculation engine (Pandas for RSI, EMAs, Volume)</li>
+          <li>Live chart with real-time TA updates via WebSocket</li>
         </ul>
       </td>
+      <td><i>Functioning chart displaying live market data and accurate technical indicators dynamically updating in real-time.</i></td>
     </tr>
     <tr>
-      <td align="center" width="100px">
-        <img src="https://img.shields.io/badge/PHASE-3-yellow?style=for-the-badge"/>
-        <h3>AI Integration</h3>
+      <td align="center" width="150px">
+        <img src="https://img.shields.io/badge/STREAM%203-INTELLIGENCE-yellow?style=for-the-badge"/>
+        <h3>Intelligence Stream</h3>
+        <small>(Weeks 6-10)</small>
       </td>
       <td>Upcoming</td>
-      <td>Integrate Google Gemini API for market insights and implement Redis caching using the <b>Dockerized Redis service</b>. Learn async external API calls and caching strategies.</td>
+      <td>Adding the AI layer that differentiates the application.</td>
       <td>
         <ul>
-          <li>Backend service to call Gemini API (async, using Agno)</li>
-          <li><b>Async Redis</b> caching for AI results & market data</li>
-          <li>Frontend UI to display AI insight</li>
-          <li>Periodic AI insight updates via WebSocket (`analysis:update`)</li>
-          <li>Secure API key management (via <code>.env</code> and Docker Compose)</li>
-          <li><i><b>Goal:</b> AI-generated insights displayed based on market data, demonstrating caching.</i></li>
+          <li>Functioning Google Gemini integration (async, via Agno framework)</li>
+          <li>Efficient async Redis caching for AI results</li>
+          <li>Structured AI insights delivered to frontend via WebSocket</li>
+          <li>Real-time insight updates synchronized with market data</li>
         </ul>
       </td>
+      <td><i>Live AI insights appearing alongside technical data, updating in real-time with market changes.</i></td>
     </tr>
     <tr>
-      <td align="center" width="100px">
-        <img src="https://img.shields.io/badge/PHASE-4-orange?style=for-the-badge"/>
-        <h3>Polish & Test</h3>
+      <td align="center" width="150px">
+        <img src="https://img.shields.io/badge/STREAM%204-EXPERIENCE-orange?style=for-the-badge"/>
+        <h3>Experience Stream</h3>
+        <small>(Weeks 9-12)</small>
       </td>
       <td>Upcoming</td>
-      <td>Refine UI/UX using Shadcn/Tailwind, implement error handling/logging, add initial automated API tests, and prepare <b>production Dockerfiles</b>. Learn UI libraries, testing, and Docker optimization.</td>
+      <td>Refining the interface into a polished, intuitive experience.</td>
       <td>
         <ul>
-          <li>UI refinements (Shadcn/Tailwind) & basic responsiveness</li>
-          <li>Backend error handling (FastAPI exception handlers) & logging</li>
-          <li>Automated API tests (FastAPI TestClient with Pytest)</li>
-          <li><b>Optimized production Dockerfiles</b> for backend and frontend</li>
-          <li><i><b>Goal:</b> Feature-complete, tested MVP codebase ready for deployment build.</i></li>
+          <li>Polished UI component system (Shadcn/ui, Tailwind CSS)</li>
+          <li>True black AMOLED theme (#000000) and light mode</li>
+          <li>Fully responsive design working across all devices (touch-friendly)</li>
+          <li>Smooth animations (Framer Motion) and transitions</li>
+          <li>Comprehensive error handling and feedback systems</li>
+          <li>Accessibility enhancements (ARIA, keyboard navigation)</li>
         </ul>
       </td>
+      <td><i>Polished, visually appealing UI with smooth animations and full responsiveness across all device types.</i></td>
     </tr>
     <tr>
-      <td align="center" width="100px">
-        <img src="https://img.shields.io/badge/PHASE-5-red?style=for-the-badge"/>
-        <h3>MVP Launch</h3>
+      <td align="center" width="150px">
+        <img src="https://img.shields.io/badge/STREAM%205-DEPLOYMENT-red?style=for-the-badge"/>
+        <h3>Deployment Stream</h3>
+        <small>(Weeks 11-13)</small>
       </td>
       <td>Upcoming</td>
-      <td>Deploy the Minimum Viable Product to a live environment using the <b>built Docker images</b>. Learn basic PaaS deployment and production configuration.</td>
+      <td>Bringing the application to production.</td>
       <td>
         <ul>
-          <li>Build production Docker images</li>
-          <li>Deploy backend (FastAPI/Uvicorn container) & frontend (static/container) to PaaS/CDN (e.g., Render, Vercel)</li>
-          <li>Configure production environment variables securely</li>
-          <li>Verify live application functionality end-to-end</li>
-          <li>Setup basic PaaS monitoring/logging</li>
-          <li><i><b>Goal:</b> Stable, deployed MVP accessible online.</i></li>
+          <li>Optimized production Dockerfiles for backend & frontend</li>
+          <li>Fully configured PaaS deployment (e.g., Render, Vercel)</li>
+          <li>Established monitoring, logging, and feedback mechanisms</li>
+          <li>Secure environment variable configuration</li>
         </ul>
       </td>
+      <td><i>Fully functioning application deployed to production with monitoring systems in place and initial user feedback mechanisms established.</i></td>
     </tr>
      <tr>
-      <td align="center" width="100px">
-        <img src="https://img.shields.io/badge/PHASE-6-purple?style=for-the-badge"/>
+      <td align="center" width="150px">
+        <img src="https://img.shields.io/badge/STREAM%206-ITERATION-purple?style=for-the-badge"/>
         <h3>Iteration</h3>
+        <small>(Post-MVP)</small>
       </td>
       <td>Future</td>
-      <td>Enhance capabilities based on feedback and implement features from the roadmap, continuing development using the <b>Docker Compose environment</b>.</td>
+      <td>Enhance capabilities based on feedback and implement features from the roadmap, continuing development using the Docker Compose environment.</td>
       <td>
         <ul>
           <li>Bug fixes & performance improvements</li>
@@ -186,8 +212,8 @@ The project is being developed iteratively through distinct phases, focusing on 
     <tr>
       <td><b>Market Data</b></td>
       <td>
-        ✓ Binance Real-time WebSockets (via Backend Service)<br/>
-        ✓ Socket.IO for Real-time Transport (FastAPI ASGI)<br/>
+        ✓ Live Price Updates (Binance Candlesticks)<br/>
+        ✓ Historical Price Data (Binance API)<br/>
         ✓ Selectable Timeframes (15m, 1h, 4h, 1d)<br/>
         ✓ Limited Symbol Selection (e.g., BTC/USDT, ETH/USDT)
       </td>
@@ -203,29 +229,29 @@ The project is being developed iteratively through distinct phases, focusing on 
         ✓ RSI Indicator (14)<br/>
         ✓ EMAs (34, 89, 200) on Price Chart<br/>
         ✓ Volume Bars<br/>
-        ✓ Real-time Indicator Updates (via WebSocket Push)
+        ✓ Real-time Indicator Updates
       </td>
       <td>
         [ ] MACD Analysis<br/>
         [ ] Volume Profile<br/>
-        [ ] Algorithmic Support/Resistance Levels<br/>
-        [ ] Basic Chart Pattern Detection (e.g., Head & Shoulders)<br/>
+        [ ] Automatic Support/Resistance Lines<br/>
+        [ ] Chart Pattern Recognition<br/>
         [ ] Customizable Indicator Parameters
       </td>
     </tr>
     <tr>
       <td><b>AI Analysis (Gemini)</b></td>
       <td>
-        ✓ Basic Market Sentiment Score/Signal (Consolidated)<br/>
+        ✓ Basic Consolidated AI Insight (e.g., Sentiment/Signal)<br/>
         ✓ Agno Prompt Orchestration<br/>
-        ✓ Periodic AI Insight Updates (triggered by Backend)<br/>
+        ✓ Periodic AI Insight Updates (via Cache)<br/>
         ✓ Async Redis Caching for AI Results
       </td>
       <td>
         [ ] AI-Generated Price Target Ranges<br/>
         [ ] Risk/Reward Assessment Summary<br/>
-        [ ] Multi-timeframe AI Synthesis<br/>
-        [ ] Pattern Interpretation/Explanation Text<br/>
+        [ ] AI Analysis Across Multiple Timeframes<br/>
+        [ ] Explanations for Patterns/Signals<br/>
         [ ] News Sentiment Integration
       </td>
     </tr>
@@ -234,10 +260,12 @@ The project is being developed iteratively through distinct phases, focusing on 
       <td>
         ✓ Single-Page Dashboard Layout (Next.js App Router)<br/>
         ✓ Interactive TradingView Lightweight Chart<br/>
-        ✓ TA & AI Display Cards (Shadcn/ui)<br/>
-        ✓ Symbol/Timeframe Selectors<br/>
-        ✓ Light/Dark Theme Toggle (Zustand/Next-Themes)<br/>
-        ✓ Basic Responsiveness (Desktop Focus, Mobile Readable)
+        ✓ TA & AI Display Cards (Shadcn/ui, Rounded Corners, Shadows)<br/>
+        ✓ Symbol/Timeframe Selectors (Dropdowns/Pills)<br/>
+        ✓ Dark AMOLED Theme (#000000) & Light Mode Toggle (Zustand/Next-Themes)<br/>
+        ✓ Fully Responsive Design (Desktop, Tablet, Mobile; Touch Targets >= 44px)<br/>
+        ✓ Subtle Animations & Transitions (Framer Motion, 300-500ms)<br/>
+        ✓ ARIA Support & Keyboard Navigation
       </td>
       <td>
         [ ] Customizable Dashboard Layouts<br/>
@@ -251,11 +279,11 @@ The project is being developed iteratively through distinct phases, focusing on 
      <tr>
       <td><b>Infrastructure</b></td>
       <td>
-        ✓ FastAPI Async Backend (Python/Pydantic)<br/>
+        ✓ FastAPI Async Backend (Python/Pydantic, Uvicorn Server)<br/>
         ✓ Next.js Frontend (React/TypeScript)<br/>
-        ✓ **Docker Compose for Development Environment**<br/>
-        ✓ Async Redis Caching<br/>
-        ✓ Simple PaaS Deployment (using Docker Images)
+        ✓ **Docker Compose for Development Environment** (BE, FE, Redis)<br/>
+        ✓ Async Redis Caching (python `redis` async client)<br/>
+        ✓ Simple PaaS Deployment (using **built Docker Images from Dockerfiles**)
       </td>
       <td>
         [ ] PostgreSQL Database (User Data, Settings - likely add to Docker Compose)<br/>
@@ -269,57 +297,86 @@ The project is being developed iteratively through distinct phases, focusing on 
 
 ## 📊 How It Works
 
-Cryage operates through a sophisticated real-time data processing pipeline built on modern asynchronous technologies, orchestrated during development by Docker Compose.
+Cryage operates through a sophisticated real-time data processing pipeline built on modern asynchronous technologies, orchestrated during development by Docker Compose. This design aligns with `Plan.md` Sections 4 & 5.
 
-### High-Level Architecture (Development Environment)
+### High-Level Architecture (Development & MVP Deployment)
+
+The development environment uses Docker Compose. The MVP deployment will utilize Docker images built from the project's Dockerfiles deployed to PaaS providers.
 
 ```mermaid
 graph LR
-    subgraph "User Browser"
+    subgraph "User Browser (Client)"
         direction TB
-        UserInterface["Next.js Frontend <br> (localhost:3000)"]
-        Chart["TradingView Chart"]
-        WSClient["Socket.IO Client"]
+        FrontendApp["Next.js Frontend App (React, TypeScript)"]
+        StateMgmt["State (TanStack Query + Zustand)"]
+        TradingChart["TradingView Lightweight Chart"]
+        SocketIOClient["Socket.IO Client"]
+        FrontendApp --> StateMgmt --> TradingChart
+        FrontendApp --> SocketIOClient
     end
 
-    subgraph "Docker Compose Network"
+    subgraph "Backend Server (FastAPI on Uvicorn - Dockerized)"
         direction TB
-        BackendContainer["Backend Container <br> (FastAPI + Socket.IO Server)"]
-        RedisContainer["Redis Container <br> (Cache)"]
+        APIServer["FastAPI REST API Endpoints"]
+        WebSocketServer["FastAPI Socket.IO Server (ASGI)"]
+        AnalysisService["Analysis Service (TA + AI Orchestration)"]
+        RedisCache["Redis Cache (Async Client)"]
+        BinanceManager["Binance WS Manager (Async)"]
+        IndicatorCalc["Indicator Service (Pandas)"]
+        GeminiCaller["Gemini Service (Async Agno Call)"]
 
-        BackendContainer -- "Async R/W" --> RedisContainer
+        APIServer --> AnalysisService
+        WebSocketServer -- Events --> AnalysisService
+        AnalysisService --> IndicatorCalc
+        AnalysisService --> GeminiCaller
+        AnalysisService --> BinanceManager
+        AnalysisService -- R/W --> RedisCache
+        IndicatorCalc -- Uses --> RedisCache
+        GeminiCaller -- R/W --> RedisCache
+        BinanceManager -- R/W --> RedisCache
     end
 
     subgraph "External Services"
-        BinanceAPI["Binance API <br> (REST + WS)"]
-        GeminiAPI["Google Gemini API"]
+        BinanceExchange["Binance API (REST + WS)"]
+        GoogleGemini["Google Gemini API"]
     end
 
-    UserInterface -- "HTTP API Calls" --> BackendContainer;
-    UserInterface -- "WebSocket Connection" --> BackendContainer;
-    BackendContainer -- "Async API Calls" --> BinanceAPI;
-    BackendContainer -- "Async API Calls" --> GeminiAPI;
+    User --> FrontendApp
+    FrontendApp -- "HTTP Requests" --> APIServer
+    SocketIOClient -- "Connects/Events" --> WebSocketServer
+    WebSocketServer -- "Real-time Data" --> SocketIOClient
+
+    BinanceManager -- "Connects (Async)" --> BinanceExchange
+    APIServer -- "Fetches History (Async)" --> BinanceExchange
+    GeminiCaller -- "Calls (Async)" --> GoogleGemini
 ```
 
-### Detailed Process Flow
+### Detailed Process Flow (MVP)
 
-1.  **Data Acquisition (Backend - `services/binance_service.py`)**: Establishes asynchronous WebSocket connections to Binance for subscribed symbols/timeframes. Receives real-time candle data. Also fetches historical data via Binance REST API when needed (e.g., initial chart load). Runs inside the `backend` Docker container.
-2.  **Real-time Processing (Backend - FastAPI + `websockets/events.py`)**:
-    *   Incoming Binance WebSocket data triggers processing within the FastAPI application.
-    *   Data is potentially normalized and the latest candlestick data is cached in the **Redis container** (using an async client).
-    *   Relevant market updates (`market:update` event) are sent immediately to subscribed frontend clients via the Socket.IO ASGI server mounted on FastAPI.
-3.  **Analysis Trigger (Backend - `services/analysis_service.py`)**: Periodically (e.g., on new candle close or a fixed timer), the analysis service initiates an asynchronous task within the FastAPI backend.
-4.  **TA Calculation (Backend - `services/indicator_service.py`)**: Retrieves necessary recent price data (primarily from the **Redis cache**) and calculates RSI, EMAs, etc., using the Pandas library. This might run synchronously within the async task context handled by FastAPI.
-5.  **AI Analysis (Backend - `services/gemini_service.py`)**:
-    *   Checks the **Redis container** cache for a recent AI insight for the specific symbol/timeframe (async).
-    *   If the cache misses or the data is stale, it formats the current market data (price, volume, TA results) into a structured prompt (using the Agno framework).
-    *   Calls the Google Gemini API asynchronously using an HTTP client like `httpx`.
-    *   Validates the AI response structure using Pydantic schemas and caches the result in **Redis** (async) with an appropriate expiry time.
-6.  **Analysis Broadcast (Backend - FastAPI + `websockets/events.py`)**: The combined TA results and the fetched/cached AI insight are packaged into an `AnalysisResultObject` (Pydantic model). This object is sent to subscribed frontend clients via a Socket.IO event (`analysis:update`).
-7.  **Frontend Visualization (Frontend - Next.js Container)**:
-    *   The Socket.IO client (`lib/socket.ts`) running in the browser receives `market:update` and `analysis:update` events from the backend container.
-    *   State management libraries (TanStack Query for server state, Zustand for simple UI state) update their stores based on the received data. TanStack Query cache might be invalidated or updated directly.
-    *   React components (`components/dashboard/*`) re-render automatically to display the latest chart data (using the TradingView Lightweight Charts library), updated indicator values, and the refreshed AI insights.
+1.  **User Interaction (Frontend)**: User selects a cryptocurrency pair and timeframe on the Next.js frontend.
+2.  **Subscription (Frontend -> Backend)**: The frontend sends a `subscribe` message via Socket.IO to the FastAPI backend.
+3.  **Binance Connection (Backend - `services/binance_service.py`)**:
+    *   The `BinanceService` (or `BinanceMgr`) establishes/maintains an asynchronous WebSocket connection to Binance for the requested live data stream.
+    *   Historical data for initial chart load is fetched via Binance REST API if not cached.
+4.  **Real-time Data Processing & Caching (Backend)**:
+    *   As new price data arrives from Binance WebSocket, `BinanceService` processes it (e.g., forms a candlestick).
+    *   Latest data is saved to **Redis cache** (async).
+    *   A `market:update` event with the new `KlineObject` is sent via Socket.IO (from `websockets/events.py`) to subscribed frontend clients.
+5.  **Frontend Chart Update (Frontend)**: The `market:update` event is received, TanStack Query updates its cache, and the TradingView chart re-renders.
+6.  **Analysis Trigger (Backend - `services/analysis_service.py`)**:
+    *   Triggered by a new candlestick closing or on a timer.
+    *   The `AnalysisService` retrieves recent price data from **Redis cache** (async).
+7.  **TA Calculation (Backend - `services/indicator_service.py`)**:
+    *   `IndicatorService` uses Pandas to calculate TA indicators (RSI, EMAs) from the price data.
+8.  **AI Insight Generation (Backend - `services/gemini_service.py`)**:
+    *   `GeminiService` checks **Redis cache** for a recent AI insight (async).
+    *   If cache miss/stale: prepares data (price, volume, TA) and calls Google Gemini API (async, using Agno for prompt structure).
+    *   The AI insight is validated (Pydantic) and saved to **Redis cache** (async).
+9.  **Analysis Broadcast (Backend - `websockets/events.py`)**:
+    *   `AnalysisService` combines TA results and AI insight into an `AnalysisResultObject`.
+    *   This object is saved to **Redis cache** (async).
+    *   An `analysis:update` event is sent via Socket.IO to subscribed frontend clients.
+10. **Frontend UI Update (Frontend)**: The `analysis:update` event is received, TanStack Query updates, and UI cards display the new TA values and AI insight.
 
 The system heavily leverages **FastAPI's** native asynchronous capabilities (`async`/`await`) and the **Uvicorn** ASGI server for efficiently handling many concurrent WebSocket connections and I/O operations (Binance streams, Gemini API calls, Redis access). **Pydantic** is crucial for ensuring data consistency between services, APIs, and WebSocket events. **Docker Compose** provides the isolated, networked environment for these services to run together during development.
 
@@ -331,9 +388,9 @@ Make sure you have the following installed on your host machine:
 
 1.  **Docker & Docker Compose:** Essential for building and running the multi-container development environment. ([Install Docker](https://docs.docker.com/get-docker/))
 2.  **Git:** For cloning the repository. ([Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
-3.  **Node.js:** Version 18+ required for the frontend **build process** inside the Docker container. You don't need to run `npm install` locally. ([Install Node.js](https://nodejs.org/) or use [nvm](https://github.com/nvm-sh/nvm))
+3.  **Node.js:** Version 18+ (or as specified in `cryage_frontend/package.json` or `Dockerfile`) is required for the frontend **build process** inside the Docker container if you were to build manually or for understanding. You generally don't need to run `npm install` locally when using Docker Compose for development. ([Install Node.js](https://nodejs.org/) or use [nvm](https://github.com/nvm-sh/nvm))
 
-*Note: Local installation of Python, Conda, virtual environments, or Redis is **not** required. These services run within isolated Docker containers managed by Docker Compose.*
+*Note: Local installation of Python, Conda, virtual environments, or Redis is **not** required for running the application via Docker Compose. These services run within isolated Docker containers.*
 
 ### Project Setup
 
@@ -431,13 +488,15 @@ Make sure you have the following installed on your host machine:
 
 ### Verifying Phase 1 Success (Initial Setup)
 
-The initial setup (reaching the end of Phase 1's goal) is successful when:
+The initial setup (reaching the end of Phase 1's "Integration Milestone" as per `Plan.md`) is successful when:
 
 1.  All three containers (`backend`, `frontend`, `redis`) start without errors using `docker-compose up`. Check `docker ps` or Docker Desktop.
-2.  The frontend UI loads successfully in your browser at `http://localhost:3000` (it might show an empty chart initially).
+2.  The frontend UI loads successfully in your browser at `http://localhost:3000`. It should display an empty TradingView chart component.
 3.  The frontend successfully establishes a WebSocket connection to the backend. Check:
     *   **Browser Console (F12 -> Console):** Look for messages indicating a successful Socket.IO connection.
-    *   **Backend Logs (`docker-compose logs -f backend`):** Look for connection messages from Socket.IO/FastAPI.
+    *   **Backend Logs (`docker-compose logs -f backend`):** Look for connection messages from Socket.IO/FastAPI (e.g., client connected).
+4.  Basic API schema validation is working (Pydantic models in FastAPI are correctly defined for initial endpoints, if any).
+5.  The multi-container system is running stably, and hot-reloading for both frontend and backend is functional.
 
 ### Troubleshooting Common Issues
 
@@ -635,7 +694,7 @@ Please note that this project is currently in active development, and major stru
 **Infrastructure & Tooling:**
 
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
-[![Uvicorn](https://img.shields.io/badge/Uvicorn-ASGI-green?style=for-the-badge)](https://www.uvicorn.org/)
+[![Uvicorn](https://img.shields.io/badge/Uvicorn-ASGI_Server-009688?style=for-the-badge&logo=uvicorn&logoColor=white)](https://www.uvicorn.org/)
 
 **Project Stats:**
 
