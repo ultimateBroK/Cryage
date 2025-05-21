@@ -6,7 +6,7 @@
 
 **Real-Time Cryptocurrency Market Intelligence with AI-Driven Insights**
 
-[![Project Status](https://img.shields.io/badge/STATUS-PHASE%201%20FOUNDATION-blue?style=flat-square)](/#%EF%B8%8F-current-project-status--phases) <!-- Updated Link -->
+[![Project Status](https://img.shields.io/badge/STATUS-PHASE%202%20MARKET%20DATA-green?style=flat-square)](/#%EF%B8%8F-current-project-status--phases) <!-- Updated Link -->
 [![Next.js](https://img.shields.io/badge/NEXT.JS-14+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FASTAPI-PYTHON-green?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Socket.IO](https://img.shields.io/badge/SOCKET.IO-REALTIME-blue?style=flat-square&logo=socket.io)](https://socket.io/)
@@ -39,39 +39,39 @@ Built with a modern tech stack including **FastAPI** (Python) for a high-perform
 
 This project aims to deliver the following core features in its Minimum Viable Product (target completion: end of Phase 5), as defined in `Plan.md` Section 3.3:
 
-- [ ] **Market Data:**
+- [ ] **Market Data:** *(In Progress - Phase 2)*
     - [ ] Show live price updates (candlesticks) from Binance.
     - [ ] Load historical price data from Binance.
     - [ ] Allow users to select different timeframes (e.g., 15m, 1h, 4h, 1d).
     - [ ] Start with a small, fixed list of cryptocurrencies (e.g., BTC/USDT, ETH/USDT).
-- [ ] **Technical Analysis (TA):**
+- [ ] **Technical Analysis (TA):** *(Upcoming - Phase 2)*
     - [ ] Calculate and display RSI (period 14).
     - [ ] Calculate and display three EMAs (34, 89, 200) on the price chart.
     - [ ] Show trading volume bars.
     - [ ] Ensure TA indicators update in real-time.
-- [ ] **AI Analysis:**
+- [ ] **AI Analysis:** *(Upcoming - Phase 3)*
     - [ ] Connect to Google Gemini (via Agno).
     - [ ] Send current market info (price, volume, indicators) to AI.
     - [ ] Display one simple, consolidated AI insight (e.g., sentiment or signal).
     - [ ] Update AI insight periodically (with caching).
-- [ ] **User Interface (UI) & Design:**
-    - [ ] **Visual Theme:** Implement **Dark AMOLED Theme** (#000000) as default; provide light mode toggle.
-    - [ ] **Modern, Clean Design:** Minimalist approach, sufficient whitespace.
-    - [ ] **Soft UI Elements:** Consistently rounded corners (min 8px) for interactive components.
-    - [ ] **Layout:** Single-page dashboard, TradingView chart as main element, separate cards for TA/AI.
+- [ ] **User Interface (UI) & Design:** *(Partially Complete - Phase 1, Will Enhance in Phase 4)*
+    - [x] **Visual Theme:** Implement **Dark AMOLED Theme** (#000000) as default; provide light mode toggle.
+    - [x] **Modern, Clean Design:** Minimalist approach, sufficient whitespace.
+    - [x] **Soft UI Elements:** Consistently rounded corners (min 8px) for interactive components.
+    - [x] **Layout:** Single-page dashboard, TradingView chart as main element, separate cards for TA/AI.
     - [ ] **Responsiveness:** Fully responsive design (desktop to mobile), touch-friendly elements (min 44x44px).
     - [ ] **Interaction & Animation:** Subtle transitions (Framer Motion), interactive feedback, loading states.
     - [ ] **Accessibility:** Sufficient color contrast, keyboard navigation, ARIA attributes.
-- [ ] **Functionality & Stability:**
-    - [ ] Application running live and accessible via URL.
+- [ ] **Functionality & Stability:** *(In Progress)*
+    - [x] Application running live and accessible via URL.
     - [ ] Users can successfully choose crypto pairs and timeframes.
     - [ ] TradingView chart displays accurate live/historical data.
     - [ ] Core features are stable (reliable data streams, correct calculations, AI calls succeed generally).
-- [ ] **Deployment:** MVP deployed using Docker images on a PaaS.
+- [ ] **Deployment:** *(Upcoming - Phase 5)* MVP deployed using Docker images on a PaaS.
 
 ## 🚀 Current Project Status & Phases
 
-The project is being developed iteratively through distinct, fluid development streams as outlined in `Plan.md` Section 7. **We are currently in Phase 1: Foundation Stream.**
+The project is being developed iteratively through distinct, fluid development streams as outlined in `Plan.md` Section 7. **We are currently in Phase 2: Market Data Stream.**
 
 <table>
   <thead>
@@ -90,7 +90,7 @@ The project is being developed iteratively through distinct, fluid development s
         <h3>Foundation Stream</h3>
         <small>(Weeks 1-3)</small>
       </td>
-      <td><b>Active</b></td>
+      <td><b>Completed</b></td>
       <td>Building the substrate that enables all future development.</td>
       <td>
         <ul>
@@ -109,7 +109,7 @@ The project is being developed iteratively through distinct, fluid development s
         <h3>Market Data Stream</h3>
         <small>(Weeks 3-7)</small>
       </td>
-      <td>Upcoming</td>
+      <td><b>Active</b></td>
       <td>Creating the complete market data pipeline that powers the application.</td>
       <td>
         <ul>
@@ -197,6 +197,134 @@ The project is being developed iteratively through distinct, fluid development s
     </tr>
   </tbody>
 </table>
+
+## 🛠️ Development Setup
+
+### Prerequisites
+
+- Docker and Docker Compose installed on your system
+- Git for version control
+- Node.js 18+ and npm/yarn (optional, for local frontend development)
+- Python 3.10+ and pip (optional, for local backend development)
+
+### Quick Start with Docker Compose
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/cryage.git
+   cd cryage
+   ```
+
+2. Create environment files:
+   ```bash
+   # Copy the example env files
+   cp cryage_backend/.env.example cryage_backend/.env
+   cp cryage_frontend/.env.example cryage_frontend/.env
+   ```
+
+3. Start the Docker services:
+   ```bash
+   docker-compose up
+   ```
+
+4. Access the application:
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+   - API Documentation: http://localhost:8000/api/v1/docs
+
+### Development Workflow
+
+#### Git Workflow
+
+Follow the branching strategy outlined in [BRANCHING.md](BRANCHING.md):
+- Feature branches: `feature/name-of-feature`
+- Bug fixes: `fix/issue-description`
+- Documentation: `docs/description`
+
+#### Running Tests
+
+Backend tests:
+```bash
+# In a separate terminal while Docker is running
+docker-compose exec backend pytest
+```
+
+Frontend tests:
+```bash
+# In a separate terminal while Docker is running
+docker-compose exec frontend npm test
+```
+
+Verify Docker services:
+```bash
+# From project root
+./verify_docker_services.sh
+```
+
+#### Development Tools
+
+- **Backend**: FastAPI with automatic API documentation at http://localhost:8000/api/v1/docs
+- **Frontend**: Next.js with hot reloading
+- **WebSockets**: Socket.IO for real-time communication
+
+#### Useful Commands
+
+```bash
+# View logs
+docker-compose logs -f
+
+# View logs for a specific service
+docker-compose logs -f backend
+docker-compose logs -f frontend
+docker-compose logs -f redis
+
+# Restart a service
+docker-compose restart backend
+docker-compose restart frontend
+
+# Stop all services
+docker-compose down
+
+# Rebuild services after dependency changes
+docker-compose up --build
+```
+
+## 🧪 Testing
+
+The project includes several types of tests:
+
+1. **Backend API Tests**: Tests API endpoints using pytest and FastAPI's TestClient
+2. **WebSocket Tests**: Tests WebSocket communication
+3. **Chart Component Tests**: Tests the frontend chart components using Jest and React Testing Library
+4. **Docker Integration Tests**: Verifies that all services communicate correctly
+
+Run the tests as described in the Development Workflow section.
+
+## 📁 Project Structure
+
+```
+cryage/
+├── cryage_backend/               # FastAPI backend
+│   ├── app/
+│   │   ├── api/                  # API endpoints
+│   │   ├── core/                 # Core configuration
+│   │   ├── schemas/              # Pydantic models
+│   │   ├── services/             # Business logic services
+│   │   ├── websockets/           # WebSocket handling
+│   │   └── main.py               # Application entry point
+│   └── tests/                    # Backend tests
+├── cryage_frontend/              # Next.js frontend
+│   ├── app/                      # Next.js app directory
+│   ├── components/               # React components
+│   ├── hooks/                    # Custom React hooks
+│   ├── lib/                      # Utility functions
+│   ├── providers/                # Context providers
+│   ├── store/                    # State management
+│   ├── types/                    # TypeScript types
+│   └── __tests__/                # Frontend tests
+├── docker-compose.yml            # Docker Compose configuration
+└── README.md                     # Project documentation
+```
 
 ## 🛠️ Features & Roadmap
 
