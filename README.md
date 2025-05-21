@@ -6,7 +6,7 @@
 
 **Real-Time Cryptocurrency Market Intelligence with AI-Driven Insights**
 
-[![Project Status](https://img.shields.io/badge/STATUS-PHASE%202%20MARKET%20DATA-green?style=flat-square)](/#%EF%B8%8F-current-project-status--phases) <!-- Updated Link -->
+[![Project Status](https://img.shields.io/badge/STATUS-PHASE%202%20MARKET%20DATA-green?style=flat-square)](/#%EF%B8%8F-current-project-status--phases)
 [![Next.js](https://img.shields.io/badge/NEXT.JS-14+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FASTAPI-PYTHON-green?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Socket.IO](https://img.shields.io/badge/SOCKET.IO-REALTIME-blue?style=flat-square&logo=socket.io)](https://socket.io/)
@@ -211,15 +211,26 @@ The project is being developed iteratively through distinct, fluid development s
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/cryage.git
+   git clone https://github.com/ultimatebrok/cryage.git
    cd cryage
    ```
 
 2. Create environment files:
    ```bash
-   # Copy the example env files
-   cp cryage_backend/.env.example cryage_backend/.env
-   cp cryage_frontend/.env.example cryage_frontend/.env
+   # Create .env file for the backend
+   # You'll need to manually create this file with the following variables:
+   # - BINANCE_API_KEY
+   # - BINANCE_API_SECRET
+   # - GEMINI_API_KEY
+   # - REDIS_HOST (default: redis)
+   # - REDIS_PORT (default: 6379)
+   # - BACKEND_CORS_ORIGINS (default: ["http://localhost:3000", "http://localhost:8000"])
+   touch cryage_backend/.env
+   
+   # Create .env.local file for the frontend
+   # You'll need to manually create this file with:
+   # - NEXT_PUBLIC_WS_URL (default: ws://localhost:8000/socket.io/)
+   touch cryage_frontend/.env.local
    ```
 
 3. Start the Docker services:
@@ -230,7 +241,7 @@ The project is being developed iteratively through distinct, fluid development s
 4. Access the application:
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:8000
-   - API Documentation: http://localhost:8000/api/v1/docs
+   - API Documentation: http://localhost:8000/docs
 
 ### Development Workflow
 
@@ -312,7 +323,8 @@ cryage/
 │   │   ├── services/             # Business logic services
 │   │   ├── websockets/           # WebSocket handling
 │   │   └── main.py               # Application entry point
-│   └── tests/                    # Backend tests
+│   ├── tests/                    # Backend tests
+│   └── Dockerfile.dev            # Development Dockerfile
 ├── cryage_frontend/              # Next.js frontend
 │   ├── app/                      # Next.js app directory
 │   ├── components/               # React components
@@ -321,7 +333,14 @@ cryage/
 │   ├── providers/                # Context providers
 │   ├── store/                    # State management
 │   ├── types/                    # TypeScript types
-│   └── __tests__/                # Frontend tests
+│   ├── __tests__/                # Frontend tests
+│   └── Dockerfile.dev            # Development Dockerfile
+├── phases/                       # Development phase documentation
+│   ├── 01-foundation-stream.md   # Phase 1 details and checklist
+│   ├── 02-market-data-stream.md  # Phase 2 details and checklist
+│   ├── 03-intelligence-stream.md # Phase 3 details and checklist
+│   ├── 04-experience-stream.md   # Phase 4 details and checklist
+│   └── 05-deployment-stream.md   # Phase 5 details and checklist
 ├── docker-compose.yml            # Docker Compose configuration
 └── README.md                     # Project documentation
 ```
@@ -708,7 +727,7 @@ cryage_backend/
 │       └── test_market_data.py
 ├── .env.example              # Example environment variables file
 ├── .gitignore
-├── Dockerfile                # Defines how to build the backend Docker image
+├── Dockerfile.dev            # Development Dockerfile
 ├── requirements.txt          # Python dependencies
 └── README.md                 # This file (or specific backend notes)
 ```
@@ -759,7 +778,7 @@ cryage_frontend/
 ├── .env.local.example        # Example environment variables for frontend
 ├── .gitignore
 ├── components.json           # Shadcn/ui configuration file
-├── Dockerfile                # Defines how to build the frontend Docker image (for dev/prod)
+├── Dockerfile.dev            # Development Dockerfile
 ├── next.config.js            # Next.js configuration file
 ├── package.json              # Project dependencies (npm/yarn) and scripts
 ├── postcss.config.js         # PostCSS config (used by Tailwind)
