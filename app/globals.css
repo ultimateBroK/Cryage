@@ -145,14 +145,9 @@
     @apply bg-muted-foreground/30;
   }
 
-  /* Firefox only scrollbar styling */
-  @-moz-document url-prefix() {
-    * {
-      scrollbar-color: oklch(0.552 0.016 285.938 / 25%) transparent;
-    }
+  /* Firefox only scrollbar styling removed for template simplicity */
+}
 
-    .dark * {
-      scrollbar-color: oklch(0.705 0.015 286.067 / 25%) transparent;
-    }
-  }
+@layer utilities {
+  /* Utility layer kept intentionally minimal for template */
 }

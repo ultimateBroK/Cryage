@@ -55,10 +55,42 @@ const useCopyToClipboard = ({
   const copyToClipboard = (value: string) => {
     if (!value) return;
 
-    navigator.clipboard.writeText(value).then(() => {
+    // Check if we're in a browser environment
+    if (typeof window !== 'undefined') {
+      // Try modern clipboard API first
+      if (navigator && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        navigator.clipboard.writeText(value).then(() => {
+          setIsCopied(true);
+          setTimeout(() => setIsCopied(false), copiedDuration);
+        }).catch((err) => {
+          console.error('Failed to copy text: ', err);
+          // Fallback to legacy method
+          fallbackCopyTextToClipboard(value);
+        });
+      } else {
+        // Fallback for older browsers or when clipboard API is not available
+        fallbackCopyTextToClipboard(value);
+      }
+    }
+  };
+
+  const fallbackCopyTextToClipboard = (text: string) => {
+    try {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), copiedDuration);
-    });
+    } catch (err) {
+      console.error('Fallback: Failed to copy text: ', err);
+    }
   };
 
   return { isCopied, copyToClipboard };

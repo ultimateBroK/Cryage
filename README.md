@@ -2,11 +2,20 @@ This is the [assistant-ui](https://github.com/Yonom/assistant-ui) starter projec
 
 ## Getting Started
 
-First, add your OpenAI API key to `.env.local` file:
+First, create a `.env.local` file in the root directory and add your Google AI API key:
+
+```bash
+# Create the environment file
+touch .env.local
+```
+
+Then add your Google AI API key to `.env.local`:
 
 ```
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+GOOGLE_API_KEY=your-google-ai-api-key-here
 ```
+
+Get your API key from: https://makersuite.google.com/app/apikey
 
 Then, run the development server:
 

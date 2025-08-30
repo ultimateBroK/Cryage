@@ -1,3 +1,4 @@
+"use client";
 import {
   ThreadPrimitive,
   ComposerPrimitive,
@@ -5,8 +6,10 @@ import {
   ActionBarPrimitive,
   BranchPickerPrimitive,
   ErrorPrimitive,
+  useMessagePartReasoning,
 } from "@assistant-ui/react";
 import type { FC } from "react";
+import { useRef, useState, type RefObject } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -21,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
+import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/ui/reasoning";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -179,12 +183,12 @@ const Composer: FC = () => {
         <ThreadWelcomeSuggestions />
       </ThreadPrimitive.Empty>
       {/* aui-composer-root */}
-      <ComposerPrimitive.Root className="focus-within::ring-offset-2 relative flex w-full flex-col rounded-2xl focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white">
+      <ComposerPrimitive.Root className="focus-within::ring-offset-2 relative flex w-full flex-col rounded-2xl bg-background/40 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white">
         {/* aui-composer-input */}
         <ComposerPrimitive.Input
           placeholder="Send a message..."
           className={
-            "bg-muted border-border dark:border-muted-foreground/15 focus:outline-primary placeholder:text-muted-foreground max-h-[calc(50dvh)] min-h-16 w-full resize-none rounded-t-2xl border-x border-t px-4 pt-2 pb-3 text-base outline-none"
+            "bg-transparent focus:outline-primary placeholder:text-muted-foreground max-h-[calc(50dvh)] min-h-16 w-full resize-none rounded-t-2xl px-4 pt-2 pb-3 text-base outline-none"
           }
           rows={1}
           autoFocus
@@ -199,7 +203,7 @@ const Composer: FC = () => {
 const ComposerAction: FC = () => {
   return (
     // aui-composer-action-wrapper
-    <div className="bg-muted border-border dark:border-muted-foreground/15 relative flex items-center justify-between rounded-b-2xl border-x border-b p-2">
+    <div className="relative flex items-center justify-between rounded-b-2xl border-t border-black/10 dark:border-white/10 bg-background/30 backdrop-blur-md p-2">
       <TooltipIconButton
         tooltip="Attach file"
         variant="ghost"
@@ -258,6 +262,7 @@ const MessageError: FC = () => {
 };
 
 const AssistantMessage: FC = () => {
+  const contentRef = useRef<HTMLDivElement | null>(null);
   return (
     <MessagePrimitive.Root asChild>
       <motion.div
@@ -273,17 +278,18 @@ const AssistantMessage: FC = () => {
         </div>
 
         {/* aui-assistant-message-content */}
-        <div className="text-foreground col-span-2 col-start-2 row-start-1 ml-4 leading-7 break-words">
+        <div ref={contentRef} className="text-foreground col-span-2 col-start-2 row-start-1 ml-4 leading-7 break-words">
           <MessagePrimitive.Content
             components={{
               Text: MarkdownText,
+              Reasoning: ReasoningMessagePart,
               tools: { Fallback: ToolFallback },
             }}
           />
           <MessageError />
         </div>
 
-        <AssistantActionBar />
+        <AssistantActionBar contentRef={contentRef} />
 
         {/* aui-assistant-branch-picker */}
         <BranchPicker className="col-start-2 row-start-2 mr-2 -ml-2" />
@@ -292,25 +298,81 @@ const AssistantMessage: FC = () => {
   );
 };
 
-const AssistantActionBar: FC = () => {
+const ReasoningMessagePart: FC = () => {
+  const { text } = useMessagePartReasoning();
+  return (
+    <div className="text-muted-foreground" data-role="reasoning">
+      <Reasoning>
+        <ReasoningTrigger>Reasoning</ReasoningTrigger>
+        <ReasoningContent markdown>
+          {text}
+        </ReasoningContent>
+      </Reasoning>
+    </div>
+  );
+};
+
+type AssistantActionBarProps = { contentRef: RefObject<HTMLDivElement | null> };
+
+const AssistantActionBar: FC<AssistantActionBarProps> = ({ contentRef }) => {
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const fallbackCopy = (text: string) => {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Fallback: Failed to copy text", err);
+    }
+  };
+
+  const onCopy = async () => {
+    const node = contentRef.current;
+    if (!node) return;
+
+    const clone = node.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('[data-role="reasoning"]').forEach((el) => el.remove());
+    const text = clone.innerText || clone.textContent || "";
+    if (!text) return;
+    try {
+      if (
+        typeof navigator !== "undefined" &&
+        navigator.clipboard &&
+        typeof navigator.clipboard.writeText === "function"
+      ) {
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } else {
+        fallbackCopy(text);
+      }
+    } catch (err) {
+      console.error("Failed to copy text:", err);
+      fallbackCopy(text);
+    }
+  };
+
   return (
     <ActionBarPrimitive.Root
       hideWhenRunning
       autohide="not-last"
       autohideFloat="single-branch"
       // aui-assistant-action-bar-root
-      className="text-muted-foreground data-floating:bg-background col-start-3 row-start-2 mt-3 ml-3 flex gap-1 data-floating:absolute data-floating:mt-2 data-floating:rounded-md data-floating:border data-floating:p-1 data-floating:shadow-sm"
+      className="text-muted-foreground data-floating:bg-background col-start-3 row-start-2 mt-2 flex gap-1 justify-end data-floating:absolute data-floating:mt-2 data-floating:rounded-md data-floating:border data-floating:p-1 data-floating:shadow-sm"
     >
-      <ActionBarPrimitive.Copy asChild>
-        <TooltipIconButton tooltip="Copy">
-          <MessagePrimitive.If copied>
-            <CheckIcon />
-          </MessagePrimitive.If>
-          <MessagePrimitive.If copied={false}>
-            <CopyIcon />
-          </MessagePrimitive.If>
-        </TooltipIconButton>
-      </ActionBarPrimitive.Copy>
+      <TooltipIconButton tooltip="Copy" onClick={onCopy}>
+        {copied ? <CheckIcon /> : <CopyIcon />}
+      </TooltipIconButton>
       <ActionBarPrimitive.Reload asChild>
         <TooltipIconButton tooltip="Refresh">
           <RefreshCwIcon />
