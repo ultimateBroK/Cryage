@@ -112,7 +112,7 @@ export const ReasoningTrigger: FC<PropsWithChildren<{ className?: string }>> = (
       color={isDark ? "#00ffbb" : "#00bfa5"}
       speed="6s"
       thickness={1}
-      className={cn("mb-1 backdrop-blur-md/0", className)}
+      className={cn("mb-2 backdrop-blur-md/0", className)}
       unstyledInner
       innerClassName="relative z-1 rounded-xl px-3 py-1.5 text-xs font-medium text-foreground/90 bg-background/35 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] flex items-center justify-center gap-1.5"
     >
@@ -167,13 +167,15 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
     <AnimatePresence initial={false}>
       {open && (
         <motion.div
-          initial={{ height: 0, opacity: 0, overflow: "hidden" }}
+          initial={{ height: 0, opacity: 0, overflow: "hidden", marginTop: 0, marginBottom: 0 }}
           animate={{ 
             height: "auto", 
             opacity: 1,
-            overflow: isRunning ? "hidden" : "visible"
+            overflow: isRunning ? "hidden" : "visible",
+            marginTop: 8, // mt-2
+            marginBottom: 12, // mb-3
           }}
-          exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+          exit={{ height: 0, opacity: 0, overflow: "hidden", marginTop: 0, marginBottom: 0 }}
           transition={{ 
             duration: 0.3, 
             ease: [0.4, 0.0, 0.2, 1], // Custom easing for smoother animation
@@ -182,7 +184,7 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
           layout
           className={cn(
             "w-full flex justify-center",
-            isRunning ? "sticky bottom-4 z-40" : "mt-1 mb-5 md:mb-6",
+            isRunning ? "sticky bottom-4 z-40" : "",
             className,
           )}
           role="status"
