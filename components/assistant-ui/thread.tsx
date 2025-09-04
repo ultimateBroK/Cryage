@@ -7,9 +7,11 @@ import {
   BranchPickerPrimitive,
   ErrorPrimitive,
   useMessagePartReasoning,
+  useMessageRuntime,
+  useComposerRuntime,
 } from "@assistant-ui/react";
 import type { FC } from "react";
-import { useRef, useState, type RefObject } from "react";
+import { useState } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -183,7 +185,7 @@ const Composer: FC = () => {
         <ThreadWelcomeSuggestions />
       </ThreadPrimitive.Empty>
       {/* aui-composer-root */}
-      <ComposerPrimitive.Root className="focus-within::ring-offset-2 relative flex w-full flex-col rounded-2xl bg-background/40 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white">
+      <ComposerPrimitive.Root className="focus-within:ring-offset-2 relative flex w-full flex-col rounded-2xl bg-background/40 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white">
         {/* aui-composer-input */}
         <ComposerPrimitive.Input
           placeholder="Send a message..."
@@ -209,9 +211,7 @@ const ComposerAction: FC = () => {
         variant="ghost"
         // aui-composer-attachment-button
         className="hover:bg-foreground/15 dark:hover:bg-background/50 scale-115 p-3.5"
-        onClick={() => {
-          console.log("Attachment clicked - not implemented");
-        }}
+        onClick={() => {}}
       >
         <PlusIcon />
       </TooltipIconButton>
@@ -262,7 +262,6 @@ const MessageError: FC = () => {
 };
 
 const AssistantMessage: FC = () => {
-  const contentRef = useRef<HTMLDivElement | null>(null);
   return (
     <MessagePrimitive.Root asChild>
       <motion.div
@@ -278,7 +277,7 @@ const AssistantMessage: FC = () => {
         </div>
 
         {/* aui-assistant-message-content */}
-        <div ref={contentRef} className="text-foreground col-span-2 col-start-2 row-start-1 ml-4 leading-7 break-words">
+        <div className="text-foreground col-span-2 col-start-2 row-start-1 ml-4 leading-7 break-words">
           <MessagePrimitive.Content
             components={{
               Text: MarkdownText,
@@ -289,7 +288,7 @@ const AssistantMessage: FC = () => {
           <MessageError />
         </div>
 
-        <AssistantActionBar contentRef={contentRef} />
+        <AssistantActionBar />
 
         {/* aui-assistant-branch-picker */}
         <BranchPicker className="col-start-2 row-start-2 mr-2 -ml-2" />
@@ -312,10 +311,10 @@ const ReasoningMessagePart: FC = () => {
   );
 };
 
-type AssistantActionBarProps = { contentRef: RefObject<HTMLDivElement | null> };
-
-const AssistantActionBar: FC<AssistantActionBarProps> = ({ contentRef }) => {
+const AssistantActionBar: FC = () => {
   const [copied, setCopied] = useState<boolean>(false);
+  const messageRuntime = useMessageRuntime();
+  const composerRuntime = useComposerRuntime();
 
   const fallbackCopy = (text: string) => {
     try {
@@ -329,36 +328,19 @@ const AssistantActionBar: FC<AssistantActionBarProps> = ({ contentRef }) => {
       textArea.select();
       document.execCommand("copy");
       document.body.removeChild(textArea);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Fallback: Failed to copy text", err);
+      return true;
+    } catch {
+      return false;
     }
   };
 
   const onCopy = async () => {
-    const node = contentRef.current;
-    if (!node) return;
-
-    const clone = node.cloneNode(true) as HTMLElement;
-    clone.querySelectorAll('[data-role="reasoning"]').forEach((el) => el.remove());
-    const text = clone.innerText || clone.textContent || "";
-    if (!text) return;
-    try {
-      if (
-        typeof navigator !== "undefined" &&
-        navigator.clipboard &&
-        typeof navigator.clipboard.writeText === "function"
-      ) {
-        await navigator.clipboard.writeText(text);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      } else {
-        fallbackCopy(text);
-      }
-    } catch (err) {
-      console.error("Failed to copy text:", err);
-      fallbackCopy(text);
+    const { isEditing, text: composerValue } = composerRuntime.getState();
+    const valueToCopy = isEditing ? composerValue : messageRuntime.unstable_getCopyText();
+    const ok = fallbackCopy(valueToCopy);
+    if (ok) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -407,6 +389,38 @@ const UserMessage: FC = () => {
 };
 
 const UserActionBar: FC = () => {
+  const [copied, setCopied] = useState<boolean>(false);
+  const messageRuntime = useMessageRuntime();
+  const composerRuntime = useComposerRuntime();
+
+  const fallbackCopy = (text: string) => {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const onCopy = async () => {
+    const { isEditing, text: composerValue } = composerRuntime.getState();
+    const valueToCopy = isEditing ? composerValue : messageRuntime.unstable_getCopyText();
+    const ok = fallbackCopy(valueToCopy);
+    if (ok) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <ActionBarPrimitive.Root
       hideWhenRunning
@@ -414,6 +428,9 @@ const UserActionBar: FC = () => {
       // aui-user-action-bar-root
       className="col-start-1 mt-2.5 mr-3 flex flex-col items-end"
     >
+      <TooltipIconButton tooltip="Copy" className="mb-1" onClick={onCopy}>
+        {copied ? <CheckIcon /> : <CopyIcon />}
+      </TooltipIconButton>
       <ActionBarPrimitive.Edit asChild>
         <TooltipIconButton tooltip="Edit">
           <PencilIcon />
