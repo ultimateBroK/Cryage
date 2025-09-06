@@ -15,7 +15,7 @@ Then add your Google AI API key to `.env.local`:
 GOOGLE_API_KEY=your-google-ai-api-key-here
 ```
 
-Get your API key from: https://makersuite.google.com/app/apikey
+Get your API key from: https://aistudio.google.com/apikey
 
 Then, run the development server:
 
