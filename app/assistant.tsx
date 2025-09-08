@@ -19,7 +19,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import ThemeToggle from "@/components/ui/theme-toggle";
-import Aurora from "@/blocks/Backgrounds/Aurora/Aurora";
+import LightRays from "@/blocks/Backgrounds/LightRays/LightRays";
 
 export const Assistant = () => {
   const runtime = useChatRuntime();
@@ -28,18 +28,32 @@ export const Assistant = () => {
     <AssistantRuntimeProvider runtime={runtime}>
       <SidebarProvider>
         <div className="flex h-dvh w-full pr-0.5 relative">
-          <div className="pointer-events-none absolute inset-0 z-10 blur-3xl opacity-45 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.15] dark:brightness-[1.2] saturate-125 contrast-[1.1]">
-            <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={1.0} blend={0.42} speed={1.15} />
+          <div className="pointer-events-none absolute inset-0 z-10">
+            <LightRays
+              raysOrigin="top-center"
+              raysColor="#50C878"
+              raysSpeed={1}
+              lightSpread={2}
+              rayLength={3}
+              pulsating={false}
+              fadeDistance={1}
+              saturation={1}
+              followMouse={true}
+              mouseInfluence={0.15}
+              noiseAmount={0}
+              distortion={0}
+              className="opacity-50 dark:opacity-35"
+            />
           </div>
           <AppSidebar />
           <SidebarInset>
-            <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-              <SidebarTrigger />
-              <Separator orientation="vertical" className="mr-2 h-4" />
+            <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 transition-colors-smooth">
+              <SidebarTrigger className="hover-lift" />
+              <Separator orientation="vertical" className="mr-2 h-4 transition-colors-smooth" />
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="https://www.assistant-ui.com/docs/getting-started" target="_blank" rel="noopener noreferrer">
+                    <BreadcrumbLink href="https://www.assistant-ui.com/docs/getting-started" target="_blank" rel="noopener noreferrer" className="hover-lift">
                       Crypto Agent
                     </BreadcrumbLink>
                   </BreadcrumbItem>

@@ -15,13 +15,13 @@ import { ThreadList } from "./assistant-ui/thread-list"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar {...props}>
+    <Sidebar {...props} className="transition-colors-smooth">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-                <Link href="https://assistant-ui.com" target="_blank">
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <Link href="https://assistant-ui.com" target="_blank" className="hover-lift">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground transition-colors-smooth">
                     <MessagesSquare className="size-4" />
                   </div>
                   <div className="flex flex-col gap-0.5 leading-none">
@@ -39,11 +39,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarRail />
       <SidebarFooter>
         <SidebarMenu>
-         
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="https://github.com/assistant-ui/assistant-ui" target="_blank">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <Link href="https://github.com/assistant-ui/assistant-ui" target="_blank" className="hover-lift">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground transition-colors-smooth">
                   <Github className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
@@ -52,7 +51,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
               </Link>
             </SidebarMenuButton>
-            
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
