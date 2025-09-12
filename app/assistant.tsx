@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { Thread } from "@/components/assistant-ui/thread";
@@ -19,10 +20,42 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import ThemeToggle from "@/components/ui/theme-toggle";
+import Settings from "@/components/ui/settings";
 import Aurora from "@/blocks/Backgrounds/Aurora/Aurora";
+
+const API_KEY_STORAGE_KEY = "gemini-api-key";
+
 
 export const Assistant = () => {
   const runtime = useChatRuntime();
+
+  // Override fetch to add API key to chat requests
+  React.useEffect(() => {
+    const originalFetch = window.fetch;
+
+    window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+
+      if (url.includes('/api/chat')) {
+        const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+        if (apiKey && init?.body) {
+          try {
+            const body = JSON.parse(init.body as string);
+            body.apiKey = apiKey;
+            init.body = JSON.stringify(body);
+          } catch {
+            // If parsing fails, continue with original request
+          }
+        }
+      }
+
+      return originalFetch(input, init);
+    };
+
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }, []);
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
@@ -49,7 +82,8 @@ export const Assistant = () => {
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
-              <div className="ml-auto">
+              <div className="ml-auto flex items-center gap-2">
+                <Settings />
                 <ThemeToggle />
               </div>
             </header>
