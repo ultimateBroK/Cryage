@@ -9,9 +9,14 @@ import {
 } from "ai";
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  const { messages, apiKey }: { messages: UIMessage[]; apiKey?: string } = await req.json();
+
+  if (!apiKey) {
+    return new Response('API key is required', { status: 400 });
+  }
+
   const google = createGoogleGenerativeAI({
-    apiKey: process.env.GOOGLE_API_KEY,
+    apiKey: apiKey,
   });
   const result = await streamText({
     model: google("gemini-2.5-flash"),
