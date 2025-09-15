@@ -10,8 +10,9 @@ import {
   useMessageRuntime,
   useComposerRuntime,
 } from "@assistant-ui/react";
+import { useAutoThreadTitle } from "@/hooks/use-auto-thread-title";
 import type { FC } from "react";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -23,6 +24,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   Square,
+  SettingsIcon,
 } from "lucide-react";
 
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
@@ -33,7 +35,53 @@ import { cn } from "@/lib/utils";
 import { MarkdownText } from "./markdown-text";
 import { ToolFallback } from "./tool-fallback";
 
+// Add notification system
+interface NotificationState {
+  show: boolean;
+  message: string;
+  type: 'info' | 'warning' | 'error';
+}
+
+const API_KEY_STORAGE_KEY = "gemini-api-key";
+
 export const Thread: FC = () => {
+  // Auto-generate thread titles when AI finishes responding
+  useAutoThreadTitle();
+
+  // Prevent unwanted scroll behavior
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      // Allow normal scrolling within the viewport
+      const viewport = document.querySelector('[data-viewport="true"]');
+      if (viewport && viewport.contains(e.target as Node)) {
+        return;
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Prevent page-level scrolling with arrow keys, page up/down
+      if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.key)) {
+        const activeElement = document.activeElement;
+        const isInChat = activeElement && (
+          activeElement.getAttribute('aria-label') === 'Message input' ||
+          activeElement.closest('[data-viewport="true"]')
+        );
+        
+        if (!isInChat) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    document.addEventListener('wheel', handleWheel, { passive: true });
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('wheel', handleWheel);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     <ThreadPrimitive.Root
       // aui-thread-root
@@ -44,7 +92,15 @@ export const Thread: FC = () => {
       }}
     >
       {/* aui-thread-viewport */}
-      <ThreadPrimitive.Viewport className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-scroll">
+      <ThreadPrimitive.Viewport 
+        className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-scroll scroll-smooth"
+        data-viewport="true"
+        style={{
+          // Ensure viewport stays stable
+          scrollBehavior: 'smooth',
+          overscrollBehavior: 'contain',
+        }}
+      >
         <ThreadWelcome />
 
         <ThreadPrimitive.Messages
@@ -57,7 +113,12 @@ export const Thread: FC = () => {
 
         <ThreadPrimitive.If empty={false}>
           {/* aui-thread-viewport-spacer */}
-          <motion.div className="min-h-6 min-w-6 shrink-0" />
+          <motion.div 
+            className="min-h-6 min-w-6 shrink-0"
+            initial={false}
+            animate={{ height: 'auto' }}
+            transition={{ duration: 0.2 }}
+          />
         </ThreadPrimitive.If>
       </ThreadPrimitive.Viewport>
 
@@ -74,6 +135,10 @@ const ThreadScrollToBottom: FC = () => {
         variant="outline"
         // aui-thread-scroll-to-bottom
         className="dark:bg-background dark:hover:bg-accent absolute -top-12 z-10 self-center rounded-full p-4 disabled:invisible"
+        onClick={(e) => {
+          // Prevent any unwanted side effects
+          e.stopPropagation();
+        }}
       >
         <ArrowDownIcon />
       </TooltipIconButton>
@@ -177,34 +242,167 @@ const ThreadWelcomeSuggestions: FC = () => {
 };
 
 const Composer: FC = () => {
-  return (
-    // aui-composer-wrapper
-    <div className="bg-background relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-4 px-[var(--thread-padding-x)] pb-4 md:pb-6">
-      <ThreadScrollToBottom />
-      <ThreadPrimitive.Empty>
-        <ThreadWelcomeSuggestions />
-      </ThreadPrimitive.Empty>
-      {/* aui-composer-root */}
-      <ComposerPrimitive.Root className="focus-within:ring-offset-2 relative flex w-full flex-col rounded-2xl bg-background/40 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white">
-        {/* aui-composer-input */}
-        <ComposerPrimitive.Input
-          placeholder="Send a message..."
-          className={
-            "bg-transparent focus:outline-primary placeholder:text-muted-foreground max-h-[calc(50dvh)] min-h-16 w-full resize-none rounded-t-2xl px-4 pt-2 pb-3 text-base outline-none"
+  const [hasApiKey, setHasApiKey] = useState(false);
+  const [notification, setNotification] = useState<NotificationState>({
+    show: false,
+    message: '',
+    type: 'info'
+  });
+
+  // Check API key on mount and when storage changes
+  useEffect(() => {
+    const checkApiKey = () => {
+      const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+      setHasApiKey(!!apiKey?.trim());
+    };
+
+    checkApiKey();
+
+    // Listen for storage changes
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === API_KEY_STORAGE_KEY) {
+        checkApiKey();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Custom event for same-tab updates
+    const handleApiKeyUpdate = () => checkApiKey();
+    window.addEventListener('apiKeyUpdated', handleApiKeyUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('apiKeyUpdated', handleApiKeyUpdate);
+    };
+  }, []);
+
+  // Show notification
+  const showNotification = useCallback((message: string, type: NotificationState['type'] = 'warning') => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification(prev => ({ ...prev, show: false }));
+    }, 4000);
+  }, []);
+
+  // Handle form submission prevention
+  const handleSubmit = useCallback((e: React.FormEvent) => {
+    if (!hasApiKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      showNotification('Please enter your Gemini API key in Settings before sending a message.');
+      
+      // Focus on settings
+      const settingsButton = document.querySelector('[aria-label="Open settings"]') as HTMLButtonElement;
+      if (settingsButton) {
+        settingsButton.click();
+      }
+      return false;
+    }
+    return true;
+  }, [hasApiKey, showNotification]);
+
+  // Handle keyboard shortcut (Enter) - global prevention
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey && !hasApiKey) {
+        const composerInput = document.querySelector('[aria-label="Message input"]') as HTMLTextAreaElement;
+        if (composerInput && document.activeElement === composerInput && composerInput.value.trim()) {
+          e.preventDefault();
+          e.stopPropagation();
+          showNotification('Please enter your Gemini API key in Settings before sending a message.');
+          
+          // Focus on settings
+          const settingsButton = document.querySelector('[aria-label="Open settings"]') as HTMLButtonElement;
+          if (settingsButton) {
+            settingsButton.click();
           }
-          rows={1}
-          autoFocus
-          aria-label="Message input"
-        />
-        <ComposerAction />
-      </ComposerPrimitive.Root>
-    </div>
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown, true); // Use capture phase
+    return () => document.removeEventListener('keydown', handleKeyDown, true);
+  }, [hasApiKey, showNotification]);
+
+  return (
+    <>
+      {/* Notification Toast */}
+      {notification.show && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top duration-300">
+          <div className={cn(
+            "rounded-lg border p-4 shadow-lg backdrop-blur-sm max-w-sm",
+            notification.type === 'warning' && "border-yellow-200 bg-yellow-50/90 text-yellow-800 dark:border-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-200",
+            notification.type === 'error' && "border-red-200 bg-red-50/90 text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200",
+            notification.type === 'info' && "border-blue-200 bg-blue-50/90 text-blue-800 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-200"
+          )}>
+            <div className="flex items-start gap-2">
+              <SettingsIcon className="size-4 mt-0.5 flex-shrink-0" />
+              <p className="text-sm font-medium">{notification.message}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* aui-composer-wrapper */}
+      <div className="bg-background relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-4 px-[var(--thread-padding-x)] pb-4 md:pb-6">
+        <ThreadScrollToBottom />
+        <ThreadPrimitive.Empty>
+          <ThreadWelcomeSuggestions />
+        </ThreadPrimitive.Empty>
+        {/* aui-composer-root */}
+        <ComposerPrimitive.Root 
+          className="focus-within:ring-offset-2 relative flex w-full flex-col rounded-2xl bg-background/40 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white"
+          onSubmit={handleSubmit}
+        >
+          {/* aui-composer-input */}
+          <ComposerPrimitive.Input
+            placeholder={hasApiKey ? "Send a message..." : "Please add API key in Settings to start chatting..."}
+            className={cn(
+              "bg-transparent focus:outline-primary placeholder:text-muted-foreground max-h-[40vh] min-h-16 w-full resize-none rounded-t-2xl px-4 pt-2 pb-3 text-base outline-none",
+              !hasApiKey && "cursor-not-allowed opacity-60"
+            )}
+            rows={1}
+            autoFocus={false} // Disable autoFocus to prevent scroll issues
+            aria-label="Message input"
+            disabled={!hasApiKey}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey && !hasApiKey) {
+                e.preventDefault();
+                e.stopPropagation();
+                showNotification('Please enter your Gemini API key in Settings before sending a message.');
+                
+                const settingsButton = document.querySelector('[aria-label="Open settings"]') as HTMLButtonElement;
+                if (settingsButton) {
+                  settingsButton.click();
+                }
+              }
+            }}
+          />
+          <ComposerAction hasApiKey={hasApiKey} />
+        </ComposerPrimitive.Root>
+      </div>
+    </>
   );
 };
 
-const ComposerAction: FC = () => {
+const ComposerAction: FC<{ hasApiKey: boolean }> = ({ hasApiKey }) => {
+  // Handle send attempt without API key
+  const handleSendAttempt = useCallback((e: React.MouseEvent) => {
+    if (!hasApiKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Focus on settings
+      const settingsButton = document.querySelector('[aria-label="Open settings"]') as HTMLButtonElement;
+      if (settingsButton) {
+        settingsButton.click();
+      }
+      return false;
+    }
+  }, [hasApiKey]);
+
   return (
-    // aui-composer-action-wrapper
     <div className="relative flex items-center justify-between rounded-b-2xl border-t border-black/10 dark:border-white/10 bg-background/30 backdrop-blur-md p-2">
       <TooltipIconButton
         tooltip="Attach file"
@@ -212,6 +410,7 @@ const ComposerAction: FC = () => {
         // aui-composer-attachment-button
         className="hover:bg-foreground/15 dark:hover:bg-background/50 scale-115 p-3.5"
         onClick={() => {}}
+        disabled={!hasApiKey}
       >
         <PlusIcon />
       </TooltipIconButton>
@@ -222,8 +421,15 @@ const ComposerAction: FC = () => {
             type="submit"
             variant="default"
             // aui-composer-send
-            className="dark:border-muted-foreground/90 border-muted-foreground/60 hover:bg-primary/75 size-8 rounded-full border"
-            aria-label="Send message"
+            className={cn(
+              "size-8 rounded-full border",
+              hasApiKey 
+                ? "dark:border-muted-foreground/90 border-muted-foreground/60 hover:bg-primary/75" 
+                : "border-muted-foreground/30 bg-muted-foreground/20 text-muted-foreground/60 cursor-not-allowed hover:bg-muted-foreground/20"
+            )}
+            aria-label={hasApiKey ? "Send message" : "API key required"}
+            disabled={!hasApiKey}
+            onClick={handleSendAttempt}
           >
             {/* aui-composer-send-icon */}
             <ArrowUpIcon className="size-5" />
