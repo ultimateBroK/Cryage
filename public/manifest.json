@@ -1,0 +1,27 @@
+{
+  "name": "Cryage - Crypto AI Assistant",
+  "short_name": "Cryage",
+  "description": "Advanced AI assistant for cryptocurrency insights, blockchain analysis, and crypto trading guidance",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#10201C",
+  "theme_color": "#00f7be",
+  "icons": [
+    {
+      "src": "/favicon.svg?v=6",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/favicon.svg?v=6",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon.svg?v=6",
+      "sizes": "16x16",
+      "type": "image/svg+xml"
+    }
+  ]
+}

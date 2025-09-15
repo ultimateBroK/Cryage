@@ -53,6 +53,8 @@ export const Settings = () => {
     setApiKey(value);
     try {
       localStorage.setItem(API_KEY_STORAGE_KEY, value);
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('apiKeyUpdated'));
     } catch (error) {
       console.error("Failed to save API key to localStorage:", error);
     }
