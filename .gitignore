@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
+# Dependencies
+**/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -10,39 +10,200 @@
 !.yarn/releases
 !.yarn/versions
 package-lock.json
+yarn.lock
 
-# testing
+# Testing
 /coverage
+coverage/
+*.lcov
+.nyc_output
 
-# next.js
-/.next/
-/out/
+# Next.js
+/frontend/.next/
+/frontend/out/
+/frontend/.swc/
 
-# production
+# Production builds
 /build
+/dist
+/frontend/dist/
+/backend/dist/
 
-# misc
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+.Python
+**/env/
+**/venv/
+**/.venv/
+**/.env
+.PYTHONPATH
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# UV (Python package manager)
+.uv/
+.uvx/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# OS generated files
 .DS_Store
-*.pem
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.tmp
+*.temp
 
-# debug
+# IDE and editor files
+/.cursor/
+/.crush/
+/.vscode/
+/.idea/
+*.swp
+*.swo
+*~
+*.sublime-*
+
+# Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 bun-debug.log*
+<<<<<<< HEAD
+logs/
+=======
+>>>>>>> main
 
-# env files (can opt-in for committing if needed)
+# Environment files
 .env*
+!.env.example
+!.env.template
 
-# vercel
+# Deployment
 .vercel
+.netlify
 
-# typescript
+# TypeScript
 *.tsbuildinfo
-next-env.d.ts
+/frontend/next-env.d.ts
 
+<<<<<<< HEAD
+# Storybook build outputs
+storybook-static
+
+# Temporary folders
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Lock files (keep these committed for consistency)
+# bun.lock - keep
+# uv.lock - keep
+
+# Documentation and notes
+CRUSH.md*
+TODO.md
+NOTES.md
+.scratch/
+
+# Performance monitoring
+.clinic/
+.0x/
+
+# Sentry
+.sentryclirc
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# next.js build output and cache
+.next/
+out/
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Storybook build outputs
+storybook-static
+
+# Temporary folders
+tmp/
+temp/
+=======
 # cursor rules
 /.cursor/
 /.vscode/
 CRUSH.md*
+>>>>>>> main
