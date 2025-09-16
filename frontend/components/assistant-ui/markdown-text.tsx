@@ -101,7 +101,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <h6 className={cn("my-4 font-semibold first:mt-0 last:mb-0", className)} {...props} />
   ),
   p: ({ className, ...props }) => (
-    <p className={cn("mb-5 mt-5 leading-7 first:mt-0 last:mb-0", className)} {...props} />
+    <p className={cn("mb-5 mt-5 leading-7 first:mt-0 last:mb-0 whitespace-pre-wrap", className)} {...props} />
   ),
   a: ({ className, ...props }) => (
     <a className={cn("text-primary font-medium underline underline-offset-4", className)} {...props} />

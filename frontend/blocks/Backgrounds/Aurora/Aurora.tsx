@@ -97,13 +97,29 @@ void main() {
   vec3 rampColor;
   COLOR_RAMP(colors, uv.x, rampColor);
   
-  float height = snoise(vec2(uv.x * 2.0 + uTime * 0.1, uTime * 0.25)) * 0.5 * uAmplitude;
-  height = exp(height);
-  height = (uv.y * 2.0 - height + 0.2);
-  float intensity = 0.6 * height;
+  // Create symmetric aurora waves across both sides
+  float centerX = 0.5;
+  float distanceFromCenter = abs(uv.x - centerX);
+  float symmetricX = distanceFromCenter * 2.0; // Normalize distance to 0-1
   
-  float midPoint = 0.20;
-  float auroraAlpha = smoothstep(midPoint - uBlend * 0.5, midPoint + uBlend * 0.5, intensity);
+  // Generate aurora on both left and right sides
+  float leftHeight = snoise(vec2(uv.x * 3.0 + uTime * 0.15, uTime * 0.3)) * 0.4 * uAmplitude;
+  float rightHeight = snoise(vec2((1.0 - uv.x) * 3.0 + uTime * 0.12, uTime * 0.28)) * 0.4 * uAmplitude;
+  
+  // Blend the two sides with a smooth transition
+  float blendFactor = smoothstep(0.2, 0.8, uv.x);
+  float combinedHeight = mix(leftHeight, rightHeight, blendFactor);
+  
+  // Add central aurora for better connectivity
+  float centralHeight = snoise(vec2(symmetricX * 2.5 + uTime * 0.08, uTime * 0.35)) * 0.3 * uAmplitude;
+  combinedHeight += centralHeight * (1.0 - distanceFromCenter * 1.5);
+  
+  combinedHeight = exp(combinedHeight);
+  combinedHeight = (uv.y * 2.2 - combinedHeight + 0.25);
+  float intensity = 0.65 * combinedHeight;
+  
+  float midPoint = 0.22;
+  float auroraAlpha = smoothstep(midPoint - uBlend * 0.6, midPoint + uBlend * 0.6, intensity);
   
   vec3 auroraColor = intensity * rampColor;
   

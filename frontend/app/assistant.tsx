@@ -9,6 +9,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import {
+  SettingsSidebarProvider,
+  SettingsSidebarInset,
+} from "@/components/ui/settings-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { ThreadTitleProvider } from "@/lib/thread-title-context";
 
@@ -29,8 +33,13 @@ const AppSidebar = dynamic(
 );
 
 const Settings = dynamic(
-  () => import("@/components/ui/settings"), 
+  () => import("@/components/ui/settings"),
   { ssr: false, loading: () => <div className="w-10 h-10" /> }
+);
+
+const SettingsSidebarPanel = dynamic(
+  () => import("@/components/ui/settings").then(m => ({ default: m.SettingsSidebarPanel })),
+  { ssr: false, loading: () => null }
 );
 
 const ThemeToggle = dynamic(
@@ -108,18 +117,23 @@ export const Assistant = () => {
     <ThreadTitleProvider>
       <AssistantRuntimeProvider runtime={runtime}>
         <SidebarProvider>
-          <div className="flex h-dvh w-full pr-0.5 relative overflow-hidden">
-            <div className="pointer-events-none absolute inset-0 z-10 blur-3xl opacity-45 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.15] dark:brightness-[1.2] saturate-125 contrast-[1.1]">
-              <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={1.0} blend={0.42} speed={1.15} />
-            </div>
-            <AppSidebar />
-            <SidebarInset>
-              <HeaderSection />
-              <div className="flex-1 overflow-hidden">
-                <Thread />
+          <SettingsSidebarProvider>
+            <div className="flex h-dvh w-full pr-0.5 relative overflow-hidden">
+              <div className="pointer-events-none absolute inset-0 z-10 blur-3xl opacity-45 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.15] dark:brightness-[1.2] saturate-125 contrast-[1.1]">
+                <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={1.0} blend={0.42} speed={1.15} />
               </div>
-            </SidebarInset>
-          </div>
+              <AppSidebar />
+              <SidebarInset>
+                <HeaderSection />
+                <SettingsSidebarInset>
+                  <div className="flex-1 overflow-hidden">
+                    <Thread />
+                  </div>
+                </SettingsSidebarInset>
+              </SidebarInset>
+              <SettingsSidebarPanel />
+            </div>
+          </SettingsSidebarProvider>
         </SidebarProvider>
       </AssistantRuntimeProvider>
     </ThreadTitleProvider>

@@ -182,26 +182,42 @@ function Sidebar({
 
   if (isMobile) {
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetContent
+      <React.Fragment>
+        {/* Overlay */}
+        <div
+          data-slot="sidebar-overlay"
+          className={cn(
+            "fixed inset-0 z-40 bg-black/50 transition-opacity duration-200 ease-linear",
+            openMobile ? "opacity-100" : "opacity-0 pointer-events-none"
+          )}
+          onClick={() => setOpenMobile(false)}
+        />
+
+        {/* Sidebar */}
+        <div
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+          className={cn(
+            "fixed inset-y-0 z-50 bg-sidebar text-sidebar-foreground flex flex-col border-r shadow-lg transition-transform duration-200 ease-linear",
+            side === "left"
+              ? openMobile ? "translate-x-0" : "-translate-x-full"
+              : openMobile ? "translate-x-0" : "translate-x-full",
+            "w-(--sidebar-width)",
+            className
+          )}
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
+              [side === "left" ? "left" : "right"]: 0,
             } as React.CSSProperties
           }
-          side={side}
+          onClick={(e) => e.stopPropagation()}
+          {...props}
         >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
-          </SheetHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
-        </SheetContent>
-      </Sheet>
+          {children}
+        </div>
+      </React.Fragment>
     )
   }
 

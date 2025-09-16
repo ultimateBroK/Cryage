@@ -93,12 +93,13 @@ export const Thread: FC = () => {
     >
       {/* aui-thread-viewport */}
       <ThreadPrimitive.Viewport 
-        className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-scroll scroll-smooth"
+        className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto min-h-0"
         data-viewport="true"
         style={{
-          // Ensure viewport stays stable
+          // Ensure viewport stays stable and scrollable
           scrollBehavior: 'smooth',
           overscrollBehavior: 'contain',
+          maxHeight: '100%',
         }}
       >
         <ThreadWelcome />
@@ -472,32 +473,36 @@ const AssistantMessage: FC = () => {
     <MessagePrimitive.Root asChild>
       <motion.div
         // aui-assistant-message-root
-        className="relative mx-auto grid w-full max-w-[var(--thread-max-width)] grid-cols-[auto_auto_1fr] grid-rows-[auto_1fr] px-[var(--thread-padding-x)] py-4"
+        className="relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4"
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         data-role="assistant"
       >
-        {/* aui-assistant-message-avatar */}
-        <div className="ring-border bg-background col-start-1 row-start-1 flex size-8 shrink-0 items-center justify-center rounded-full ring-1">
-          <StarIcon size={14} />
+        {/* Main message container */}
+        <div className="flex gap-4">
+          {/* aui-assistant-message-avatar */}
+          <div className="ring-border bg-background flex size-8 shrink-0 items-center justify-center rounded-full ring-1">
+            <StarIcon size={14} />
+          </div>
+
+          {/* aui-assistant-message-content */}
+          <div className="text-foreground flex-1 leading-7 break-words">
+            <MessagePrimitive.Content
+              components={{
+                Text: MarkdownText,
+                Reasoning: ReasoningMessagePart,
+                tools: { Fallback: ToolFallback },
+              }}
+            />
+            <MessageError />
+          </div>
         </div>
 
-        {/* aui-assistant-message-content */}
-        <div className="text-foreground col-span-2 col-start-2 row-start-1 ml-4 leading-7 break-words">
-          <MessagePrimitive.Content
-            components={{
-              Text: MarkdownText,
-              Reasoning: ReasoningMessagePart,
-              tools: { Fallback: ToolFallback },
-            }}
-          />
-          <MessageError />
+        {/* Actions and branch picker below content */}
+        <div className="ml-12 flex flex-col gap-2">
+          <AssistantActionBar />
+          <BranchPicker className="" />
         </div>
-
-        <AssistantActionBar />
-
-        {/* aui-assistant-branch-picker */}
-        <BranchPicker className="col-start-2 row-start-2 mr-2 -ml-2" />
       </motion.div>
     </MessagePrimitive.Root>
   );
@@ -553,10 +558,8 @@ const AssistantActionBar: FC = () => {
   return (
     <ActionBarPrimitive.Root
       hideWhenRunning
-      autohide="not-last"
-      autohideFloat="single-branch"
       // aui-assistant-action-bar-root
-      className="text-muted-foreground data-floating:bg-background col-start-3 row-start-2 mt-2 flex gap-1 justify-end data-floating:absolute data-floating:mt-2 data-floating:rounded-md data-floating:border data-floating:p-1 data-floating:shadow-sm"
+      className="text-muted-foreground flex gap-1 justify-start"
     >
       <TooltipIconButton tooltip="Copy" onClick={onCopy}>
         {copied ? <CheckIcon /> : <CopyIcon />}
@@ -575,20 +578,24 @@ const UserMessage: FC = () => {
     <MessagePrimitive.Root asChild>
       <motion.div
         // aui-user-message-root
-        className="mx-auto grid w-full max-w-[var(--thread-max-width)] auto-rows-auto grid-cols-[minmax(72px,1fr)_auto] gap-y-1 px-[var(--thread-padding-x)] py-4 [&:where(>*)]:col-start-2"
+        className="mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4"
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         data-role="user"
       >
-        <UserActionBar />
-
-        {/* aui-user-message-content */}
-        <div className="bg-muted text-foreground col-start-2 rounded-3xl px-5 py-2.5 break-words">
-          <MessagePrimitive.Content components={{ Text: MarkdownText }} />
+        {/* Main message container */}
+        <div className="flex justify-end">
+          {/* aui-user-message-content */}
+          <div className="bg-muted text-foreground rounded-3xl px-5 py-2.5 break-words max-w-[80%]">
+            <MessagePrimitive.Content components={{ Text: MarkdownText }} />
+          </div>
         </div>
 
-        {/* aui-user-branch-picker */}
-        <BranchPicker className="col-span-full col-start-1 row-start-3 -mr-1 justify-end" />
+        {/* Actions and branch picker below content */}
+        <div className="flex flex-col gap-2 items-end">
+          <UserActionBar />
+          <BranchPicker className="justify-end" />
+        </div>
       </motion.div>
     </MessagePrimitive.Root>
   );
@@ -630,11 +637,10 @@ const UserActionBar: FC = () => {
   return (
     <ActionBarPrimitive.Root
       hideWhenRunning
-      autohide="not-last"
       // aui-user-action-bar-root
-      className="col-start-1 mt-2.5 mr-3 flex flex-col items-end"
+      className="text-muted-foreground flex gap-1 justify-end"
     >
-      <TooltipIconButton tooltip="Copy" className="mb-1" onClick={onCopy}>
+      <TooltipIconButton tooltip="Copy" onClick={onCopy}>
         {copied ? <CheckIcon /> : <CopyIcon />}
       </TooltipIconButton>
       <ActionBarPrimitive.Edit asChild>
