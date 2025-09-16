@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/settings-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { ThreadTitleProvider } from "@/lib/thread-title-context";
+import { Idle } from "@/components/idle";
 
 // Dynamic imports for better code splitting
 const Thread = dynamic(
@@ -22,8 +23,9 @@ const Thread = dynamic(
   { ssr: false, loading: () => null }
 );
 
+// Defer Aurora (and its ogl dep) to browser idle to keep first load JS small
 const Aurora = dynamic(
-  () => import("@/blocks/Backgrounds/Aurora/Aurora"), 
+  () => import("@/blocks/Backgrounds/Aurora/Aurora"),
   { ssr: false, loading: () => <div className="absolute inset-0" /> }
 );
 
@@ -51,8 +53,8 @@ const ThemeToggle = dynamic(
 const AppHeader = () => {
   return (
     <div className="flex items-center space-x-2">
-      <span className="text-lg font-semibold text-foreground">Cryage</span>
-      <span className="text-sm text-muted-foreground">• Crypto AI Assistant</span>
+      <span className="text-base sm:text-lg font-semibold text-foreground">Cryage</span>
+      <span className="text-xs sm:text-sm text-muted-foreground hidden sm:inline">• Crypto AI Assistant</span>
     </div>
   );
 };
@@ -62,11 +64,11 @@ const API_KEY_STORAGE_KEY = "gemini-api-key";
 // Separate header component for better code organization
 const HeaderSection: React.FC = () => {
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+    <header className="flex h-14 sm:h-16 shrink-0 items-center gap-2 border-b px-2 sm:px-4">
       <SidebarTrigger />
       <Separator orientation="vertical" className="mr-2 h-4" />
       <AppHeader />
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-1 sm:gap-2">
         <Settings />
         <ThemeToggle />
       </div>
@@ -120,7 +122,9 @@ export const Assistant = () => {
           <SettingsSidebarProvider>
             <div className="flex h-dvh w-full pr-0.5 relative overflow-hidden">
               <div className="pointer-events-none absolute inset-0 z-10 blur-3xl opacity-45 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.15] dark:brightness-[1.2] saturate-125 contrast-[1.1]">
-                <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={1.0} blend={0.42} speed={1.15} />
+                <Idle delayMs={1200}>
+                  <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={1.0} blend={0.42} speed={1.15} />
+                </Idle>
               </div>
               <AppSidebar />
               <SidebarInset>

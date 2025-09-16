@@ -9,7 +9,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 
 const SETTINGS_SIDEBAR_COOKIE_NAME = "settings_sidebar_state"
 const SETTINGS_SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
-const SETTINGS_SIDEBAR_WIDTH = "16rem"
+const SETTINGS_SIDEBAR_WIDTH = "25rem"
 
 type SettingsSidebarContextProps = {
   open: boolean
@@ -111,7 +111,7 @@ function SettingsSidebar({
   children,
   ...props
 }: React.ComponentProps<"div">) {
-  const { isMobile, openMobile, setOpenMobile, open } = useSettingsSidebar()
+  const { isMobile, openMobile, setOpenMobile, open, setOpen } = useSettingsSidebar()
 
   if (isMobile) {
     return (
@@ -146,29 +146,28 @@ function SettingsSidebar({
   }
 
   return (
-    <div
-      className="group peer text-foreground hidden md:block"
-      data-state={open ? "open" : "closed"}
-      data-slot="settings-sidebar"
-    >
-      {/* This is what handles the sidebar gap on desktop */}
+    <React.Fragment>
+      {/* Overlay for desktop */}
       <div
-        data-slot="settings-sidebar-gap"
+        data-slot="settings-sidebar-overlay"
         className={cn(
-          "relative w-(--settings-sidebar-width) bg-transparent transition-[width] duration-200 ease-linear",
-          "group-data-[state=closed]:w-0",
-          "group-data-[state=open]:w-(--settings-sidebar-width)"
+          "fixed inset-0 z-40 bg-black/50 transition-opacity duration-200 ease-linear hidden md:block",
+          open ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
+        onClick={() => setOpen(false)}
       />
+
+      {/* Sidebar overlay */}
       <div
         data-slot="settings-sidebar-container"
         className={cn(
-          "fixed inset-y-0 z-10 hidden h-svh w-(--settings-sidebar-width) transition-[right,width] duration-200 ease-linear md:flex",
-          "right-0 group-data-[state=closed]:right-[calc(var(--settings-sidebar-width)*-1)]",
-          "group-data-[state=open]:right-0",
-          "border-l",
+          "fixed inset-y-0 z-50 h-svh w-(--settings-sidebar-width) transition-transform duration-200 ease-linear",
+          "right-0",
+          open ? "translate-x-0" : "translate-x-full",
+          "border-l shadow-lg",
           className
         )}
+        onClick={(e) => e.stopPropagation()}
         {...props}
       >
         <div
@@ -179,7 +178,7 @@ function SettingsSidebar({
           {children}
         </div>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 
@@ -233,15 +232,11 @@ function SettingsSidebarHeader({ className, ...props }: React.ComponentProps<"di
 }
 
 function SettingsSidebarInset({ className, ...props }: React.ComponentProps<"div">) {
-  const { open, isMobile } = useSettingsSidebar()
-  
   return (
     <div
       data-slot="settings-sidebar-inset"
       className={cn(
         "relative flex w-full flex-1 flex-col min-h-0",
-        !isMobile && open && "md:mr-[var(--settings-sidebar-width)]",
-        "transition-[margin] duration-200 ease-linear",
         className
       )}
       {...props}
