@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState, type F
 import { PlusIcon, MinusIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useThreadRuntime } from "@assistant-ui/react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from "framer-motion";
 import StarBorder from "@/blocks/Animations/StarBorder/StarBorder";
 import {
   MarkdownTextPrimitive,
