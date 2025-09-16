@@ -95,9 +95,9 @@ const DashboardSidebar: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full space-y-4 p-4">
+    <div className="flex flex-col h-full min-h-0 space-y-3 p-3 sm:space-y-4 sm:p-4 will-change-transform overflow-y-auto">
       {/* Market Overview */}
-      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg">
+      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg flex-shrink-0">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm flex items-center gap-2 dark:text-slate-200">
             <Globe className="w-4 h-4 dark:text-blue-400" />
@@ -128,7 +128,7 @@ const DashboardSidebar: React.FC = () => {
       </Card>
 
       {/* Top Movers */}
-      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg">
+      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg flex-shrink-0">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm flex items-center gap-2 dark:text-slate-200">
             <Zap className="w-4 h-4 dark:text-yellow-400" />
@@ -151,7 +151,7 @@ const DashboardSidebar: React.FC = () => {
          </Card>
 
        {/* Quick Actions */}
-      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg">
+      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg flex-shrink-0">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm flex items-center gap-2 dark:text-slate-200">
             <Target className="w-4 h-4 dark:text-purple-400" />
@@ -176,7 +176,7 @@ const DashboardSidebar: React.FC = () => {
 
        {/* Active Alerts */}
       {marketStats.activeAlerts > 0 && (
-        <Card className="crypto-card-cyan border-orange-200 bg-orange-50/50 dark:border-orange-600 dark:bg-orange-950/30 dark:shadow-lg">
+        <Card className="crypto-card-cyan border-orange-200 bg-orange-50/50 dark:border-orange-600 dark:bg-orange-950/30 dark:shadow-lg flex-shrink-0">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm flex items-center gap-2 text-orange-700 dark:text-orange-300">
               <AlertTriangle className="w-4 h-4 dark:text-orange-400" />
@@ -203,8 +203,8 @@ const DashboardSidebar: React.FC = () => {
 // Settings Sidebar - Quick settings access
 const SettingsSidebar: React.FC = () => {
   return (
-    <div className="flex flex-col h-full space-y-4 p-4">
-      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg">
+    <div className="flex flex-col h-full min-h-0 space-y-3 p-3 sm:space-y-4 sm:p-4 will-change-transform overflow-y-auto">
+      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg flex-shrink-0">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm flex items-center gap-2 dark:text-slate-200">
             <Settings className="w-4 h-4 dark:text-gray-400" />
@@ -227,7 +227,7 @@ const SettingsSidebar: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg">
+      <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg flex-shrink-0">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm dark:text-slate-200">Recent Activity</CardTitle>
         </CardHeader>

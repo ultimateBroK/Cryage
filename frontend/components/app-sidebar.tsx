@@ -16,7 +16,7 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 }
 
 export function AppSidebar({ activeTab = "chat", ...props }: AppSidebarProps) {
-  const collapsibleMode = activeTab === "chat" ? "offcanvas" : "icon" as const;
+  const collapsibleMode = (activeTab === "chat" || activeTab === "dashboard") ? "offcanvas" : "icon" as const;
   return (
     <Sidebar collapsible={collapsibleMode} {...props}>
       <SidebarHeader>
