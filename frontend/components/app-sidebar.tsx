@@ -8,7 +8,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from "@/components/ui/sidebar"
 import { ContextualSidebar } from "./ContextualSidebar"
 
@@ -42,8 +41,6 @@ export function AppSidebar({ activeTab = "chat", ...props }: AppSidebarProps) {
           <ContextualSidebar activeTab={activeTab} />
         </div>
       </SidebarContent>
-
-      <SidebarRail />
     </Sidebar>
   )
 }

@@ -13,14 +13,25 @@ import {
   Globe,
   Zap,
   Target,
-  MessageSquare,
   Settings
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { MotionDiv, Presence } from "@/components/motion";
 
-// Dynamic imports for performance
-const ThreadList = dynamic(() => import("./assistant-ui/thread-list").then(m => m.ThreadList), { ssr: false, loading: () => null });
+// Dynamic imports for performance with loading state
+const ThreadList = dynamic(() => import("./assistant-ui/thread-list").then(m => m.ThreadList), { 
+  ssr: false, 
+  loading: () => (
+    <div className="flex flex-col gap-2 p-3">
+      {/* New Thread Button Skeleton */}
+      <div className="h-9 rounded-lg border border-dashed bg-muted/20 animate-pulse" />
+      {/* Thread Items Skeleton */}
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="h-10 rounded-lg bg-muted/20 animate-pulse" />
+      ))}
+    </div>
+  )
+});
 
 interface ContextualSidebarProps {
   activeTab: string;
@@ -40,10 +51,10 @@ export const ContextualSidebar: React.FC<ContextualSidebarProps> = ({ activeTab 
     <Presence>
       <MotionDiv
         key={activeTab}
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
-        transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
         className="h-full"
       >
         {content}
@@ -55,19 +66,9 @@ export const ContextualSidebar: React.FC<ContextualSidebarProps> = ({ activeTab 
 // Chat Sidebar - Thread management
 const ChatSidebar: React.FC = () => {
   return (
-    <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="p-4 border-b dark:border-slate-700 dark:bg-slate-900/50 sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-slate-900/40">
-        <div className="flex items-center gap-2">
-          <MessageSquare className="w-5 h-5 dark:text-blue-400" />
-          <h3 className="font-semibold dark:text-slate-200">Chat History</h3>
-        </div>
-      </div>
-
-
-
+    <div className="flex flex-col h-full min-h-0">
       {/* Thread List */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden p-3 will-change-transform">
         <ThreadList />
       </div>
     </div>
