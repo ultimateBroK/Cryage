@@ -2,12 +2,6 @@
 
 > **Transform your crypto trading with AI-powered market analysis and intelligent conversation**
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Gemini AI](https://img.shields.io/badge/Gemini-2.5%20Flash-orange?style=for-the-badge&logo=google)](https://ai.google.dev/)
-
 ## ✨ What is Cryage?
 
 **Cryage** is a next-generation crypto AI agent that combines advanced market analysis with intelligent conversation. Built for traders, analysts, and crypto enthusiasts who want to make informed decisions with AI assistance.
@@ -117,12 +111,12 @@ graph LR
 
 ## 🎯 Roadmap - Coming Soon
 
-| Feature | Timeline | Description |
-|---------|----------|-------------|
+| Feature | Status | Description |
+|---------|--------|-------------|
 | 📊 **Live Market Charts** | 🚧 **Next** | Real-time crypto data with technical indicators |
-| 🧠 **AI Market Analysis** | 🚧 **Week 2** | Context-aware analysis combining technical + sentiment |
-| 📈 **Demo Trading Signals** | 🚧 **Week 3** | Paper trading signals with AI rationale |
-| 🔄 **Enhanced Chat** | 🚧 **Week 4** | Market-aware conversations and analysis |
+| 🧠 **AI Market Analysis** | 🚧 **In Progress** | Context-aware analysis combining technical + sentiment |
+| 📈 **Demo Trading Signals** | 🚧 **Planned** | Paper trading signals with AI rationale |
+| 🔄 **Enhanced Chat** | 🚧 **Planned** | Market-aware conversations and analysis |
 
 ## 🛠️ Tech Stack & Dependencies
 
@@ -187,8 +181,8 @@ POST /api/agent/analyze
 ### Method 1: Quick Start (Recommended)
 ```bash
 # Clone and start immediately
-git clone https://github.com/your-username/cryage-crypto-ai.git
-cd cryage-crypto-ai
+git clone https://github.com/ultimateBroK/cryage.git
+cd cryage
 
 # One command to rule them all
 bun run dev
@@ -297,29 +291,162 @@ We welcome contributions! Here's how to get started:
 - 📱 **Mobile Support**: Fully responsive
 - 🌙 **Dark Mode**: Built-in theme support
 
-## 🌟 Star History
+## ✨ Technologies
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ultimateBroK/cryage&type=Date)](https://star-history.com/#ultimateBroK/cryage&Date)
+### 🥇 Programming Languages
+<table>
+  <tr>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=python&titles=true" alt="Python" /><br>
+      <b>Python</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=javascript&titles=true" alt="JavaScript" /><br>
+      <b>JavaScript</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=typescript&titles=true" alt="TypeScript" /><br>
+      <b>TypeScript</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=css&titles=true" alt="CSS" /><br>
+      <b>CSS</b>
+    </td>
+  </tr>
+</table>
 
-## 📄 License
+### 🤖 AI & Machine Learning Platforms
+<table>
+  <tr>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=agno&titles=true" alt="Agno" /><br>
+      <b>Agno</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=gemini&titles=true" alt="Gemini" /><br>
+      <b>Gemini</b>
+    </td>
+  </tr>
+</table>
+
+### 📊 Data & Trading APIs
+<table>
+  <tr>
+    <td align="center" width="120">
+      <img src="https://cdn.simpleicons.org/binance?viewbox=auto" width="48" height="48" alt="Binance" /><br>
+      <b>Binance</b>
+    </td>
+  </tr>
+</table>
+
+### 🎨 Frontend Frameworks & UI Libraries
+<table>
+  <tr>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=react&titles=true" alt="React" /><br>
+      <b>React</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=nextjs&titles=true" alt="Next.js" /><br>
+      <b>Next.js</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=tailwindcss&titles=true" alt="Tailwind CSS" /><br>
+      <b>Tailwind CSS</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=shadcn&titles=true" alt="Shadcn" /><br>
+      <b>Shadcn/ui</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.brandfetch.io/idJGnLFA9x/theme/dark/symbol.svg?c=1dxbfHSJFAPEGdCLU4o5B" width="48" height="48" alt="TradingView" /><br>
+      <b>TradingView</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.brandfetch.io/idDJv1mfrb/theme/light/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B" width="48" height="48" alt="Motion" /><br>
+      <b>Motion</b>
+    </td>
+  </tr>
+</table>
+
+### ⚙️ Backend & API Development
+<table>
+  <tr>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=bun&titles=true" alt="Bun" /><br>
+      <b>Bun</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=fastapi&titles=true" alt="FastAPI" /><br>
+      <b>FastAPI</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=socketio&titles=true" alt="Socket.IO" /><br>
+      <b>Socket.IO</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://cdn.brandfetch.io/idCF8uvFtt/w/720/h/720/theme/dark/logo.png?c=1dxbfHSJFAPEGdCLU4o5B" width="48" height="48" alt="Uvicorn" /><br>
+      <b>Uvicorn</b>
+    </td>
+  </tr>
+</table>
+
+### 🗄️ Databases & Storage
+<table>
+  <tr>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=sqlite&titles=true" alt="SQLite" /><br>
+      <b>SQLite</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=agno&titles=true" alt="Agno" /><br>
+      <b>Agno</b>
+    </td>
+  </tr>
+</table>
+
+### 🐳 DevOps & Deployment
+<table>
+  <tr>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=docker&titles=true" alt="Docker" /><br>
+      <b>Docker</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=vercel&titles=true" alt="Vercel" /><br>
+      <b>Vercel</b>
+    </td>
+    <td align="center" width="120">
+      <img src="https://go-skill-icons.vercel.app/api/icons?i=git&titles=true" alt="Git" /><br>
+      <b>Git</b>
+    </td>
+  </tr>
+</table>
+
+</div>
+
+## ⚠️ Disclaimer
+
+**Cryage is for informational and educational purposes only. It is NOT financial advice.**
+
+Cryptocurrency trading involves significant risk, and you could lose your capital. The information provided by Cryage, including any AI-generated insights, technical analysis, or data visualizations, may contain errors, inaccuracies, or be incomplete.
+
+- **Do NOT** make trading decisions based solely on the information presented by this tool.
+- **Always** conduct your own thorough research (DYOR) and consult with a qualified financial advisor before making any investment decisions.
+- The developers and contributors of Cryage assume **NO** responsibility for any trading losses or financial damages incurred as a result of using this software.
+
+Use Cryage at your own risk.
+
+## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- 🤖 **Google Gemini AI** - Powering intelligent conversations
-- 🎨 **Vercel & Next.js** - Amazing developer experience  
-- ⚡ **Assistant UI** - Beautiful chat interface components
-- 🎭 **Tailwind CSS** - Utility-first styling framework
-
 ---
 
+<p align="center">Built with ❤️ using FastAPI, Next.js, Binance API, and Google Gemini AI</p>
+
 <div align="center">
-
-**Built with ❤️ for the crypto community**
-
-[⭐ Star this project](https://github.com/ultimateBroK/cryage) • [🐛 Report Bug](https://github.com/ultimateBroK/cryage/issues) • [💡 Request Feature](https://github.com/ultimateBroK/cryage/issues)
-
-**Ready to revolutionize your crypto trading with AI?**
-
+  <a href="https://visitor-badge.laobi.icu/badge?page_id=ultimateBroK.Cryage"><img src="https://visitor-badge.laobi.icu/badge?page_id=ultimateBroK.Cryage" alt="Visitors"></a>
+  <a href="https://github.com/ultimateBroK/Cryage/stargazers"><img src="https://img.shields.io/github/stars/ultimateBroK/Cryage?style=flat-square&logo=github&label=Stars&color=gold" alt="Stars"></a>
+  <a href="https://github.com/ultimateBroK/Cryage/issues"><img src="https://img.shields.io/github/issues/ultimateBroK/Cryage?style=flat-square&logo=github&label=Issues&color=red" alt="Issues"></a>
 </div>
