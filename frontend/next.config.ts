@@ -6,24 +6,14 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === "production",
   },
 
-  // Enable bundle analyzer conditionally
-  ...(process.env.ANALYZE === 'true' && {
-    webpack: (config: any) => {
-      if (typeof window === 'undefined') {
-        // Server-side: Import bundle analyzer dynamically
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { BundleAnalyzerPlugin } = require('@next/bundle-analyzer')();
-        config.plugins = config.plugins || [];
-        config.plugins.push(
-          new BundleAnalyzerPlugin({
-            analyzerMode: 'server',
-            openAnalyzer: true,
-          })
-        );
-      }
-      return config;
-    },
-  }),
+  // Performance optimizations
+  poweredByHeader: false,
+  
+  // Image optimization
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 86400, // 24 hours
+  },
 
   experimental: {
     // Optimize package imports for faster compilation (Next.js 15 compatible)
@@ -42,13 +32,63 @@ const nextConfig: NextConfig = {
       "class-variance-authority",
       "clsx",
       "tailwind-merge",
+      "ogl", // Aurora WebGL library
     ],
+    
   },
 
   // Production optimizations
   ...(process.env.NODE_ENV === "production" && {
     output: "standalone",
+    compress: true,
+    
+    // Headers for better caching
+    async headers() {
+      return [
+        {
+          source: '/(.*)',
+          headers: [
+            {
+              key: 'X-DNS-Prefetch-Control',
+              value: 'on'
+            },
+            {
+              key: 'Strict-Transport-Security',
+              value: 'max-age=63072000; includeSubDomains; preload'
+            },
+            {
+              key: 'X-Content-Type-Options',
+              value: 'nosniff'
+            },
+            {
+              key: 'X-Frame-Options',
+              value: 'DENY'
+            },
+            {
+              key: 'Referrer-Policy',
+              value: 'origin-when-cross-origin'
+            }
+          ]
+        },
+        {
+          source: '/favicon.svg',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'public, max-age=31536000, immutable'
+            }
+          ]
+        }
+      ];
+    },
   }),
 };
 
-export default nextConfig;
+// Conditionally wrap with bundle analyzer
+const withBundleAnalyzer = process.env.ANALYZE === 'true' 
+  ? require('@next/bundle-analyzer')({
+      enabled: true,
+    })
+  : (config: NextConfig) => config;
+
+export default withBundleAnalyzer(nextConfig);

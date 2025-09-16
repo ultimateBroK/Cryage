@@ -134,10 +134,15 @@ export default function Aurora(props: AuroraProps) {
     const ctn = ctnDom.current;
     if (!ctn) return;
 
+    // Performance optimization: reduce quality on mobile/smaller screens
+    const isMobile = window.innerWidth < 768;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+
     const renderer = new Renderer({
       alpha: true,
       premultipliedAlpha: true,
-      antialias: true,
+      antialias: !isMobile, // Disable antialiasing on mobile for better performance
+      powerPreference: "low-power", // Prefer battery life over performance
     });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
@@ -146,17 +151,29 @@ export default function Aurora(props: AuroraProps) {
     gl.canvas.style.backgroundColor = "transparent";
 
     let program: Program | undefined;
+    let lastResize = 0;
 
     function resize() {
       if (!ctn) return;
-      const width = ctn.offsetWidth;
-      const height = ctn.offsetHeight;
+      
+      // Throttle resize events for better performance
+      const now = Date.now();
+      if (now - lastResize < 100) return;
+      lastResize = now;
+      
+      const width = Math.floor(ctn.offsetWidth * pixelRatio);
+      const height = Math.floor(ctn.offsetHeight * pixelRatio);
       renderer.setSize(width, height);
+      gl.canvas.style.width = ctn.offsetWidth + 'px';
+      gl.canvas.style.height = ctn.offsetHeight + 'px';
+      
       if (program) {
         program.uniforms.uResolution.value = [width, height];
       }
     }
-    window.addEventListener("resize", resize);
+    
+    // Use passive listener for better scroll performance
+    window.addEventListener("resize", resize, { passive: true });
 
     const geometry = new Triangle(gl);
     if (geometry.attributes.uv) {
@@ -175,7 +192,7 @@ export default function Aurora(props: AuroraProps) {
         uTime: { value: 0 },
         uAmplitude: { value: amplitude },
         uColorStops: { value: colorStopsArray },
-        uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
+        uResolution: { value: [Math.floor(ctn.offsetWidth * pixelRatio), Math.floor(ctn.offsetHeight * pixelRatio)] },
         uBlend: { value: blend },
       },
     });
@@ -184,18 +201,32 @@ export default function Aurora(props: AuroraProps) {
     ctn.appendChild(gl.canvas);
 
     let animateId = 0;
+    let lastTime = 0;
+    const targetFPS = isMobile ? 30 : 60; // Lower FPS on mobile
+    const frameInterval = 1000 / targetFPS;
+
     const update = (t: number) => {
       animateId = requestAnimationFrame(update);
+      
+      // Frame rate limiting for better performance
+      if (t - lastTime < frameInterval) return;
+      lastTime = t;
+      
       const { time = t * 0.01, speed = 1.0 } = propsRef.current;
       if (program) {
         program.uniforms.uTime.value = time * speed * 0.1;
         program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? 1.0;
         program.uniforms.uBlend.value = propsRef.current.blend ?? blend;
+        
+        // Cache color stops to avoid repeated conversions
         const stops = propsRef.current.colorStops ?? colorStops;
-        program.uniforms.uColorStops.value = stops.map((hex: string) => {
-          const c = new Color(hex);
-          return [c.r, c.g, c.b];
-        });
+        if (stops !== colorStops) {
+          program.uniforms.uColorStops.value = stops.map((hex: string) => {
+            const c = new Color(hex);
+            return [c.r, c.g, c.b];
+          });
+        }
+        
         renderer.render({ scene: mesh });
       }
     };
@@ -209,6 +240,8 @@ export default function Aurora(props: AuroraProps) {
       if (ctn && gl.canvas.parentNode === ctn) {
         ctn.removeChild(gl.canvas);
       }
+      // Properly dispose of WebGL resources
+      // Note: OGL doesn't have explicit delete methods, cleanup is handled by context loss
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [amplitude]);
