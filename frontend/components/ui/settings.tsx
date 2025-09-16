@@ -1,18 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SettingsIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  SettingsSidebar,
+  SettingsSidebarContent,
+  SettingsSidebarHeader,
+  SettingsSidebarTrigger,
+} from "@/components/ui/settings-sidebar";
 import {
   Select,
   SelectContent,
@@ -30,10 +26,10 @@ const GEMINI_MODELS = [
     { value: "gemini-2.5-pro", label: "Gemini 2.5 Pro" },
 ] as const;
 
-export const Settings = () => {
+// SettingsSidebar component that contains the settings content
+export const SettingsSidebarPanel = () => {
   const [apiKey, setApiKey] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState<string>("gemini-2.5-flash");
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     // Load settings from localStorage on component mount
@@ -70,25 +66,15 @@ export const Settings = () => {
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Open settings"
-          className="rounded-full"
-        >
-          <SettingsIcon className="size-5" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>AI Settings</SheetTitle>
-          <SheetDescription>
-            Configure your AI model and API key settings.
-          </SheetDescription>
-        </SheetHeader>
-        <div className="grid gap-6 py-6 px-6">
+    <SettingsSidebar>
+      <SettingsSidebarHeader>
+        <h2 className="text-lg font-semibold text-foreground">AI Settings</h2>
+        <p className="text-sm text-muted-foreground">
+          Configure your AI model and API key settings.
+        </p>
+      </SettingsSidebarHeader>
+      <SettingsSidebarContent>
+        <div className="grid gap-6">
           <div className="grid gap-2">
             <Label htmlFor="api-key">Gemini API Key</Label>
             <Input
@@ -118,9 +104,14 @@ export const Settings = () => {
             </Select>
           </div>
         </div>
-      </SheetContent>
-    </Sheet>
+      </SettingsSidebarContent>
+    </SettingsSidebar>
   );
+};
+
+// Settings trigger button component
+export const Settings = () => {
+  return <SettingsSidebarTrigger />;
 };
 
 export default Settings;

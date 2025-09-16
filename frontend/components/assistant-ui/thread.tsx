@@ -29,7 +29,7 @@ import {
 
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
 import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/ui/reasoning";
-import { motion } from "framer-motion";
+import { MotionDiv } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MarkdownText } from "./markdown-text";
@@ -93,12 +93,13 @@ export const Thread: FC = () => {
     >
       {/* aui-thread-viewport */}
       <ThreadPrimitive.Viewport 
-        className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-scroll scroll-smooth"
+        className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto min-h-0"
         data-viewport="true"
         style={{
-          // Ensure viewport stays stable
+          // Ensure viewport stays stable and scrollable
           scrollBehavior: 'smooth',
           overscrollBehavior: 'contain',
+          maxHeight: '100%',
         }}
       >
         <ThreadWelcome />
@@ -113,7 +114,7 @@ export const Thread: FC = () => {
 
         <ThreadPrimitive.If empty={false}>
           {/* aui-thread-viewport-spacer */}
-          <motion.div 
+          <MotionDiv 
             className="min-h-6 min-w-6 shrink-0"
             initial={false}
             animate={{ height: 'auto' }}
@@ -154,27 +155,27 @@ const ThreadWelcome: FC = () => {
         {/* aui-thread-welcome-center */}
         <div className="flex w-full flex-grow flex-col items-center justify-center">
           {/* aui-thread-welcome-message */}
-          <div className="flex size-full flex-col justify-center px-8 md:mt-20">
-            <motion.div
+          <div className="flex size-full flex-col justify-center px-4 sm:px-6 md:px-8 md:mt-20">
+            <MotionDiv
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: 0.5 }}
               // aui-thread-welcome-message-motion-1
-              className="text-2xl font-semibold"
+              className="text-xl sm:text-2xl font-semibold"
             >
               Hello there!
-            </motion.div>
-            <motion.div
+            </MotionDiv>
+            <MotionDiv
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: 0.6 }}
               // aui-thread-welcome-message-motion-2
-              className="text-muted-foreground/65 text-2xl"
+              className="text-muted-foreground/65 text-lg sm:text-xl md:text-2xl"
             >
               How can I help you today?
-            </motion.div>
+            </MotionDiv>
           </div>
         </div>
       </div>
@@ -208,7 +209,7 @@ const ThreadWelcomeSuggestions: FC = () => {
           action: "What is the weather in San Francisco?",
         },
       ].map((suggestedAction, index) => (
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -235,7 +236,7 @@ const ThreadWelcomeSuggestions: FC = () => {
               <p className="text-muted-foreground">{suggestedAction.label}</p>
             </Button>
           </ThreadPrimitive.Suggestion>
-        </motion.div>
+        </MotionDiv>
       ))}
     </div>
   );
@@ -329,23 +330,23 @@ const Composer: FC = () => {
     <>
       {/* Notification Toast */}
       {notification.show && (
-        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top duration-300">
+        <div className="fixed top-4 right-2 sm:right-4 left-2 sm:left-auto z-50 animate-in slide-in-from-top duration-300">
           <div className={cn(
-            "rounded-lg border p-4 shadow-lg backdrop-blur-sm max-w-sm",
+            "rounded-lg border p-3 sm:p-4 shadow-lg backdrop-blur-sm max-w-sm mx-auto sm:mx-0",
             notification.type === 'warning' && "border-yellow-200 bg-yellow-50/90 text-yellow-800 dark:border-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-200",
             notification.type === 'error' && "border-red-200 bg-red-50/90 text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200",
             notification.type === 'info' && "border-blue-200 bg-blue-50/90 text-blue-800 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-200"
           )}>
             <div className="flex items-start gap-2">
               <SettingsIcon className="size-4 mt-0.5 flex-shrink-0" />
-              <p className="text-sm font-medium">{notification.message}</p>
+              <p className="text-xs sm:text-sm font-medium">{notification.message}</p>
             </div>
           </div>
         </div>
       )}
 
       {/* aui-composer-wrapper */}
-      <div className="bg-background relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-4 px-[var(--thread-padding-x)] pb-4 md:pb-6">
+      <div className="bg-background relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-4 px-[var(--thread-padding-x)] pb-4 md:pb-6 safe-area-inset-bottom">
         <ThreadScrollToBottom />
         <ThreadPrimitive.Empty>
           <ThreadWelcomeSuggestions />
@@ -404,11 +405,11 @@ const ComposerAction: FC<{ hasApiKey: boolean }> = ({ hasApiKey }) => {
 
   return (
     <div className="relative flex items-center justify-between rounded-b-2xl border-t border-black/10 dark:border-white/10 bg-background/30 backdrop-blur-md p-2">
-      <TooltipIconButton
+        <TooltipIconButton
         tooltip="Attach file"
         variant="ghost"
         // aui-composer-attachment-button
-        className="hover:bg-foreground/15 dark:hover:bg-background/50 scale-115 p-3.5"
+        className="hover:bg-foreground/15 dark:hover:bg-background/50 scale-115 p-3.5 touch-target"
         onClick={() => {}}
         disabled={!hasApiKey}
       >
@@ -422,7 +423,7 @@ const ComposerAction: FC<{ hasApiKey: boolean }> = ({ hasApiKey }) => {
             variant="default"
             // aui-composer-send
             className={cn(
-              "size-8 rounded-full border",
+              "size-8 sm:size-9 rounded-full border touch-target",
               hasApiKey 
                 ? "dark:border-muted-foreground/90 border-muted-foreground/60 hover:bg-primary/75" 
                 : "border-muted-foreground/30 bg-muted-foreground/20 text-muted-foreground/60 cursor-not-allowed hover:bg-muted-foreground/20"
@@ -470,35 +471,39 @@ const MessageError: FC = () => {
 const AssistantMessage: FC = () => {
   return (
     <MessagePrimitive.Root asChild>
-      <motion.div
+      <MotionDiv
         // aui-assistant-message-root
-        className="relative mx-auto grid w-full max-w-[var(--thread-max-width)] grid-cols-[auto_auto_1fr] grid-rows-[auto_1fr] px-[var(--thread-padding-x)] py-4"
+        className="relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4"
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         data-role="assistant"
       >
-        {/* aui-assistant-message-avatar */}
-        <div className="ring-border bg-background col-start-1 row-start-1 flex size-8 shrink-0 items-center justify-center rounded-full ring-1">
-          <StarIcon size={14} />
+        {/* Main message container */}
+        <div className="flex gap-4">
+          {/* aui-assistant-message-avatar */}
+          <div className="ring-border bg-background flex size-8 shrink-0 items-center justify-center rounded-full ring-1">
+            <StarIcon size={14} />
+          </div>
+
+          {/* aui-assistant-message-content */}
+          <div className="text-foreground flex-1 leading-7 break-words overflow-hidden min-w-0">
+            <MessagePrimitive.Content
+              components={{
+                Text: MarkdownText,
+                Reasoning: ReasoningMessagePart,
+                tools: { Fallback: ToolFallback },
+              }}
+            />
+            <MessageError />
+          </div>
         </div>
 
-        {/* aui-assistant-message-content */}
-        <div className="text-foreground col-span-2 col-start-2 row-start-1 ml-4 leading-7 break-words">
-          <MessagePrimitive.Content
-            components={{
-              Text: MarkdownText,
-              Reasoning: ReasoningMessagePart,
-              tools: { Fallback: ToolFallback },
-            }}
-          />
-          <MessageError />
+        {/* Actions and branch picker below content */}
+        <div className="ml-12 flex flex-col gap-2">
+          <AssistantActionBar />
+          <BranchPicker className="" />
         </div>
-
-        <AssistantActionBar />
-
-        {/* aui-assistant-branch-picker */}
-        <BranchPicker className="col-start-2 row-start-2 mr-2 -ml-2" />
-      </motion.div>
+      </MotionDiv>
     </MessagePrimitive.Root>
   );
 };
@@ -553,10 +558,8 @@ const AssistantActionBar: FC = () => {
   return (
     <ActionBarPrimitive.Root
       hideWhenRunning
-      autohide="not-last"
-      autohideFloat="single-branch"
       // aui-assistant-action-bar-root
-      className="text-muted-foreground data-floating:bg-background col-start-3 row-start-2 mt-2 flex gap-1 justify-end data-floating:absolute data-floating:mt-2 data-floating:rounded-md data-floating:border data-floating:p-1 data-floating:shadow-sm"
+      className="text-muted-foreground flex gap-1 justify-start"
     >
       <TooltipIconButton tooltip="Copy" onClick={onCopy}>
         {copied ? <CheckIcon /> : <CopyIcon />}
@@ -573,23 +576,27 @@ const AssistantActionBar: FC = () => {
 const UserMessage: FC = () => {
   return (
     <MessagePrimitive.Root asChild>
-      <motion.div
+      <MotionDiv
         // aui-user-message-root
-        className="mx-auto grid w-full max-w-[var(--thread-max-width)] auto-rows-auto grid-cols-[minmax(72px,1fr)_auto] gap-y-1 px-[var(--thread-padding-x)] py-4 [&:where(>*)]:col-start-2"
+        className="mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4"
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         data-role="user"
       >
-        <UserActionBar />
-
-        {/* aui-user-message-content */}
-        <div className="bg-muted text-foreground col-start-2 rounded-3xl px-5 py-2.5 break-words">
-          <MessagePrimitive.Content components={{ Text: MarkdownText }} />
+        {/* Main message container */}
+        <div className="flex justify-end">
+          {/* aui-user-message-content */}
+          <div className="bg-muted text-foreground rounded-3xl px-3 sm:px-5 py-2.5 break-words max-w-[90%] sm:max-w-[80%] overflow-hidden min-w-0">
+            <MessagePrimitive.Content components={{ Text: MarkdownText }} />
+          </div>
         </div>
 
-        {/* aui-user-branch-picker */}
-        <BranchPicker className="col-span-full col-start-1 row-start-3 -mr-1 justify-end" />
-      </motion.div>
+        {/* Actions and branch picker below content */}
+        <div className="flex flex-col gap-2 items-end">
+          <UserActionBar />
+          <BranchPicker className="justify-end" />
+        </div>
+      </MotionDiv>
     </MessagePrimitive.Root>
   );
 };
@@ -630,11 +637,10 @@ const UserActionBar: FC = () => {
   return (
     <ActionBarPrimitive.Root
       hideWhenRunning
-      autohide="not-last"
       // aui-user-action-bar-root
-      className="col-start-1 mt-2.5 mr-3 flex flex-col items-end"
+      className="text-muted-foreground flex gap-1 justify-end"
     >
-      <TooltipIconButton tooltip="Copy" className="mb-1" onClick={onCopy}>
+      <TooltipIconButton tooltip="Copy" onClick={onCopy}>
         {copied ? <CheckIcon /> : <CopyIcon />}
       </TooltipIconButton>
       <ActionBarPrimitive.Edit asChild>
