@@ -94,7 +94,7 @@ graph LR
     B --> C[🤖 Gemini AI]
     A --> D[📊 Chart Component]
     B --> E[🐍 FastAPI Backend]
-    E --> F[📈 Gate.io API]
+    E --> F[📈 Binance API]
     E --> G[🗄️ SQLite Database]
     E --> H[🧠 AI Agent]
 ```
@@ -137,7 +137,7 @@ graph LR
 {
   "api": "FastAPI + Python 3.12+",
   "ai": "LangChain + Google GenAI",
-  "data": "Gate.io API (planned)",
+  "data": "Binance API (planned)",
   "storage": "SQLite (planned)",
   "deployment": "uv + uvicorn"
 }
