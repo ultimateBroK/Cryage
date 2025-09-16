@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import dynamic from "next/dynamic";
@@ -16,12 +16,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ThreadTitleProvider } from "@/lib/thread-title-context";
 import { Idle } from "@/components/idle";
+import { MainLayoutWithTabState } from "@/components/MainLayoutWithTabState";
+import { useNotifications } from "@/hooks/use-notifications";
+import { useAppShortcuts } from "@/hooks/use-keyboard-shortcuts";
 
-// Dynamic imports for better code splitting
-const Thread = dynamic(
-  () => import("@/components/assistant-ui/thread").then(m => ({ default: m.Thread })), 
-  { ssr: false, loading: () => null }
-);
+// Thread is now imported in MainLayout component
 
 // Defer Aurora (and its ogl dep) to browser idle to keep first load JS small
 const Aurora = dynamic(
@@ -78,6 +77,38 @@ const HeaderSection: React.FC = () => {
 
 export const Assistant = () => {
   const runtime = useChatRuntime();
+  const [activeTab, setActiveTab] = React.useState("chat");
+  const { unreadNotifications } = useNotifications();
+
+  // Separate counts for different types
+  const unreadMessageCount = unreadNotifications.filter(n => n.type === 'message').length;
+  const systemNotificationCount = unreadNotifications.filter(n => n.type === 'system').length;
+
+  // Keyboard shortcuts
+  const handleToggleSettings = useCallback(() => {
+    // This would need to be implemented to toggle the settings sidebar
+    console.log('Toggle settings shortcut pressed');
+  }, []);
+
+  const handleSwitchToChat = useCallback(() => {
+    setActiveTab('chat');
+  }, []);
+
+  const handleSwitchToDashboard = useCallback(() => {
+    setActiveTab('dashboard');
+  }, []);
+
+  const handleNewChat = useCallback(() => {
+    // This would create a new chat thread
+    console.log('New chat shortcut pressed');
+  }, []);
+
+  useAppShortcuts(
+    handleToggleSettings,
+    handleSwitchToChat,
+    handleSwitchToDashboard,
+    handleNewChat
+  );
 
   // Optimized fetch override with memoization
   const setupFetchOverride = React.useCallback(() => {
@@ -92,7 +123,7 @@ export const Assistant = () => {
         if (!cachedApiKey) {
           cachedApiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
         }
-        
+
         if (cachedApiKey && init?.body) {
           try {
             const body = JSON.parse(init.body as string);
@@ -126,15 +157,17 @@ export const Assistant = () => {
                   <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={1.0} blend={0.42} speed={1.15} />
                 </Idle>
               </div>
-              <AppSidebar />
-              <SidebarInset>
-                <HeaderSection />
-                <SettingsSidebarInset>
-                  <div className="flex-1 overflow-hidden">
-                    <Thread />
-                  </div>
-                </SettingsSidebarInset>
-              </SidebarInset>
+              <AppSidebar activeTab={activeTab} />
+               <SidebarInset>
+                 <HeaderSection />
+                  <SettingsSidebarInset>
+                    <MainLayoutWithTabState
+                      onTabChange={setActiveTab}
+                      unreadMessageCount={unreadMessageCount}
+                      systemNotificationCount={systemNotificationCount}
+                    />
+                  </SettingsSidebarInset>
+               </SidebarInset>
               <SettingsSidebarPanel />
             </div>
           </SettingsSidebarProvider>

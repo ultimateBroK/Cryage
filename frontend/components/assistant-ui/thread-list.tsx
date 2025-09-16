@@ -16,12 +16,22 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { MotionDiv, Presence } from "@/components/motion";
 
 export const ThreadList: FC = () => {
   return (
     <TooltipProvider delayDuration={300}>
       <ThreadListPrimitive.Root className="flex flex-col items-stretch gap-1.5">
-        <ThreadListNew />
+        <Presence>
+          <MotionDiv
+            key="new-thread"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ThreadListNew />
+          </MotionDiv>
+        </Presence>
         <ThreadListItems />
       </ThreadListPrimitive.Root>
     </TooltipProvider>
@@ -31,7 +41,7 @@ export const ThreadList: FC = () => {
 const ThreadListNew: FC = () => {
   return (
     <ThreadListPrimitive.New asChild>
-      <Button className="data-active:bg-muted hover:bg-muted flex items-center justify-start gap-1 rounded-lg px-3 py-2 text-start" variant="ghost">
+      <Button className="flex items-center justify-start gap-2 rounded-lg px-3 py-2 text-start text-muted-foreground hover:text-foreground border-dashed" variant="outline">
         <PlusIcon />
         New Thread
       </Button>
@@ -45,12 +55,21 @@ const ThreadListItems: FC = () => {
 
 const ThreadListItem: FC = () => {
   return (
-    <ThreadListItemPrimitive.Root className="data-active:bg-muted hover:bg-muted focus-visible:bg-muted focus-visible:ring-ring flex items-center rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2">
-      <ThreadListItemPrimitive.Trigger className="flex-grow px-3 py-2 text-start min-w-0">
-        <ThreadListItemTitle />
-      </ThreadListItemPrimitive.Trigger>
-      <ThreadListItemArchive />
-    </ThreadListItemPrimitive.Root>
+    <Presence>
+      <MotionDiv
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.2 }}
+      >
+        <ThreadListItemPrimitive.Root className="data-active:bg-muted hover:bg-muted focus-visible:bg-muted focus-visible:ring-ring flex items-center rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2">
+          <ThreadListItemPrimitive.Trigger className="flex-grow px-3 py-2 text-start min-w-0">
+            <ThreadListItemTitle />
+          </ThreadListItemPrimitive.Trigger>
+          <ThreadListItemArchive />
+        </ThreadListItemPrimitive.Root>
+      </MotionDiv>
+    </Presence>
   );
 };
 

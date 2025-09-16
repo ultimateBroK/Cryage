@@ -17,7 +17,7 @@
     "start:frontend": "cd frontend && bun run start",
     "lint": "bun run lint:frontend",
     "lint:frontend": "cd frontend && bun run lint",
-    "typecheck:frontend": "cd frontend && tsc -p tsconfig.json --noEmit",
+    "typecheck:frontend": "cd frontend && bun x tsc -p tsconfig.json --noEmit",
     "analyze": "cd frontend && bun run analyze",
     "perf": "cd frontend && bun run perf",
     "install:frontend": "cd frontend && bun install",
