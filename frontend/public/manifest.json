@@ -1,7 +1,7 @@
 {
-  "name": "Cryage - Crypto AI Assistant",
+  "name": "Cryage - Crypto agent",
   "short_name": "Cryage",
-  "description": "Advanced AI assistant for cryptocurrency insights, blockchain analysis, and crypto trading guidance",
+  "description": "AI agent for cryptocurrency insights, blockchain analysis, and crypto trading guidance",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#10201C",

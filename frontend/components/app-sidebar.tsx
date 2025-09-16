@@ -26,7 +26,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </div>
                   <div className="flex flex-col gap-0.5 leading-none">
                     <span className="font-semibold text-lg">Cryage</span>
-                    <span className="text-xs text-muted-foreground">Crypto AI Assistant</span>
+                    <span className="text-xs text-muted-foreground">Crypto agent</span>
                   </div>
                 </Link>
               </SidebarMenuButton>
