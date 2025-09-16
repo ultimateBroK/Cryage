@@ -299,7 +299,7 @@ We welcome contributions! Here's how to get started:
 
 ## 🌟 Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ultimatebrok/cryage&type=Date)](https://star-history.com/#ultimatebrok/cryage&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=ultimateBroK/cryage&type=Date)](https://star-history.com/#ultimateBroK/cryage&Date)
 
 ## 📄 License
 
@@ -318,7 +318,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built with ❤️ for the crypto community**
 
-[⭐ Star this project](https://github.com/ultimatebrok/cryage) • [🐛 Report Bug](https://github.com/ultimatebrok/cryage/issues) • [💡 Request Feature](https://github.com/ultimatebrok/cryage/issues)
+[⭐ Star this project](https://github.com/ultimateBroK/cryage) • [🐛 Report Bug](https://github.com/ultimateBroK/cryage/issues) • [💡 Request Feature](https://github.com/ultimateBroK/cryage/issues)
 
 **Ready to revolutionize your crypto trading with AI?**
 
