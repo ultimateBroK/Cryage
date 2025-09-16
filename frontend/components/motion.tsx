@@ -11,7 +11,7 @@ type MotionDivProps = React.ComponentPropsWithoutRef<'div'> & {
   layout?: boolean;
 };
 
-export function MotionDiv({ children, ...rest }: MotionDivProps) {
+export function MotionDiv({ children, initial, animate, exit, transition, layout, ...domProps }: MotionDivProps) {
   const [fm, setFm] = useState<null | typeof import('framer-motion')>(null);
 
   useEffect(() => {
@@ -24,9 +24,20 @@ export function MotionDiv({ children, ...rest }: MotionDivProps) {
     };
   }, []);
 
-  if (!fm) return <div {...rest}>{children}</div>;
+  if (!fm) return <div {...domProps}>{children}</div>;
   const MotionDivImpl = fm.motion.div as unknown as (props: MotionDivProps) => React.ReactElement;
-  return <MotionDivImpl {...rest}>{children as ReactNode}</MotionDivImpl>;
+  return (
+    <MotionDivImpl
+      initial={initial}
+      animate={animate}
+      exit={exit}
+      transition={transition}
+      layout={layout}
+      {...domProps}
+    >
+      {children as ReactNode}
+    </MotionDivImpl>
+  );
 }
 
 interface PresenceProps {

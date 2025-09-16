@@ -93,7 +93,7 @@ export const Thread: FC = () => {
     >
       {/* aui-thread-viewport */}
       <ThreadPrimitive.Viewport 
-        className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto min-h-0"
+        className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto min-h-0 pb-2 md:pb-4"
         data-viewport="true"
         style={{
           // Ensure viewport stays stable and scrollable
@@ -129,13 +129,44 @@ export const Thread: FC = () => {
 };
 
 const ThreadScrollToBottom: FC = () => {
+  const [show, setShow] = useState<boolean>(false);
+
+  useEffect(() => {
+    const viewport = document.querySelector('[data-viewport="true"]') as HTMLElement | null;
+    if (!viewport) return;
+
+    const threshold = 8; // px
+    const compute = () => {
+      const atBottom = viewport.scrollHeight - (viewport.scrollTop + viewport.clientHeight) <= threshold;
+      setShow(!atBottom);
+    };
+
+    compute();
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(compute);
+    };
+    viewport.addEventListener('scroll', onScroll, { passive: true });
+    const resizeObserver = new ResizeObserver(() => compute());
+    resizeObserver.observe(viewport);
+    return () => {
+      viewport.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   return (
     <ThreadPrimitive.ScrollToBottom asChild>
       <TooltipIconButton
         tooltip="Scroll to bottom"
         variant="outline"
         // aui-thread-scroll-to-bottom
-        className="dark:bg-background dark:hover:bg-accent absolute -top-12 z-10 self-center rounded-full p-4 disabled:invisible"
+        className={cn(
+          "dark:bg-background dark:hover:bg-accent absolute -top-12 z-10 self-center rounded-full p-4 transition-opacity disabled:invisible",
+          show ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
         onClick={(e) => {
           // Prevent any unwanted side effects
           e.stopPropagation();
@@ -346,7 +377,7 @@ const Composer: FC = () => {
       )}
 
       {/* aui-composer-wrapper */}
-      <div className="bg-background relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-4 px-[var(--thread-padding-x)] pb-4 md:pb-6 safe-area-inset-bottom">
+      <div className="bg-background relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-4 px-[var(--thread-padding-x)] pb-4 md:pb-6 mb-3 sm:mb-4 safe-area-inset-bottom">
         <ThreadScrollToBottom />
         <ThreadPrimitive.Empty>
           <ThreadWelcomeSuggestions />
