@@ -54,7 +54,7 @@ const AppHeader = () => {
   return (
     <div className="flex items-center space-x-2">
       <span className="text-base sm:text-lg font-semibold text-foreground">Cryage</span>
-      <span className="text-xs sm:text-sm text-muted-foreground hidden sm:inline">• Crypto AI Assistant</span>
+      <span className="text-xs sm:text-sm text-muted-foreground hidden sm:inline">• Crypto agent</span>
     </div>
   );
 };

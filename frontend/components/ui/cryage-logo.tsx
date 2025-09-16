@@ -68,5 +68,5 @@ export const CryageLogo: React.FC<CryageLogoProps> = ({
     </svg>
   );
 };
-
+ 
 export default CryageLogo;

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cryage - Crypto AI Assistant",
-  description: "Advanced AI assistant for cryptocurrency insights, blockchain analysis, and crypto trading guidance",
+  title: "Cryage - Crypto agent",
+  description: "Crypto agent for cryptocurrency insights, blockchain analysis, and trading guidance",
   manifest: "/manifest.json",
   icons: {
     icon: [

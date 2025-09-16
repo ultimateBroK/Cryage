@@ -34,6 +34,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MarkdownText } from "./markdown-text";
 import { ToolFallback } from "./tool-fallback";
+import { CryageLogo } from "@/components/ui/cryage-logo";
 
 // Add notification system
 interface NotificationState {
@@ -221,23 +222,23 @@ const ThreadWelcomeSuggestions: FC = () => {
       {[
         {
           title: "What are the advantages",
-          label: "of using Assistant Cloud?",
-          action: "What are the advantages of using Assistant Cloud?",
+          label: "of using Cryage?",
+          action: "What are the advantages of using Cryage?",
         },
         {
           title: "Write code to",
-          label: `demonstrate topological sorting`,
-          action: `Write code to demonstrate topological sorting`,
+          label: `demonstrate crypto trading`,
+          action: `Write code to demonstrate crypto trading`,
         },
         {
           title: "Help me write an essay",
-          label: `about AI chat applications`,
-          action: `Help me write an essay about AI chat applications`,
+          label: `about crypto trading`,
+          action: `Help me write an essay about crypto trading`,
         },
         {
           title: "What is the weather",
           label: "in San Francisco?",
-          action: "What is the weather in San Francisco?",
+          action: "What is the weather in crypto trading?",
         },
       ].map((suggestedAction, index) => (
         <MotionDiv
@@ -513,7 +514,7 @@ const AssistantMessage: FC = () => {
         <div className="flex gap-4">
           {/* aui-assistant-message-avatar */}
           <div className="ring-border bg-background flex size-8 shrink-0 items-center justify-center rounded-full ring-1">
-            <StarIcon size={14} />
+            <CryageLogo size={16} />
           </div>
 
           {/* aui-assistant-message-content */}
@@ -745,17 +746,4 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
   );
 };
 
-const StarIcon = ({ size = 14 }: { size?: number }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M8 0L9.79611 6.20389L16 8L9.79611 9.79611L8 16L6.20389 9.79611L0 8L6.20389 6.20389L8 0Z"
-      fill="currentColor"
-    />
-  </svg>
-);
+//
