@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useCallback } from "react";
+import Link from "next/link";
+import { Terminal } from "lucide-react";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import dynamic from "next/dynamic";
@@ -13,12 +15,12 @@ import {
   SettingsSidebarProvider,
   SettingsSidebarInset,
 } from "@/components/ui/settings-sidebar";
-import { Separator } from "@/components/ui/separator";
 import { ThreadTitleProvider } from "@/lib/thread-title-context";
 import { Idle } from "@/components/idle";
-import { MainLayoutWithTabState } from "@/components/main-layout-with-tab-state";
+import { MainLayout } from "@/components/main-layout";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useAppShortcuts } from "@/hooks/use-keyboard-shortcuts";
+import { Button } from "@/components/ui/button";
 
 // Thread is now imported in MainLayout component
 
@@ -48,26 +50,22 @@ const ThemeToggle = dynamic(
   { ssr: false, loading: () => <div className="w-10 h-10" /> }
 );
 
-// Simple app name display instead of breadcrumb
-const AppHeader = () => {
-  return (
-    <div className="flex items-center space-x-2">
-      <span className="text-base sm:text-lg font-semibold text-foreground">Cryage</span>
-      <span className="text-xs sm:text-sm text-muted-foreground hidden sm:inline">• Crypto agent</span>
-    </div>
-  );
-};
+// App title removed from header per design request
 
 const API_KEY_STORAGE_KEY = "gemini-api-key";
 
 // Separate header component for better code organization
 const HeaderSection: React.FC = () => {
   return (
-    <header className="flex h-14 sm:h-16 shrink-0 items-center gap-2 glass-toolbar px-2 sm:px-4 sticky top-0 z-20">
+    <header className="flex h-14 sm:h-16 shrink-0 items-center gap-2 glass-toolbar-transparent px-2 sm:px-4 sticky top-0 z-20">
       <SidebarTrigger />
-      <Separator orientation="vertical" className="mr-2 h-4" />
-      <AppHeader />
       <div className="ml-auto flex items-center gap-1 sm:gap-2">
+        <Button asChild variant="ghost" size="sm" className="inline-flex gap-2">
+          <Link href="/terminal" aria-label="Launch Terminal">
+            <Terminal className="w-4 h-4" />
+            <span className="hidden md:inline">Terminal</span>
+          </Link>
+        </Button>
         <Settings />
         <ThemeToggle />
       </div>
@@ -78,9 +76,8 @@ const HeaderSection: React.FC = () => {
 export const Assistant = () => {
   const runtime = useChatRuntime();
   const [activeTab, setActiveTab] = React.useState("chat");
+  // Notification counts to pass into layout
   const { unreadNotifications } = useNotifications();
-
-  // Separate counts for different types
   const unreadMessageCount = unreadNotifications.filter(n => n.type === 'message').length;
   const systemNotificationCount = unreadNotifications.filter(n => n.type === 'system').length;
 
@@ -152,16 +149,16 @@ export const Assistant = () => {
         <SidebarProvider>
           <SettingsSidebarProvider>
             <div className="flex h-dvh w-full pr-0.5 relative overflow-hidden">
-              <div className="pointer-events-none absolute inset-0 z-10 blur-3xl opacity-45 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.15] dark:brightness-[1.2] saturate-125 contrast-[1.1]">
+              <div className="pointer-events-none absolute inset-0 z-10 blur-2xl sm:blur-3xl opacity-40 sm:opacity-45 dark:opacity-35 sm:dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.12] sm:brightness-[1.15] dark:brightness-[1.15] sm:dark:brightness-[1.2] saturate-110 sm:saturate-125 contrast-[1.05] sm:contrast-[1.1]">
                 <Idle delayMs={1200}>
-                  <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={1.0} blend={0.42} speed={1.15} />
+                  <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={0.8} blend={0.38} speed={1.0} />
                 </Idle>
               </div>
               <AppSidebar activeTab={activeTab} />
                <SidebarInset>
                  <HeaderSection />
                   <SettingsSidebarInset>
-                    <MainLayoutWithTabState
+                    <MainLayout
                       onTabChange={setActiveTab}
                       unreadMessageCount={unreadMessageCount}
                       systemNotificationCount={systemNotificationCount}

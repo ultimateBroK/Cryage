@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MessageSquare, BarChart3, Settings } from "lucide-react";
+import { MessageSquare, BarChart3 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import dynamic from "next/dynamic";
 
 // Reuse loading components từ main-layout-with-tab-state
@@ -50,23 +51,7 @@ const DashboardLoadingSkeleton = () => (
   </div>
 );
 
-const SettingsLoadingSkeleton = () => (
-  <div className="p-4 space-y-6">
-    {Array.from({ length: 3 }).map((_, i) => (
-      <div key={i} className="p-6 border rounded-lg">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-5 h-5 bg-muted/30 rounded animate-pulse" />
-          <div className="h-5 bg-muted/30 rounded animate-pulse w-32" />
-        </div>
-        <div className="space-y-3">
-          <div className="h-4 bg-muted/20 rounded animate-pulse" />
-          <div className="h-4 bg-muted/20 rounded animate-pulse w-3/4" />
-          <div className="h-10 bg-muted/30 rounded animate-pulse" />
-        </div>
-      </div>
-    ))}
-  </div>
-);
+// Settings tab removed in this layout
 
 // Optimized dynamic imports
 const Thread = dynamic(
@@ -79,80 +64,81 @@ const CryptoDashboard = dynamic(
   { ssr: false, loading: DashboardLoadingSkeleton }
 );
 
-const SettingsPanel = dynamic(
-  () => import("@/components/settings-panel").then(m => ({ default: m.SettingsPanel })),
-  { ssr: false, loading: SettingsLoadingSkeleton }
-);
+// Removed SettingsPanel for this layout
 
-const MainLayoutComponent = () => {
+interface MainLayoutProps {
+  onTabChange?: (tab: string) => void;
+  unreadMessageCount?: number;
+  systemNotificationCount?: number;
+}
+
+const MainLayoutComponent = ({ onTabChange, unreadMessageCount = 0, systemNotificationCount = 0 }: MainLayoutProps) => {
   const [activeTab, setActiveTab] = useState("chat");
   const [preloadedTabs, setPreloadedTabs] = useState<Set<string>>(new Set(["chat"]));
 
   // Smart preloading strategy
   useEffect(() => {
-    const preloadOtherTabs = async () => {
-      // Preload dashboard sau 3 giây
-      setTimeout(() => {
-        if (!preloadedTabs.has("dashboard")) {
-          import("@/components/crypto-dashboard").then(() => {
-            setPreloadedTabs(prev => new Set(prev).add("dashboard"));
-          });
-        }
-      }, 3000);
+    const t = setTimeout(() => {
+      if (!preloadedTabs.has("dashboard")) {
+        import("@/components/crypto-dashboard").then(() => {
+          setPreloadedTabs(prev => new Set(prev).add("dashboard"));
+        });
+      }
+    }, 2000);
 
-      // Preload settings sau 5 giây (ít quan trọng hơn)
-      setTimeout(() => {
-        if (!preloadedTabs.has("settings")) {
-          import("@/components/settings-panel").then(() => {
-            setPreloadedTabs(prev => new Set(prev).add("settings"));
-          });
-        }
-      }, 5000);
-    };
-
-    preloadOtherTabs();
+    return () => clearTimeout(t);
   }, [preloadedTabs]);
 
   // Preload on hover
   const handleTabHover = (tab: string) => {
     if (!preloadedTabs.has(tab)) {
-      const importMap = {
-        dashboard: () => import("@/components/crypto-dashboard"),
-        settings: () => import("@/components/settings-panel"),
-      };
-
-      const importFn = importMap[tab as keyof typeof importMap];
-      if (importFn) {
-        importFn().then(() => {
-          setPreloadedTabs(prev => new Set(prev).add(tab));
+      if (tab === "dashboard") {
+        import("@/components/crypto-dashboard").then(() => {
+          setPreloadedTabs(prev => new Set(prev).add("dashboard"));
         });
       }
     }
   };
 
+  const handleSetActiveTab = React.useCallback((tab: string) => {
+    setActiveTab(tab);
+    onTabChange?.(tab);
+  }, [onTabChange]);
+
   return (
     <div className="flex-1 overflow-hidden">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-        <TabsList className="grid w-full grid-cols-3 mx-4 mt-4 mb-2 bg-muted/50">
-          <TabsTrigger value="chat" className="flex items-center gap-2 data-[state=active]:bg-background">
-            <MessageSquare className="w-4 h-4" />
-            <span className="hidden sm:inline">Chat</span>
+      <Tabs value={activeTab} onValueChange={handleSetActiveTab} className="h-full flex flex-col">
+        <TabsList className="flex w-full max-w-md mx-auto px-2 sm:px-4 mt-2 sm:mt-3 mb-2 gap-1">
+          <TabsTrigger
+            value="chat"
+            className="flex-1 w-full flex items-center justify-center gap-2 min-h-[40px] touch-manipulation relative"
+          >
+            <MessageSquare className="w-5 h-5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline text-sm">Chat</span>
+            {unreadMessageCount > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+              >
+                {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
+              </Badge>
+            )}
           </TabsTrigger>
-          <TabsTrigger 
-            value="dashboard" 
+          <TabsTrigger
+            value="dashboard"
             onMouseEnter={() => handleTabHover("dashboard")}
-            className="flex items-center gap-2 data-[state=active]:bg-background"
+            className="flex-1 w-full flex items-center justify-center gap-2 min-h-[40px] touch-manipulation relative"
           >
-            <BarChart3 className="w-4 h-4" />
-            <span className="hidden sm:inline">Dashboard</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="settings" 
-            onMouseEnter={() => handleTabHover("settings")}
-            className="flex items-center gap-2 data-[state=active]:bg-background"
-          >
-            <Settings className="w-4 h-4" />
-            <span className="hidden sm:inline">Settings</span>
+            <BarChart3 className="w-5 h-5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline text-sm">Dashboard</span>
+            {systemNotificationCount > 0 && (
+              <Badge
+                variant="secondary"
+                className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+              >
+                {systemNotificationCount > 9 ? '9+' : systemNotificationCount}
+              </Badge>
+            )}
           </TabsTrigger>
         </TabsList>
 
@@ -168,11 +154,6 @@ const MainLayoutComponent = () => {
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="settings" className="flex-1 m-0 overflow-hidden">
-          <Suspense fallback={<SettingsLoadingSkeleton />}>
-            <SettingsPanel />
-          </Suspense>
-        </TabsContent>
       </Tabs>
     </div>
   );

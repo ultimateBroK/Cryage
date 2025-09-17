@@ -165,7 +165,7 @@ html {
 
 /* Custom scrollbar with smooth animations */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
   transition: all 0.3s ease;
 }
 
@@ -424,7 +424,7 @@ button,
   
   /* Scrollbar styling */
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -451,6 +451,14 @@ button,
     border-bottom: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
   }
 
+  /* Transparent variant for top header */
+  .glass-toolbar-transparent {
+    backdrop-filter: blur(10px) saturate(110%);
+    -webkit-backdrop-filter: blur(10px) saturate(110%);
+    background: transparent;
+    border-bottom: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
+  }
+
   .glass-panel {
     backdrop-filter: blur(12px) saturate(120%);
     -webkit-backdrop-filter: blur(12px) saturate(120%);
@@ -463,6 +471,43 @@ button,
     -webkit-backdrop-filter: blur(10px) saturate(120%);
     background: color-mix(in oklch, var(--background) 65%, transparent);
     border: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+  }
+
+  /* Glass sidebar background */
+  .glass-sidebar {
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    background: color-mix(in oklch, var(--sidebar) 35%, transparent);
+  }
+
+  /* Lighter effects on small screens for performance */
+  @media (max-width: 767px) {
+    .glass-toolbar {
+      backdrop-filter: blur(8px) saturate(110%);
+      -webkit-backdrop-filter: blur(8px) saturate(110%);
+    }
+
+    .glass-toolbar-transparent {
+      backdrop-filter: blur(6px) saturate(105%);
+      -webkit-backdrop-filter: blur(6px) saturate(105%);
+      border-bottom: 1px solid color-mix(in oklch, var(--border) 35%, transparent);
+    }
+
+    .glass-panel {
+      backdrop-filter: blur(8px) saturate(110%);
+      -webkit-backdrop-filter: blur(8px) saturate(110%);
+    }
+
+    .glass-segmented {
+      backdrop-filter: blur(7px) saturate(108%);
+      -webkit-backdrop-filter: blur(7px) saturate(108%);
+    }
+
+    .glass-sidebar {
+      backdrop-filter: blur(8px) saturate(108%);
+      -webkit-backdrop-filter: blur(8px) saturate(108%);
+      background: color-mix(in oklch, var(--sidebar) 28%, transparent);
+    }
   }
 
   .glass-divider {
