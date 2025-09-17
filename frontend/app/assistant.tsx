@@ -51,8 +51,8 @@ const ThemeToggle = dynamic(
 // Simple app name display instead of breadcrumb
 const AppHeader = () => {
   return (
-    <div className="flex items-center space-x-2">
-      <span className="text-base sm:text-lg font-semibold text-foreground">Cryage</span>
+    <div className="flex items-center gap-2">
+      <span className="text-base sm:text-lg font-semibold tracking-tight text-foreground">Cryage</span>
       <span className="text-xs sm:text-sm text-muted-foreground hidden sm:inline">• Crypto agent</span>
     </div>
   );
@@ -63,7 +63,7 @@ const API_KEY_STORAGE_KEY = "gemini-api-key";
 // Separate header component for better code organization
 const HeaderSection: React.FC = () => {
   return (
-    <header className="flex h-14 sm:h-16 shrink-0 items-center gap-2 border-b px-2 sm:px-4">
+    <header className="glass-surface brand-glow flex h-14 sm:h-16 shrink-0 items-center gap-2 px-2 sm:px-4 mx-2 mt-2 rounded-xl border">
       <SidebarTrigger />
       <Separator orientation="vertical" className="mr-2 h-4" />
       <AppHeader />
@@ -154,7 +154,7 @@ export const Assistant = () => {
             <div className="flex h-dvh w-full pr-0.5 relative overflow-hidden">
               <div className="pointer-events-none absolute inset-0 z-10 blur-3xl opacity-45 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.15] dark:brightness-[1.2] saturate-125 contrast-[1.1]">
                 <Idle delayMs={1200}>
-                  <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={1.0} blend={0.42} speed={1.15} />
+                  <Aurora colorStops={["#00ffbb", "#00ffd0", "#00ffbb"]} amplitude={1.0} blend={0.42} speed={1.15} />
                 </Idle>
               </div>
               <AppSidebar activeTab={activeTab} />

@@ -338,7 +338,17 @@ button,
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
   /* Tab accent (emerald, not blue) */
-  --tab-accent: #10b981;
+  /* Brand accent (primary) */
+  --brand: #00ffbb;
+  --brand-600: color-mix(in oklab, var(--brand) 85%, black);
+  --brand-400: color-mix(in oklab, var(--brand) 85%, white);
+  --tab-accent: var(--brand);
+  /* Glass tokens */
+  --glass-bg-light: rgba(255, 255, 255, 0.6);
+  --glass-bg-dark: rgba(255, 255, 255, 0.08);
+  --glass-border-light: rgba(15, 23, 42, 0.08);
+  --glass-border-dark: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.6);
 }
 
 .dark {
@@ -402,7 +412,7 @@ button,
   --dark-neon-glow-red: 0 0 20px rgba(239, 68, 68, 0.5);
   --dark-neon-glow-cyan: 0 0 20px rgba(0, 255, 187, 0.5);
   /* Tab accent (emerald, not blue) */
-  --tab-accent: #10b981;
+  --tab-accent: var(--brand);
 }
 
 @layer base {
@@ -468,6 +478,40 @@ button,
   }
 
   /* Enhanced Crypto Glamorous Utilities */
+  .glass-surface {
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    background: var(--glass-bg-light);
+    border: 1px solid var(--glass-border-light);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08), inset 0 1px 0 var(--glass-highlight);
+  }
+
+  .dark .glass-surface {
+    background: var(--glass-bg-dark);
+    border-color: var(--glass-border-dark);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+
+  .glass-pill {
+    @apply rounded-full;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.35) 100%);
+    border: 1px solid rgba(255,255,255,0.35);
+  }
+
+  .dark .glass-pill {
+    background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%);
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  .brand-glow {
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--brand) 35%, transparent), 0 6px 24px color-mix(in oklab, var(--brand) 18%, transparent);
+  }
+
+  .brand-ring {
+    box-shadow: 0 0 0 1px var(--brand) inset;
+  }
   .crypto-gradient-bg {
     background: linear-gradient(135deg, var(--crypto-blue) 0%, var(--crypto-purple) 100%);
   }
