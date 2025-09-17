@@ -97,10 +97,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 bun-debug.log*
-<<<<<<< HEAD
 logs/
-=======
->>>>>>> main
 
 # Environment files
 .env*
@@ -115,7 +112,6 @@ logs/
 *.tsbuildinfo
 /frontend/next-env.d.ts
 
-<<<<<<< HEAD
 # Storybook build outputs
 storybook-static
 
@@ -139,6 +135,7 @@ CRUSH.md*
 TODO.md
 NOTES.md
 .scratch/
+CLAUDE.md
 
 # Performance monitoring
 .clinic/
@@ -201,10 +198,6 @@ storybook-static
 # Temporary folders
 tmp/
 temp/
-=======
-# cursor rules
-/.cursor/
-/.vscode/
-CRUSH.md*
-AGENTS.md*
->>>>>>> main
+ 
+# Local folders to ignore
+windsuft/
