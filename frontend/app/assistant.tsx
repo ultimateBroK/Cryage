@@ -63,7 +63,7 @@ const API_KEY_STORAGE_KEY = "gemini-api-key";
 // Separate header component for better code organization
 const HeaderSection: React.FC = () => {
   return (
-    <header className="flex h-14 sm:h-16 shrink-0 items-center gap-2 border-b px-2 sm:px-4">
+    <header className="flex h-14 sm:h-16 shrink-0 items-center gap-2 glass-toolbar px-2 sm:px-4 sticky top-0 z-20">
       <SidebarTrigger />
       <Separator orientation="vertical" className="mr-2 h-4" />
       <AppHeader />
@@ -176,3 +176,4 @@ export const Assistant = () => {
     </ThreadTitleProvider>
   );
 };
+

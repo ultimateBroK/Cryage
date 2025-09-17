@@ -1,5 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
+import { Terminal } from "lucide-react"
 import { CryageLogo } from "@/components/ui/cryage-logo"
 import {
   Sidebar,
@@ -33,6 +34,14 @@ export function AppSidebar({ activeTab = "chat", ...props }: AppSidebarProps) {
                   </div>
                 </Link>
               </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="sm" tooltip="Terminal" asChild>
+              <Link href="/terminal">
+                <Terminal className="w-4 h-4" />
+                <span className="group-data-[collapsible=icon]:hidden">Terminal</span>
+              </Link>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

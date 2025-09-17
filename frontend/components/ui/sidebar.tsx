@@ -63,6 +63,11 @@ function SidebarProvider({
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
+  // Debug log for mobile state
+  React.useEffect(() => {
+    console.log('Sidebar Mobile Debug:', { isMobile });
+  }, [isMobile]);
+
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = React.useState(defaultOpen)
@@ -193,7 +198,7 @@ function Sidebar({
           data-slot="sidebar"
           data-mobile="true"
           className={cn(
-            "fixed inset-y-0 z-50 bg-sidebar text-sidebar-foreground flex flex-col border-r shadow-lg transition-transform duration-200 ease-linear",
+            "fixed inset-y-0 z-50 bg-sidebar text-sidebar-foreground flex flex-col border-r shadow-lg transition-transform duration-200 ease-linear bg-yellow-500",
             side === "left"
               ? openMobile ? "translate-x-0" : "-translate-x-full"
               : openMobile ? "translate-x-0" : "translate-x-full",

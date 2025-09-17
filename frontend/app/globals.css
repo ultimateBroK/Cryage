@@ -443,6 +443,31 @@ button,
 
 @layer utilities {
   /* Utility layer kept intentionally minimal for template */
+  /* Glass utilities for iOS-style liquid glass aesthetics */
+  .glass-toolbar {
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    background: color-mix(in oklch, var(--background) 70%, transparent);
+    border-bottom: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+  }
+
+  .glass-panel {
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    background: color-mix(in oklch, var(--card) 80%, transparent);
+    border: 1px solid color-mix(in oklch, var(--border) 70%, transparent);
+  }
+
+  .glass-segmented {
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    background: color-mix(in oklch, var(--background) 65%, transparent);
+    border: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+  }
+
+  .glass-divider {
+    border-color: color-mix(in oklch, var(--border) 70%, transparent);
+  }
   .safe-area-inset-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -575,15 +600,19 @@ button,
 
   /* Enhanced Tab Design System */
   .crypto-tab-container {
-    background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.8) 100%);
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    background: linear-gradient(135deg, color-mix(in oklch, var(--background) 65%, transparent) 0%, color-mix(in oklch, var(--background) 72%, transparent) 100%);
+    border: 1px solid color-mix(in oklch, var(--border) 65%, transparent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   }
 
   .dark .crypto-tab-container {
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
-    border: 1px solid rgba(71, 85, 105, 0.3);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    background: linear-gradient(135deg, color-mix(in oklch, var(--card) 70%, transparent) 0%, color-mix(in oklch, var(--card) 78%, transparent) 100%);
+    border: 1px solid color-mix(in oklch, var(--border) 70%, transparent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   }
 
   .crypto-tab-active {

@@ -187,3 +187,4 @@ const MainLayoutWithTabStateComponent: React.FC<MainLayoutWithTabStateProps> = (
 
 export const MainLayoutWithTabState = React.memo(MainLayoutWithTabStateComponent);
 MainLayoutWithTabState.displayName = 'MainLayoutWithTabState';
+

@@ -48,14 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
-        style={{
-          height: '100vh',
-          width: '100vw',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-        }}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <PageTransitionWrapper>{children}</PageTransitionWrapper>
       </body>
