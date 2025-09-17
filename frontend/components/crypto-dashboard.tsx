@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, PieChart, Settings, ChevronDown, ChevronUp, Eye, EyeOff, MessageSquare } from "lucide-react";
 import { MotionDiv } from "@/components/motion";
 
-export const CryptoDashboard = () => {
+const CryptoDashboardComponent = () => {
   // Progressive disclosure state
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [showDetailedView, setShowDetailedView] = useState(false);
@@ -19,26 +19,28 @@ export const CryptoDashboard = () => {
   });
 
   // Toggle card expansion
-  const toggleCardExpansion = (cardId: string) => {
-    const newExpanded = new Set(expandedCards);
-    if (newExpanded.has(cardId)) {
-      newExpanded.delete(cardId);
-    } else {
-      newExpanded.add(cardId);
-    }
-    setExpandedCards(newExpanded);
-  };
+  const toggleCardExpansion = useCallback((cardId: string) => {
+    setExpandedCards(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(cardId)) {
+        newExpanded.delete(cardId);
+      } else {
+        newExpanded.add(cardId);
+      }
+      return newExpanded;
+    });
+  }, []);
 
   // Toggle section visibility
-  const toggleSectionVisibility = (section: keyof typeof visibleSections) => {
+  const toggleSectionVisibility = useCallback((section: keyof typeof visibleSections) => {
     setVisibleSections(prev => ({
       ...prev,
       [section]: !prev[section]
     }));
-  };
+  }, []);
 
   // Enhanced mock data - in real app, this would come from API
-  const marketData = [
+  const marketData = useMemo(() => [
     {
       symbol: "BTC/USDT",
       name: "Bitcoin",
@@ -91,14 +93,14 @@ export const CryptoDashboard = () => {
       low24h: "$0.478",
       icon: PieChart,
     },
-  ];
+  ], []);
 
-  const indicators = [
+  const indicators = useMemo(() => [
     { name: "RSI (14)", value: "65.4", status: "neutral" as const },
     { name: "MACD", value: "+125.3", status: "positive" as const },
     { name: "Volume (24h)", value: "$2.1B", status: "positive" as const },
     { name: "Market Cap", value: "$850B", status: "negative" as const },
-  ];
+  ], []);
 
   return (
     <div className="p-3 sm:p-4 space-y-4 sm:space-y-6 overflow-y-auto h-full">
@@ -621,3 +623,5 @@ export const CryptoDashboard = () => {
     </div>
   );
 };
+
+export const CryptoDashboard = React.memo(CryptoDashboardComponent);

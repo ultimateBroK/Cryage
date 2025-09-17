@@ -4,14 +4,25 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:webpack": "next dev",
+    "dev:fast": "next dev --turbopack --experimental-debug",
     "build": "next build",
     "build:analyze": "ANALYZE=true next build",
+    "build:fast": "next build --no-lint",
+    "build:prod": "NODE_ENV=production next build",
     "start": "next start",
+    "start:prod": "NODE_ENV=production next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "typecheck": "tsc --noEmit",
     "analyze": "node scripts/analyze-bundle.js",
     "perf": "node scripts/performance-check.js",
+    "perf:build": "npm run build && npm run analyze",
     "dev:debug": "next dev --turbopack --experimental-debug",
-    "build:trace": "next build --debug"
+    "build:trace": "next build --debug",
+    "size-check": "bundlesize",
+    "clean": "rm -rf .next out node_modules/.cache",
+    "clean:build": "rm -rf .next out"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.11",

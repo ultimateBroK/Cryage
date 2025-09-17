@@ -1,9 +1,7 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Presence } from "./motion";
-import { MotionDiv } from "./motion";
 
 interface PageTransitionWrapperProps {
   children: ReactNode;
@@ -11,9 +9,23 @@ interface PageTransitionWrapperProps {
 
 export function PageTransitionWrapper({ children }: PageTransitionWrapperProps) {
   const pathname = usePathname();
+  const [fm, setFm] = useState<null | typeof import('framer-motion')>(null);
+
+  useEffect(() => {
+    // Lazy load framer-motion for page transitions
+    import('framer-motion').then(setFm);
+  }, []);
+
+  // If framer-motion hasn't loaded, render without animation
+  if (!fm) {
+    return <div className="min-h-screen">{children}</div>;
+  }
+
+  const AnimatePresence = fm.AnimatePresence;
+  const MotionDiv = fm.motion.div;
 
   return (
-    <Presence>
+    <AnimatePresence mode="wait">
       <MotionDiv
         key={pathname}
         initial={{ opacity: 0, y: 20 }}
@@ -27,6 +39,6 @@ export function PageTransitionWrapper({ children }: PageTransitionWrapperProps) 
       >
         {children}
       </MotionDiv>
-    </Presence>
+    </AnimatePresence>
   );
 }

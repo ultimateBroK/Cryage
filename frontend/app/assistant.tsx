@@ -16,7 +16,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ThreadTitleProvider } from "@/lib/thread-title-context";
 import { Idle } from "@/components/idle";
-import { MainLayoutWithTabState } from "@/components/MainLayoutWithTabState";
+import { MainLayoutWithTabState } from "@/components/main-layout-with-tab-state";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useAppShortcuts } from "@/hooks/use-keyboard-shortcuts";
 

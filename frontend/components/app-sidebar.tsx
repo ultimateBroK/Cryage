@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { ContextualSidebar } from "./ContextualSidebar"
+import { ContextualSidebar } from "./contextual-sidebar"
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   activeTab?: string;

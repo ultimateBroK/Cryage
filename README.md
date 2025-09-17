@@ -136,7 +136,7 @@ graph LR
 ```json
 {
   "api": "FastAPI + Python 3.12+",
-  "ai": "LangChain + Google GenAI",
+  "ai": "Agno + Gemini",
   "data": "Binance API (planned)",
   "storage": "SQLite (planned)",
   "deployment": "uv + uvicorn"
