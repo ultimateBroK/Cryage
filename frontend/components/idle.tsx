@@ -30,7 +30,9 @@ export function Idle({ children, delayMs = 1000, respectReducedMotion = true }: 
       const handle = w.requestIdleCallback(fire, { timeout: delayMs });
       return () => {
         canceled = true;
-        w.cancelIdleCallback && w.cancelIdleCallback(handle);
+        if (w.cancelIdleCallback) {
+          w.cancelIdleCallback(handle);
+        }
       };
     }
 

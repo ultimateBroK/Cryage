@@ -73,6 +73,235 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* StarBorder Animation Keyframes */
+  --animate-star-movement-bottom: star-movement-bottom linear infinite alternate;
+  --animate-star-movement-top: star-movement-top linear infinite alternate;
+}
+
+/* StarBorder Animation Keyframes */
+@keyframes star-movement-bottom {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100%, 0%);
+    opacity: 0;
+  }
+}
+
+@keyframes star-movement-top {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100%, 0%);
+    opacity: 0;
+  }
+}
+
+/* Shimmer animation for skeleton loading */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Animation delay utilities */
+.animation-delay-150 {
+  animation-delay: 0.15s;
+}
+
+/* Enhanced micro-interactions */
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+}
+
+.interactive-element {
+  @apply transition-all duration-200 ease-out;
+}
+
+.interactive-element:hover {
+  @apply transform scale-[1.02];
+}
+
+.interactive-element:active {
+  @apply transform scale-[0.98] transition-transform duration-75;
+}
+
+/* Ripple effect for buttons */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Enhanced scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar with smooth animations */
+::-webkit-scrollbar {
+  width: 8px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+  transform: scaleX(1.2);
+}
+
+/* Scroll-triggered animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.scroll-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.scroll-fade-in-left {
+  animation: fadeInLeft 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.scroll-fade-in-right {
+  animation: fadeInRight 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* Parallax effect utility */
+.parallax {
+  transform-style: preserve-3d;
+}
+
+.parallax > * {
+  transform-style: preserve-3d;
+}
+
+.parallax-slow {
+  transform: translateZ(0) scale(1);
+  transition: transform 0.1s linear;
+}
+
+.parallax-medium {
+  transform: translateZ(0) scale(1);
+  transition: transform 0.15s linear;
+}
+
+.parallax-fast {
+  transform: translateZ(0) scale(1);
+  transition: transform 0.2s linear;
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable framer-motion animations */
+  [data-framer-appear-id] {
+    animation: none !important;
+  }
+}
+
+/* Performance optimizations for animations */
+.crypto-hover-scale,
+.crypto-card-glass,
+.crypto-glow-green,
+.crypto-glow-red,
+.crypto-glow-blue,
+.crypto-glow-purple,
+.crypto-glow-cyan {
+  will-change: transform, opacity, box-shadow;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: translateZ(0);
+}
+
+.crypto-hover-scale:hover,
+.crypto-hover-scale:focus {
+  transform: translateZ(0) scale(1.02);
+}
+
+/* Optimize scrollbar animations */
+::-webkit-scrollbar-thumb {
+  will-change: background-color;
+}
+
+/* Optimize button transitions */
+button,
+.btn {
+  will-change: transform, background-color, box-shadow;
 }
 
 :root {
@@ -108,6 +337,8 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
+  /* Tab accent (emerald, not blue) */
+  --tab-accent: #10b981;
 }
 
 .dark {
@@ -142,6 +373,36 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+  /* Enhanced Dark Mode Crypto Variables */
+  --crypto-green: #00ff88;
+  --crypto-red: #ff4444;
+  --crypto-blue: #0088ff;
+  --crypto-purple: #8b5cf6;
+  --crypto-cyan: #00ffbb;
+
+  /* Enhanced Neon Glows */
+  --neon-glow-green: 0 0 15px rgba(0, 255, 136, 0.4);
+  --neon-glow-red: 0 0 15px rgba(255, 68, 68, 0.4);
+  --neon-glow-blue: 0 0 15px rgba(0, 136, 255, 0.4);
+  --neon-glow-purple: 0 0 15px rgba(139, 92, 246, 0.4);
+  --neon-glow-cyan: 0 0 15px rgba(0, 255, 187, 0.4);
+
+  /* Dark Mode Specific Colors */
+  --dark-crypto-bg: #0f172a;
+  --dark-crypto-card: rgba(30, 41, 59, 0.8);
+  --dark-crypto-accent: #3b82f6;
+  --dark-crypto-success: #10b981;
+  --dark-crypto-warning: #f59e0b;
+  --dark-crypto-error: #ef4444;
+
+  /* Enhanced Dark Mode Neon Glows */
+  --dark-neon-glow-blue: 0 0 20px rgba(59, 130, 246, 0.5);
+  --dark-neon-glow-green: 0 0 20px rgba(16, 185, 129, 0.5);
+  --dark-neon-glow-purple: 0 0 20px rgba(139, 92, 246, 0.5);
+  --dark-neon-glow-red: 0 0 20px rgba(239, 68, 68, 0.5);
+  --dark-neon-glow-cyan: 0 0 20px rgba(0, 255, 187, 0.5);
+  /* Tab accent (emerald, not blue) */
+  --tab-accent: #10b981;
 }
 
 @layer base {
@@ -163,7 +424,7 @@
   
   /* Scrollbar styling */
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -182,18 +443,88 @@
 
 @layer utilities {
   /* Utility layer kept intentionally minimal for template */
+  /* Glass utilities for iOS-style liquid glass aesthetics */
+  .glass-toolbar {
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    background: color-mix(in oklch, var(--background) 70%, transparent);
+    border-bottom: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+  }
+
+  /* Transparent variant for top header */
+  .glass-toolbar-transparent {
+    backdrop-filter: blur(10px) saturate(110%);
+    -webkit-backdrop-filter: blur(10px) saturate(110%);
+    background: transparent;
+    border-bottom: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
+  }
+
+  .glass-panel {
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    background: color-mix(in oklch, var(--card) 80%, transparent);
+    border: 1px solid color-mix(in oklch, var(--border) 70%, transparent);
+  }
+
+  .glass-segmented {
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    background: color-mix(in oklch, var(--background) 65%, transparent);
+    border: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+  }
+
+  /* Glass sidebar background */
+  .glass-sidebar {
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    background: color-mix(in oklch, var(--sidebar) 35%, transparent);
+  }
+
+  /* Lighter effects on small screens for performance */
+  @media (max-width: 767px) {
+    .glass-toolbar {
+      backdrop-filter: blur(8px) saturate(110%);
+      -webkit-backdrop-filter: blur(8px) saturate(110%);
+    }
+
+    .glass-toolbar-transparent {
+      backdrop-filter: blur(6px) saturate(105%);
+      -webkit-backdrop-filter: blur(6px) saturate(105%);
+      border-bottom: 1px solid color-mix(in oklch, var(--border) 35%, transparent);
+    }
+
+    .glass-panel {
+      backdrop-filter: blur(8px) saturate(110%);
+      -webkit-backdrop-filter: blur(8px) saturate(110%);
+    }
+
+    .glass-segmented {
+      backdrop-filter: blur(7px) saturate(108%);
+      -webkit-backdrop-filter: blur(7px) saturate(108%);
+    }
+
+    .glass-sidebar {
+      backdrop-filter: blur(8px) saturate(108%);
+      -webkit-backdrop-filter: blur(8px) saturate(108%);
+      background: color-mix(in oklch, var(--sidebar) 28%, transparent);
+    }
+  }
+
+  .glass-divider {
+    border-color: color-mix(in oklch, var(--border) 70%, transparent);
+  }
   .safe-area-inset-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
-  
+
   .safe-area-inset-top {
     padding-top: env(safe-area-inset-top);
   }
-  
+
   .safe-area-inset-left {
     padding-left: env(safe-area-inset-left);
   }
-  
+
   .safe-area-inset-right {
     padding-right: env(safe-area-inset-right);
   }
@@ -204,5 +535,191 @@
       min-height: 44px;
       min-width: 44px;
     }
+  }
+
+  /* Enhanced Crypto Glamorous Utilities */
+  .crypto-gradient-bg {
+    background: linear-gradient(135deg, var(--crypto-blue) 0%, var(--crypto-purple) 100%);
+  }
+
+  .crypto-card-glass {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .crypto-card-glass-dark {
+    backdrop-filter: blur(12px);
+    background: var(--dark-crypto-card);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .crypto-glow-green {
+    box-shadow: var(--neon-glow-green);
+  }
+
+  .crypto-glow-red {
+    box-shadow: var(--neon-glow-red);
+  }
+
+  .crypto-glow-blue {
+    box-shadow: var(--neon-glow-blue);
+  }
+
+  .crypto-glow-purple {
+    box-shadow: var(--neon-glow-purple);
+  }
+
+  .crypto-glow-cyan {
+    box-shadow: var(--neon-glow-cyan);
+  }
+
+  /* Dark Mode Specific Glows */
+  .crypto-glow-blue-dark {
+    box-shadow: var(--dark-neon-glow-blue);
+  }
+
+  .crypto-glow-green-dark {
+    box-shadow: var(--dark-neon-glow-green);
+  }
+
+  .crypto-glow-purple-dark {
+    box-shadow: var(--dark-neon-glow-purple);
+  }
+
+  .crypto-glow-red-dark {
+    box-shadow: var(--dark-neon-glow-red);
+  }
+
+  .crypto-glow-cyan-dark {
+    box-shadow: var(--dark-neon-glow-cyan);
+  }
+
+  .crypto-text-green {
+    color: var(--crypto-green);
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+  }
+
+  .crypto-text-red {
+    color: var(--crypto-red);
+    text-shadow: 0 0 8px rgba(255, 68, 68, 0.6);
+  }
+
+  .crypto-text-cyan {
+    color: var(--crypto-cyan);
+    text-shadow: 0 0 8px rgba(0, 255, 187, 0.6);
+  }
+
+  .crypto-text-green-dark {
+    color: var(--dark-crypto-success);
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
+  }
+
+  .crypto-text-red-dark {
+    color: var(--dark-crypto-error);
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
+  }
+
+  .crypto-text-cyan-dark {
+    color: var(--crypto-cyan);
+    text-shadow: 0 0 10px rgba(0, 255, 187, 0.7);
+  }
+
+  .crypto-hover-scale {
+    transition: all 0.3s ease;
+  }
+
+  .crypto-hover-scale:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .crypto-hover-scale-dark {
+    transition: all 0.3s ease;
+  }
+
+  .crypto-hover-scale-dark:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Enhanced Tab Design System */
+  .crypto-tab-container {
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    background: linear-gradient(135deg, color-mix(in oklch, var(--background) 65%, transparent) 0%, color-mix(in oklch, var(--background) 72%, transparent) 100%);
+    border: 1px solid color-mix(in oklch, var(--border) 65%, transparent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .dark .crypto-tab-container {
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    background: linear-gradient(135deg, color-mix(in oklch, var(--card) 70%, transparent) 0%, color-mix(in oklch, var(--card) 78%, transparent) 100%);
+    border: 1px solid color-mix(in oklch, var(--border) 70%, transparent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .crypto-tab-active {
+    background: rgba(16, 185, 129, 0.12);
+    border: 2px solid var(--tab-accent);
+    color: var(--tab-accent);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.45);
+    font-weight: 600;
+  }
+
+  .dark .crypto-tab-active {
+    background: rgba(16, 185, 129, 0.16);
+    border: 2px solid var(--tab-accent);
+    color: var(--tab-accent);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.55);
+    font-weight: 600;
+  }
+
+  .crypto-tab-inactive {
+    background: transparent;
+    border: 2px solid transparent;
+    color: rgba(100, 116, 139, 0.8);
+    font-weight: 500;
+  }
+
+  .crypto-tab-inactive:hover {
+    background: rgba(16, 185, 129, 0.08);
+    border: 2px solid rgba(16, 185, 129, 0.3);
+    color: var(--tab-accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  }
+
+  .dark .crypto-tab-inactive {
+    color: rgba(148, 163, 184, 0.8);
+  }
+
+  .dark .crypto-tab-inactive:hover {
+    background: rgba(16, 185, 129, 0.12);
+    border: 2px solid rgba(16, 185, 129, 0.4);
+    color: var(--tab-accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+
+  /* Cyan Border Theme for Cards */
+  .crypto-card-cyan {
+    border: 2px solid rgba(0, 255, 187, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .crypto-card-cyan:hover {
+    border: 2px solid rgba(0, 255, 187, 0.4);
+    box-shadow: var(--neon-glow-cyan);
+  }
+
+  .dark .crypto-card-cyan {
+    border: 2px solid rgba(0, 255, 187, 0.3);
+  }
+
+  .dark .crypto-card-cyan:hover {
+    border: 2px solid rgba(0, 255, 187, 0.5);
+    box-shadow: var(--dark-neon-glow-cyan);
   }
 }

@@ -1,5 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
+import { Terminal } from "lucide-react"
 import { CryageLogo } from "@/components/ui/cryage-logo"
 import {
   Sidebar,
@@ -8,36 +9,47 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from "@/components/ui/sidebar"
-import dynamic from "next/dynamic"
-const ThreadList = dynamic(() => import("./assistant-ui/thread-list").then(m => m.ThreadList), { ssr: false, loading: () => null })
+import { ContextualSidebar } from "./contextual-sidebar"
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  activeTab?: string;
+}
+
+export function AppSidebar({ activeTab = "chat", ...props }: AppSidebarProps) {
+  const collapsibleMode = (activeTab === "chat" || activeTab === "dashboard") ? "offcanvas" : "icon" as const;
   return (
-    <Sidebar {...props}>
+    <Sidebar collapsible={collapsibleMode} className="border-0" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton size="lg" tooltip="Cryage" asChild>
                 <Link href="#" onClick={(e) => e.preventDefault()}>
                   <div className="flex aspect-square size-8 items-center justify-center">
                     <CryageLogo size={32} />
                   </div>
-                  <div className="flex flex-col gap-0.5 leading-none">
+                  <div className="flex flex-col gap-0.5 leading-none group-data-[collapsible=icon]:hidden">
                     <span className="font-semibold text-lg">Cryage</span>
                     <span className="text-xs text-muted-foreground">Crypto agent</span>
                   </div>
                 </Link>
               </SidebarMenuButton>
           </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="sm" tooltip="Terminal" asChild>
+              <Link href="/terminal">
+                <Terminal className="w-4 h-4" />
+                <span className="group-data-[collapsible=icon]:hidden">Terminal</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
-        <ThreadList />
+      <SidebarContent className="p-0">
+        <div className="group-data-[collapsible=icon]:hidden">
+          <ContextualSidebar activeTab={activeTab} />
+        </div>
       </SidebarContent>
-
-      <SidebarRail />
     </Sidebar>
   )
 }

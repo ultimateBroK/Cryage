@@ -4,7 +4,6 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState, type F
 import { PlusIcon, MinusIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useThreadRuntime } from "@assistant-ui/react";
-import { AnimatePresence, motion } from "framer-motion";
 import StarBorder from "@/blocks/Animations/StarBorder/StarBorder";
 import {
   MarkdownTextPrimitive,
@@ -130,9 +129,17 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
   const ctx = useContext(ReasoningContext);
   const threadRuntime = useThreadRuntime();
   const scrollRef = useRef<HTMLDivElement>(null);
-  
+  const [fm, setFm] = useState<null | typeof import('framer-motion')>(null);
+
   const open = ctx?.open ?? false;
   const isRunning = threadRuntime?.getState().isRunning ?? false;
+
+  // Lazy load framer-motion
+  useEffect(() => {
+    if (open) {
+      import('framer-motion').then(setFm);
+    }
+  }, [open]);
 
   // Auto-scroll to bottom when content updates while running
   useEffect(() => {
@@ -163,21 +170,53 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
 
   if (!ctx) return null;
 
+  // If framer-motion hasn't loaded yet, render static content
+  if (!fm) {
+    return open ? (
+      <div
+        className={cn(
+          "w-full flex justify-center",
+          isRunning ? "sticky bottom-4 z-40" : "",
+          className,
+        )}
+        role="status"
+        aria-live="polite"
+      >
+        <div
+          ref={scrollRef}
+          className={cn(
+            "inline-block rounded-xl bg-background/40 backdrop-blur-md border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] p-3 text-left mx-auto",
+            isRunning ? "max-h-[30vh] overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent" : ""
+          )}
+        >
+          {markdown ? (
+            <MarkdownTextPrimitive className="aui-md" components={compactComponents} />
+          ) : (
+            <div>{children}</div>
+          )}
+        </div>
+      </div>
+    ) : null;
+  }
+
+  const AnimatePresence = fm.AnimatePresence;
+  const MotionDiv = fm.motion.div;
+
   return (
     <AnimatePresence initial={false}>
       {open && (
-        <motion.div
+        <MotionDiv
           initial={{ height: 0, opacity: 0, overflow: "hidden", marginTop: 0, marginBottom: 0 }}
-          animate={{ 
-            height: "auto", 
+          animate={{
+            height: "auto",
             opacity: 1,
             overflow: isRunning ? "hidden" : "visible",
             marginTop: 8, // mt-2
             marginBottom: 12, // mb-3
           }}
           exit={{ height: 0, opacity: 0, overflow: "hidden", marginTop: 0, marginBottom: 0 }}
-          transition={{ 
-            duration: 0.3, 
+          transition={{
+            duration: 0.3,
             ease: [0.4, 0.0, 0.2, 1], // Custom easing for smoother animation
             layout: { duration: 0.3 }
           }}
@@ -203,7 +242,7 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
               <div>{children}</div>
             )}
           </div>
-        </motion.div>
+        </MotionDiv>
       )}
     </AnimatePresence>
   );

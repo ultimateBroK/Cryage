@@ -10,6 +10,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 const SETTINGS_SIDEBAR_COOKIE_NAME = "settings_sidebar_state"
 const SETTINGS_SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SETTINGS_SIDEBAR_WIDTH = "25rem"
+const SETTINGS_SIDEBAR_WIDTH_MOBILE = "20rem" // 20% reduction for typical ~25rem base
 
 type SettingsSidebarContextProps = {
   open: boolean
@@ -90,6 +91,7 @@ function SettingsSidebarProvider({
           style={
             {
               "--settings-sidebar-width": SETTINGS_SIDEBAR_WIDTH,
+              "--settings-sidebar-width-mobile": SETTINGS_SIDEBAR_WIDTH_MOBILE,
               ...style,
             } as React.CSSProperties
           }
@@ -133,7 +135,8 @@ function SettingsSidebar({
           className={cn(
             "fixed inset-y-0 right-0 z-50 bg-background text-foreground flex flex-col border-l shadow-lg transition-transform duration-200 ease-linear",
             openMobile ? "translate-x-0" : "translate-x-full",
-            "w-(--settings-sidebar-width)",
+            // Mobile uses reduced width; sm and up use default width
+            "w-[var(--settings-sidebar-width-mobile)] sm:w-(--settings-sidebar-width)",
             className
           )}
           onClick={(e) => e.stopPropagation()}
