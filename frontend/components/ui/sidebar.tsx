@@ -164,7 +164,7 @@ function Sidebar({
       <div
         data-slot="sidebar"
         className={cn(
-          "text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col glass-surface border",
+          "bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col",
           className
         )}
         {...props}
@@ -193,7 +193,7 @@ function Sidebar({
           data-slot="sidebar"
           data-mobile="true"
           className={cn(
-            "fixed inset-y-0 z-50 text-sidebar-foreground flex flex-col shadow-lg transition-transform duration-200 ease-linear glass-surface border",
+            "fixed inset-y-0 z-50 bg-sidebar text-sidebar-foreground flex flex-col border-r shadow-lg transition-transform duration-200 ease-linear",
             side === "left"
               ? openMobile ? "translate-x-0" : "-translate-x-full"
               : openMobile ? "translate-x-0" : "translate-x-full",
@@ -254,7 +254,7 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:shadow-sm glass-surface border"
+          className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
         >
           {children}
         </div>

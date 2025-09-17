@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     apple: '/favicon.svg?v=6',
     other: [
       { rel: 'icon', type: 'image/svg+xml', url: '/favicon.svg?v=6' },
-      { rel: 'mask-icon', url: '/favicon.svg?v=6', color: '#00ffbb' },
+      { rel: 'mask-icon', url: '/favicon.svg?v=6', color: '#00f7be' },
     ],
   },
 };
@@ -36,7 +36,7 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#00ffbb",
+  themeColor: "#00f7be",
   colorScheme: "dark light",
 };
 

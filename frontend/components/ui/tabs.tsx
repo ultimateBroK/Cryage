@@ -14,7 +14,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-10 items-center justify-center rounded-full p-1 text-muted-foreground gap-1 glass-pill brand-glow",
+      "inline-flex h-10 items-center justify-center rounded-md crypto-tab-container p-0.5 text-muted-foreground gap-1",
       className
     )}
     {...props}
@@ -29,13 +29,10 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
-      // inactive
-      "data-[state=inactive]:text-muted-foreground/80 hover:data-[state=inactive]:text-foreground/90",
-      // active frosted chip
-      "data-[state=active]:bg-white/60 data-[state=active]:backdrop-blur data-[state=active]:text-foreground data-[state=active]:shadow-sm dark:data-[state=active]:bg-white/10",
-      // brand ring when active
-      "data-[state=active]:ring-1 data-[state=active]:ring-[var(--tab-accent)]/50",
+      "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crypto-cyan/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=inactive]:crypto-tab-inactive hover:data-[state=inactive]:crypto-tab-inactive",
+      // Bottom indicator for active state
+      "relative data-[state=active]:text-foreground data-[state=active]:bg-transparent",
+      "after:content-[''] after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-[var(--tab-accent)]/60 after:opacity-0 data-[state=active]:after:opacity-100 data-[state=active]:after:bg-[var(--tab-accent)] data-[state=active]:after:shadow-[0_0_6px_rgba(16,185,129,0.5)]",
       className
     )}
     {...props}
