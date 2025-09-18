@@ -23,8 +23,7 @@ import {
   Aurora, 
   AppSidebar, 
   Settings, 
-  SettingsSidebarPanel, 
-  ThemeToggle 
+  SettingsSidebarPanel
 } from "@/lib/dynamic-imports";
 
 /**
@@ -50,23 +49,26 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
 }) => {
   return (
     <header className="flex h-12 sm:h-14 shrink-0 items-center gap-2 glass-toolbar-transparent px-2 sm:px-4 sticky top-0 z-20">
-      <SidebarTrigger />
+      {/* Left side - Sidebar trigger with balanced spacing */}
+      <div className="flex items-center justify-center w-10 sm:w-12">
+        <SidebarTrigger />
+      </div>
       
-      {/* Integrated Tab Navigation with Scale Animation */}
-      <div className="flex-1 flex justify-center">
+      {/* Center - Tab Navigation with balanced alignment */}
+      <div className="flex-1 flex justify-center items-center px-2">
         <div className="flex items-center bg-background/40 backdrop-blur-md border border-white/15 rounded-xl p-1 gap-1">
           <button
             onClick={() => onTabChange("chat")}
-            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out transform-gpu w-28 sm:w-32 ${
-              activeTab === "chat" 
-                ? "bg-primary text-primary-foreground shadow-lg scale-110 z-10" 
-                : "text-muted-foreground hover:text-foreground hover:bg-background/60 scale-90 hover:scale-95"
+            className={`flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out transform-gpu w-24 sm:w-28 md:w-32 relative ${
+              activeTab === "chat"
+                ? "bg-primary text-primary-foreground shadow-lg scale-105 z-10"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/60 scale-95 hover:scale-100"
             }`}
             style={{
               transformOrigin: 'center',
             }}
           >
-            <MessageSquare className={`w-4 h-4 transition-all duration-300 ${activeTab === "chat" ? "scale-110" : "scale-90"}`} />
+            <MessageSquare className={`w-4 h-4 transition-all duration-300 ${activeTab === "chat" ? "scale-110" : "scale-100"}`} />
             <span className="hidden sm:inline whitespace-nowrap">Chat</span>
             {unreadMessageCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
@@ -76,16 +78,16 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
           </button>
           <button
             onClick={() => onTabChange("dashboard")}
-            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out transform-gpu w-28 sm:w-32 relative ${
-              activeTab === "dashboard" 
-                ? "bg-primary text-primary-foreground shadow-lg scale-110 z-10" 
-                : "text-muted-foreground hover:text-foreground hover:bg-background/60 scale-90 hover:scale-95"
+            className={`flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out transform-gpu w-24 sm:w-28 md:w-32 relative ${
+              activeTab === "dashboard"
+                ? "bg-primary text-primary-foreground shadow-lg scale-105 z-10"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/60 scale-95 hover:scale-100"
             }`}
             style={{
               transformOrigin: 'center',
             }}
           >
-            <BarChart3 className={`w-4 h-4 transition-all duration-300 ${activeTab === "dashboard" ? "scale-110" : "scale-90"}`} />
+            <BarChart3 className={`w-4 h-4 transition-all duration-300 ${activeTab === "dashboard" ? "scale-110" : "scale-100"}`} />
             <span className="hidden sm:inline whitespace-nowrap">Dashboard</span>
             {systemNotificationCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
@@ -96,9 +98,13 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-1 sm:gap-2">
-        <Settings />
-        <ThemeToggle />
+      {/* Right side - Settings with sidebar-like background */}
+      <div className="flex items-center justify-center w-10 sm:w-12">
+        <div className="relative group">
+          <Settings />
+          {/* Settings background similar to sidebar */}
+          <div className="absolute inset-0 bg-background/50 backdrop-blur-sm border border-white/10 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10" />
+        </div>
       </div>
     </header>
   );

@@ -133,7 +133,7 @@ function SettingsSidebar({
           data-slot="settings-sidebar"
           data-mobile="true"
           className={cn(
-            "fixed inset-y-0 right-0 z-50 bg-background text-foreground flex flex-col border-l shadow-lg transition-transform duration-200 ease-linear",
+            "fixed inset-y-0 right-0 z-50 glass-sidebar text-foreground flex flex-col border-l shadow-lg transition-transform duration-200 ease-linear",
             openMobile ? "translate-x-0" : "translate-x-full",
             // Mobile uses reduced width; sm and up use default width
             "w-[var(--settings-sidebar-width-mobile)] sm:w-(--settings-sidebar-width)",
@@ -176,7 +176,7 @@ function SettingsSidebar({
         <div
           data-sidebar="settings-sidebar"
           data-slot="settings-sidebar-inner"
-          className="bg-background flex h-full w-full flex-col border-l"
+          className="glass-sidebar flex h-full w-full flex-col border-l"
         >
           {children}
         </div>
@@ -216,7 +216,7 @@ function SettingsSidebarContent({ className, ...props }: React.ComponentProps<"d
     <div
       data-slot="settings-sidebar-content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-4",
+        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-4 glass-panel rounded-lg m-2",
         className
       )}
       {...props}
@@ -228,7 +228,7 @@ function SettingsSidebarHeader({ className, ...props }: React.ComponentProps<"di
   return (
     <div
       data-slot="settings-sidebar-header"
-      className={cn("flex flex-col gap-2 p-4 pb-2", className)}
+      className={cn("flex flex-col gap-2 p-4 pb-2 glass-panel rounded-lg m-2 mb-0", className)}
       {...props}
     />
   )
