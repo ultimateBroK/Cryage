@@ -3,7 +3,6 @@
 import React, { useCallback } from "react";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
-import dynamic from "next/dynamic";
 import { MessageSquare, BarChart3 } from "lucide-react";
 import {
   SidebarInset,
@@ -19,47 +18,30 @@ import { Idle } from "@/components/common/idle";
 import { MainLayout } from "@/components/layouts/main-layout";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useAppShortcuts } from "@/hooks/use-keyboard-shortcuts";
+import { HeaderSectionProps, TabType } from "@/types/components";
+import { 
+  Aurora, 
+  AppSidebar, 
+  Settings, 
+  SettingsSidebarPanel, 
+  ThemeToggle 
+} from "@/lib/dynamic-imports";
 
-// Thread is now imported in MainLayout component
-
-// Defer Aurora (and its ogl dep) to browser idle to keep first load JS small
-const Aurora = dynamic(
-  () => import("@/blocks/Backgrounds/Aurora/Aurora"),
-  { ssr: false, loading: () => <div className="absolute inset-0" /> }
-);
-
-const AppSidebar = dynamic(
-  () => import("@/components/features/navigation/app-sidebar").then(m => ({ default: m.AppSidebar })), 
-  { ssr: false, loading: () => <div className="w-64 border-r" /> }
-);
-
-const Settings = dynamic(
-  () => import("@/components/ui/settings"),
-  { ssr: false, loading: () => <div className="w-10 h-10" /> }
-);
-
-const SettingsSidebarPanel = dynamic(
-  () => import("@/components/ui/settings").then(m => ({ default: m.SettingsSidebarPanel })),
-  { ssr: false, loading: () => null }
-);
-
-const ThemeToggle = dynamic(
-  () => import("@/components/ui/theme-toggle"), 
-  { ssr: false, loading: () => <div className="w-10 h-10" /> }
-);
-
-// App title removed from header per design request
+/**
+ * Assistant Component
+ * 
+ * Main application component that provides the chat interface with AI capabilities.
+ * Features tab-based navigation, dynamic imports for performance, and proper SSR handling.
+ */
 
 const API_KEY_STORAGE_KEY = "gemini-api-key";
 
-// Optimized header with integrated tabs for better space utilization
-interface HeaderSectionProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-  unreadMessageCount: number;
-  systemNotificationCount: number;
-}
-
+/**
+ * HeaderSection Component
+ * 
+ * Renders the application header with tab navigation and action buttons.
+ * Includes notification badges and responsive design.
+ */
 const HeaderSection: React.FC<HeaderSectionProps> = ({ 
   activeTab, 
   onTabChange, 
@@ -122,10 +104,17 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
   );
 };
 
-export const Assistant = () => {
+/**
+ * Main Assistant Component
+ * 
+ * Provides the complete chat interface with AI capabilities, sidebar navigation,
+ * and settings panel. Handles API key management and keyboard shortcuts.
+ */
+export const Assistant: React.FC = () => {
   const runtime = useChatRuntime();
-  const [activeTab, setActiveTab] = React.useState("chat");
-  // Notification counts to pass into layout
+  const [activeTab, setActiveTab] = React.useState<TabType>("chat");
+  
+  // Notification counts for header display
   const { unreadNotifications } = useNotifications();
   const unreadMessageCount = unreadNotifications.filter(n => n.type === 'message').length;
   const systemNotificationCount = unreadNotifications.filter(n => n.type === 'system').length;
@@ -207,17 +196,17 @@ export const Assistant = () => {
                <SidebarInset>
                  <HeaderSection 
                    activeTab={activeTab}
-                   onTabChange={setActiveTab}
+                   onTabChange={(tab: string) => setActiveTab(tab as TabType)}
                    unreadMessageCount={unreadMessageCount}
                    systemNotificationCount={systemNotificationCount}
                  />
                   <SettingsSidebarInset>
-                    <MainLayout
-                      activeTab={activeTab}
-                      onTabChange={setActiveTab}
-                      unreadMessageCount={unreadMessageCount}
-                      systemNotificationCount={systemNotificationCount}
-                    />
+                  <MainLayout
+                    activeTab={activeTab}
+                    onTabChange={(tab: string) => setActiveTab(tab as TabType)}
+                    unreadMessageCount={unreadMessageCount}
+                    systemNotificationCount={systemNotificationCount}
+                  />
                   </SettingsSidebarInset>
                </SidebarInset>
               <SettingsSidebarPanel />

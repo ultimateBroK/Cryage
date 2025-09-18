@@ -170,8 +170,8 @@ const CryptoDashboardComponent = () => {
               <CardContent className="space-y-2 sm:space-y-3">
                 {/* Main Price Display */}
                 <div className="flex items-baseline gap-2">
-                  <div className="text-xl sm:text-2xl font-bold">{coin.price}</div>
-                  <div className={`flex items-center text-sm font-medium ${
+                  <div className="text-xl sm:text-2xl font-bold trading-price">{coin.price}</div>
+                  <div className={`flex items-center text-sm font-medium trading-change ${
                     coin.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
                   }`}>
                     {coin.changeType === 'positive' ? (
@@ -184,7 +184,7 @@ const CryptoDashboardComponent = () => {
                 </div>
 
                 {/* 24h Range */}
-                <div className="flex justify-between text-xs text-muted-foreground">
+                <div className="flex justify-between text-xs text-muted-foreground trading-price">
                   <span>L: {coin.low24h}</span>
                   <span>H: {coin.high24h}</span>
                 </div>
@@ -193,11 +193,11 @@ const CryptoDashboardComponent = () => {
                 <div className="grid grid-cols-2 gap-2 pt-2 border-t">
                   <div className="text-center p-1 sm:p-0">
                     <p className="text-xs text-muted-foreground">Volume</p>
-                    <p className="text-xs sm:text-sm font-medium">{coin.volume}</p>
+                    <p className="text-xs sm:text-sm font-medium trading-volume">{coin.volume}</p>
                   </div>
                   <div className="text-center p-1 sm:p-0">
                     <p className="text-xs text-muted-foreground">Market Cap</p>
-                    <p className="text-xs sm:text-sm font-medium">{coin.marketCap}</p>
+                    <p className="text-xs sm:text-sm font-medium trading-volume">{coin.marketCap}</p>
                   </div>
                 </div>
 
@@ -208,11 +208,11 @@ const CryptoDashboardComponent = () => {
                      <div className="grid grid-cols-2 gap-2">
                        <div className="text-center">
                          <p className="text-xs text-muted-foreground">RSI (14)</p>
-                         <p className="text-sm font-medium">65.4</p>
+                         <p className="text-sm font-medium trading-metric">65.4</p>
                        </div>
                        <div className="text-center">
                          <p className="text-xs text-muted-foreground">MACD</p>
-                         <p className="text-sm font-medium text-green-600">+125.3</p>
+                         <p className="text-sm font-medium trading-metric text-green-600">+125.3</p>
                        </div>
                      </div>
 
@@ -220,15 +220,15 @@ const CryptoDashboardComponent = () => {
                      <div className="grid grid-cols-3 gap-2 text-xs">
                        <div className="text-center">
                          <p className="text-muted-foreground">ATH</p>
-                         <p className="font-medium">$73,750</p>
+                         <p className="font-medium trading-price">$73,750</p>
                        </div>
                        <div className="text-center">
                          <p className="text-muted-foreground">ATL</p>
-                         <p className="font-medium">$67.81</p>
+                         <p className="font-medium trading-price">$67.81</p>
                        </div>
                        <div className="text-center">
                          <p className="text-muted-foreground">Supply</p>
-                         <p className="font-medium">19.7M</p>
+                         <p className="font-medium trading-metric">19.7M</p>
                        </div>
                      </div>
                    </div>
@@ -328,7 +328,7 @@ const CryptoDashboardComponent = () => {
                       indicator.status === 'positive' ? 'default' :
                       indicator.status === 'negative' ? 'destructive' : 'secondary'
                     }
-                    className="text-xs"
+                    className="text-xs trading-metric"
                   >
                     {indicator.value}
                   </Badge>
@@ -464,7 +464,7 @@ const CryptoDashboardComponent = () => {
           <CardContent className="space-y-6">
             {/* Fear & Greed Index */}
             <div className="text-center">
-              <div className="text-3xl font-bold text-orange-600 mb-2">65</div>
+              <div className="text-3xl font-bold trading-price text-orange-600 mb-2">65</div>
               <div className="text-sm font-medium">Fear & Greed Index</div>
               <Badge variant="secondary" className="mt-1">Greed</Badge>
               <div className="w-full bg-muted rounded-full h-2 mt-3">
@@ -479,19 +479,19 @@ const CryptoDashboardComponent = () => {
             {/* Quick Market Stats */}
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-3 bg-muted/30 rounded-lg">
-                <div className="text-lg font-bold">$2.1T</div>
+                <div className="text-lg font-bold trading-price">$2.1T</div>
                 <div className="text-xs text-muted-foreground">Global Cap</div>
               </div>
               <div className="text-center p-3 bg-muted/30 rounded-lg">
-                <div className="text-lg font-bold">$89.2B</div>
+                <div className="text-lg font-bold trading-volume">$89.2B</div>
                 <div className="text-xs text-muted-foreground">24h Volume</div>
               </div>
               <div className="text-center p-3 bg-muted/30 rounded-lg">
-                <div className="text-lg font-bold">56.2%</div>
+                <div className="text-lg font-bold trading-metric">56.2%</div>
                 <div className="text-xs text-muted-foreground">BTC Dominance</div>
               </div>
                <div className="text-center p-3 bg-muted/30 rounded-lg">
-                 <div className="text-lg font-bold">1,247</div>
+                 <div className="text-lg font-bold trading-metric">1,247</div>
                  <div className="text-xs text-muted-foreground">Active Coins</div>
                </div>
              </div>
@@ -553,15 +553,15 @@ const CryptoDashboardComponent = () => {
           <CardContent className="space-y-2">
             <button className="w-full p-2 rounded-md border hover:bg-muted/50 transition-colors text-left text-sm">
               <div className="font-medium">My Holdings</div>
-              <div className="text-xs text-muted-foreground">$12,450.00</div>
+              <div className="text-xs text-muted-foreground trading-price">$12,450.00</div>
             </button>
             <button className="w-full p-2 rounded-md border hover:bg-muted/50 transition-colors text-left text-sm">
               <div className="font-medium">Performance</div>
-              <div className="text-xs text-green-600">+8.2% this month</div>
+              <div className="text-xs text-green-600 trading-change">+8.2% this month</div>
             </button>
             <button className="w-full p-2 rounded-md border hover:bg-muted/50 transition-colors text-left text-sm">
               <div className="font-medium">Watchlist</div>
-              <div className="text-xs text-muted-foreground">12 coins</div>
+              <div className="text-xs text-muted-foreground trading-metric">12 coins</div>
             </button>
           </CardContent>
         </Card>
@@ -605,15 +605,15 @@ const CryptoDashboardComponent = () => {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm">24h Change</span>
-              <Badge variant="default" className="text-green-600">+2.1%</Badge>
+              <Badge variant="default" className="text-green-600 trading-change">+2.1%</Badge>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm">Top Gainer</span>
-              <Badge variant="outline" className="text-xs">SOL +12.5%</Badge>
+              <Badge variant="outline" className="text-xs trading-change">SOL +12.5%</Badge>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm">Top Loser</span>
-              <Badge variant="outline" className="text-xs text-red-600">DOT -5.2%</Badge>
+              <Badge variant="outline" className="text-xs text-red-600 trading-change">DOT -5.2%</Badge>
             </div>
           </CardContent>
         </Card>
