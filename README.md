@@ -49,41 +49,59 @@ cd ../backend && uv sync && uv run uvicorn main:app --reload
 ## 📁 Project Structure
 
 ```
-cryage-crypto-ai/
+cryage/
 ├── 🎨 frontend/              # Next.js 15 + React 19 Frontend
-│   ├── app/                  # App Router pages & API routes
-│   │   ├── api/             # Backend API endpoints
-│   │   │   ├── chat/        # ✅ AI chat functionality
-│   │   │   └── generate-title/ # ✅ Auto thread titles
-│   │   ├── assistant.tsx    # Main chat interface
-│   │   ├── globals.css      # Global styles
-│   │   └── layout.tsx       # Root layout
-│   ├── components/          # Reusable React components
-│   │   ├── assistant-ui/    # Chat interface components
-│   │   │   ├── thread.tsx   # ✅ Chat thread management
-│   │   │   ├── thread-list.tsx # ✅ Thread history
-│   │   │   └── markdown-text.tsx # ✅ Message rendering
-│   │   ├── ui/              # UI component library
-│   │   │   ├── button.tsx   # Styled buttons
-│   │   │   ├── sidebar.tsx  # Navigation sidebar
-│   │   │   ├── settings.tsx # ✅ API key management
-│   │   │   └── theme-toggle.tsx # Dark/light mode
-│   │   └── app-sidebar.tsx  # ✅ Main navigation
-│   ├── blocks/              # Advanced UI blocks
-│   │   └── Backgrounds/
-│   │       └── Aurora/      # ✅ Beautiful animated background
-│   ├── hooks/               # Custom React hooks
-│   ├── lib/                 # Utility functions
-│   └── public/              # Static assets
+│   ├── src/                 # Source directory
+│   │   ├── app/             # App Router pages & API routes
+│   │   │   ├── api/         # Backend API endpoints
+│   │   │   │   ├── chat/        # ✅ AI chat functionality
+│   │   │   │   └── generate-title/ # ✅ Auto thread titles
+│   │   │   ├── assistant.tsx    # Main chat interface
+│   │   │   ├── globals.css      # Global styles
+│   │   │   ├── layout.tsx       # Root layout
+│   │   │   └── terminal/        # Trading terminal page (scaffolded)
+│   │   ├── components/     # Reusable React components
+│   │   │   ├── features/   # Feature-specific components
+│   │   │   │   ├── assistant/    # ✅ Chat interface components
+│   │   │   │   │   ├── thread.tsx       # ✅ Chat thread management
+│   │   │   │   │   ├── thread-list.tsx   # ✅ Thread history
+│   │   │   │   │   └── markdown-text.tsx # ✅ Message rendering
+│   │   │   │   ├── crypto/       # Crypto dashboard components
+│   │   │   │   ├── navigation/   # Navigation components
+│   │   │   │   │   └── app-sidebar.tsx  # ✅ Main navigation
+│   │   │   │   ├── settings/     # Settings components
+│   │   │   │   │   └── settings-panel.tsx # ✅ API key management
+│   │   │   │   └── terminal/     # Trading terminal panels (scaffolded)
+│   │   │   ├── ui/          # UI component library
+│   │   │   │   ├── button.tsx      # Styled buttons
+│   │   │   │   ├── sidebar.tsx     # Navigation sidebar
+│   │   │   │   ├── theme-toggle.tsx # ✅ Dark/light mode
+│   │   │   │   └── ...            # Other UI components
+│   │   │   ├── common/      # Common utilities
+│   │   │   └── layouts/     # Layout components
+│   │   ├── blocks/         # Advanced UI blocks
+│   │   │   ├── Backgrounds/
+│   │   │   │   └── Aurora/      # ✅ Beautiful animated background
+│   │   │   └── Animations/
+│   │   │       └── StarBorder/  # ✅ Star border animations
+│   │   ├── hooks/          # Custom React hooks
+│   │   ├── lib/            # Utility functions & contexts
+│   │   ├── styles/         # Global styles
+│   │   ├── types/          # TypeScript type definitions
+│   │   └── utils/          # Utility functions
+│   ├── public/             # Static assets
+│   ├── scripts/            # Build and analysis scripts
+│   └── .next/              # Next.js build output
 │
-├── 🐍 backend/               # FastAPI Python Backend
-│   ├── main.py              # 🚧 FastAPI application (basic structure)
-│   ├── pyproject.toml       # Python dependencies
-│   └── README.md            # Backend documentation
+├── 🐍 backend/             # FastAPI Python Backend
+│   ├── main.py            # 🚧 FastAPI application (basic structure)
+│   ├── pyproject.toml      # Python dependencies
+│   └── README.md           # Backend documentation
 │
-├── 📋 package.json           # Monorepo scripts
-├── 📖 README.md             # This file
-└── 🎯 CRUSH.md              # Development guidelines
+├── 📋 package.json         # Monorepo scripts
+├── 📖 README.md           # This file
+├── 🎯 CRUSH.md            # Development guidelines
+└── 🤖 CLAUDE.md           # AI assistant guidelines
 ```
 
 ## 🏗️ Architecture Overview
@@ -108,6 +126,10 @@ graph LR
 | 🎨 **Modern UI** | ✅ **Live** | Responsive design with Aurora animations |
 | 🔐 **API Key Management** | ✅ **Live** | Configure directly in UI, no env files needed |
 | ⚡ **Performance Optimized** | ✅ **Live** | Dynamic imports, caching, optimized bundle |
+| 🎭 **Theme Support** | ✅ **Live** | Dark/light mode toggle |
+| 🌟 **Animations** | ✅ **Live** | Star border and Aurora background effects |
+| 📱 **Mobile Responsive** | ✅ **Live** | Works seamlessly on all devices |
+| 🏗️ **Terminal Scaffold** | ✅ **Live** | Trading terminal structure ready |
 
 ## 🎯 Roadmap - Coming Soon
 
@@ -226,7 +248,9 @@ bun run dev              # Development server with Turbopack
 bun run build            # Production build
 bun run start            # Production server  
 bun run lint             # ESLint checks
-bun run build:analyze    # Bundle analyzer
+bun run typecheck        # TypeScript checking
+bun run analyze          # Bundle analyzer
+bun run perf             # Performance check
 ```
 
 ### 🐍 Backend Commands  
@@ -242,6 +266,11 @@ bun run dev:frontend     # Frontend only
 bun run dev:backend      # Backend only
 bun run install:frontend # Install frontend deps
 bun run install:backend  # Install backend deps
+bun run build            # Build frontend
+bun run lint             # Run frontend linting
+bun run typecheck:frontend # Check TypeScript types
+bun run analyze          # Bundle analysis
+bun run perf             # Performance check
 ```
 
 ## 🤝 Contributing
@@ -253,6 +282,7 @@ We welcome contributions! Here's how to get started:
 2. **Market data integration** - Help us add live crypto data
 3. **Chart visualization** - Implement beautiful trading charts
 4. **AI enhancements** - Improve market analysis capabilities
+5. **Terminal panels** - Build out the trading terminal interface
 
 ### 🔧 Development Guidelines
 - ✅ **TypeScript strict mode** - No `any` types allowed
@@ -290,6 +320,9 @@ We welcome contributions! Here's how to get started:
 - 🔒 **Security**: Hardened & validated
 - 📱 **Mobile Support**: Fully responsive
 - 🌙 **Dark Mode**: Built-in theme support
+- 🎨 **Animations**: Aurora + Star border effects
+- 🏗️ **Terminal**: Scaffolded and ready
+- 🧠 **AI Integration**: Gemini 2.5 Flash with reasoning
 
 ## ✨ Technologies
 
@@ -315,7 +348,7 @@ We welcome contributions! Here's how to get started:
   </tr>
 </table>
 
-### 🤖 AI & Machine Learning Platforms
+### 🤖 AI
 <table>
   <tr>
     <td align="center" width="120">
@@ -449,4 +482,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   <a href="https://visitor-badge.laobi.icu/badge?page_id=ultimateBroK.Cryage"><img src="https://visitor-badge.laobi.icu/badge?page_id=ultimateBroK.Cryage" alt="Visitors"></a>
   <a href="https://github.com/ultimateBroK/Cryage/stargazers"><img src="https://img.shields.io/github/stars/ultimateBroK/Cryage?style=flat-square&logo=github&label=Stars&color=gold" alt="Stars"></a>
   <a href="https://github.com/ultimateBroK/Cryage/issues"><img src="https://img.shields.io/github/issues/ultimateBroK/Cryage?style=flat-square&logo=github&label=Issues&color=red" alt="Issues"></a>
+  <a href="https://github.com/ultimateBroK/Cryage/network/members"><img src="https://img.shields.io/github/forks/ultimateBroK/Cryage?style=flat-square&logo=github&label=Forks&color=blue" alt="Forks"></a>
 </div>
