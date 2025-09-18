@@ -86,6 +86,7 @@ Thumbs.db
 /.crush/
 /.vscode/
 /.windsurf/
+/.github/
 /.idea/
 *.swp
 *.swo
