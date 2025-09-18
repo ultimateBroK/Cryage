@@ -22,12 +22,15 @@ coverage/
 /frontend/.next/
 /frontend/out/
 /frontend/.swc/
+.next/
+out/
 
 # Production builds
 /build
 /dist
 /frontend/dist/
 /backend/dist/
+dist/
 
 # Python
 **/__pycache__/
@@ -40,10 +43,8 @@ coverage/
 **/.env
 .PYTHONPATH
 *.so
-.Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -84,6 +85,7 @@ Thumbs.db
 /.cursor/
 /.crush/
 /.vscode/
+/.windsurf/
 /.idea/
 *.swp
 *.swo
@@ -132,10 +134,11 @@ temp/
 
 # Documentation and notes
 CRUSH.md*
+AGENTS.md*
+CLAUDE.md*
 TODO.md
 NOTES.md
 .scratch/
-CLAUDE.md
 
 # Performance monitoring
 .clinic/
@@ -149,9 +152,6 @@ pids
 *.pid
 *.seed
 *.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
 
 # Dependency directories
 jspm_packages/
@@ -184,20 +184,5 @@ jspm_packages/
 .cache
 .parcel-cache
 
-# next.js build output and cache
-.next/
-out/
-
 # Nuxt.js build / generate output
 .nuxt
-dist
-
-# Storybook build outputs
-storybook-static
-
-# Temporary folders
-tmp/
-temp/
- 
-# Local folders to ignore
-windsuft/
