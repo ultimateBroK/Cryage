@@ -1,5 +1,6 @@
 // import { openai } from "@ai-sdk/openai";
 // import { createOllama } from 'ollama-ai-provider-v2';
+
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
 import {
@@ -10,7 +11,7 @@ import {
 
 // Disable AI SDK warnings about unsupported features
 if (typeof globalThis !== 'undefined') {
-  (globalThis as any).AI_SDK_LOG_WARNINGS = false;
+  (globalThis as { AI_SDK_LOG_WARNINGS?: boolean | ((...args: unknown[]) => void) }).AI_SDK_LOG_WARNINGS = false;
 }
 
 export async function POST(req: Request) {

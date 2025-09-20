@@ -3,11 +3,9 @@
 import React, { useCallback } from "react";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
-import { MessageSquare, BarChart3 } from "lucide-react";
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   SettingsSidebarProvider,
@@ -18,11 +16,11 @@ import { Idle } from "@/components/common/idle";
 import { MainLayout } from "@/components/layouts/main-layout";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useAppShortcuts } from "@/hooks/use-keyboard-shortcuts";
-import { HeaderSectionProps, TabType } from "@/types/components";
+import { TabType } from "@/types/components";
+import { AppHeader } from "@/components/features/navigation/app-header";
 import { 
   Aurora, 
   AppSidebar, 
-  Settings, 
   SettingsSidebarPanel
 } from "@/lib/dynamic-imports";
 
@@ -35,80 +33,6 @@ import {
 
 const API_KEY_STORAGE_KEY = "gemini-api-key";
 
-/**
- * HeaderSection Component
- * 
- * Renders the application header with tab navigation and action buttons.
- * Includes notification badges and responsive design.
- */
-const HeaderSection: React.FC<HeaderSectionProps> = ({ 
-  activeTab, 
-  onTabChange, 
-  unreadMessageCount, 
-  systemNotificationCount 
-}) => {
-  return (
-    <header className="flex h-12 sm:h-14 shrink-0 items-center gap-2 glass-toolbar-transparent px-2 sm:px-4 sticky top-0 z-20">
-      {/* Left side - Sidebar trigger with balanced spacing */}
-      <div className="flex items-center justify-center w-10 sm:w-12">
-        <SidebarTrigger />
-      </div>
-      
-      {/* Center - Tab Navigation with balanced alignment */}
-      <div className="flex-1 flex justify-center items-center px-2">
-        <div className="flex items-center bg-background/40 backdrop-blur-md border border-white/15 rounded-xl p-1 gap-1">
-          <button
-            onClick={() => onTabChange("chat")}
-            className={`flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out transform-gpu w-24 sm:w-28 md:w-32 relative ${
-              activeTab === "chat"
-                ? "bg-primary text-primary-foreground shadow-lg scale-105 z-10"
-                : "text-muted-foreground hover:text-foreground hover:bg-background/60 scale-95 hover:scale-100"
-            }`}
-            style={{
-              transformOrigin: 'center',
-            }}
-          >
-            <MessageSquare className={`w-4 h-4 transition-all duration-300 ${activeTab === "chat" ? "scale-110" : "scale-100"}`} />
-            <span className="hidden sm:inline whitespace-nowrap">Chat</span>
-            {unreadMessageCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-                {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => onTabChange("dashboard")}
-            className={`flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out transform-gpu w-24 sm:w-28 md:w-32 relative ${
-              activeTab === "dashboard"
-                ? "bg-primary text-primary-foreground shadow-lg scale-105 z-10"
-                : "text-muted-foreground hover:text-foreground hover:bg-background/60 scale-95 hover:scale-100"
-            }`}
-            style={{
-              transformOrigin: 'center',
-            }}
-          >
-            <BarChart3 className={`w-4 h-4 transition-all duration-300 ${activeTab === "dashboard" ? "scale-110" : "scale-100"}`} />
-            <span className="hidden sm:inline whitespace-nowrap">Dashboard</span>
-            {systemNotificationCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-                {systemNotificationCount > 9 ? '9+' : systemNotificationCount}
-              </span>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Right side - Settings with sidebar-like background */}
-      <div className="flex items-center justify-center w-10 sm:w-12">
-        <div className="relative group">
-          <Settings />
-          {/* Settings background similar to sidebar */}
-          <div className="absolute inset-0 bg-background/50 backdrop-blur-sm border border-white/10 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10" />
-        </div>
-      </div>
-    </header>
-  );
-};
 
 /**
  * Main Assistant Component
@@ -200,7 +124,7 @@ export const Assistant: React.FC = () => {
               </div>
               <AppSidebar activeTab={activeTab} />
                <SidebarInset>
-                 <HeaderSection 
+                 <AppHeader 
                    activeTab={activeTab}
                    onTabChange={(tab: string) => setActiveTab(tab as TabType)}
                    unreadMessageCount={unreadMessageCount}

@@ -123,10 +123,9 @@ export function useAutoScroll(options: UseAutoScrollOptions) {
     });
 
     // Fallback interval for cases where mutation observer might miss updates
-    let intervalId: NodeJS.Timeout;
+    const intervalId: NodeJS.Timeout = setInterval(() => {
     let lastKnownHeight = element.scrollHeight;
 
-    intervalId = setInterval(() => {
       if (enabled && element) {
         const currentHeight = element.scrollHeight;
         if (currentHeight !== lastKnownHeight) {

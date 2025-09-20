@@ -157,6 +157,39 @@
   animation-delay: 0.15s;
 }
 
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+/* Logo animations */
+@keyframes logo-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.6));
+  }
+}
+
+@keyframes logo-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.animate-logo {
+  animation: logo-glow 3s ease-in-out infinite;
+}
+
+.animate-logo:hover {
+  animation: logo-glow 1.5s ease-in-out infinite, logo-pulse 2s ease-in-out infinite;
+}
+
 /* Enhanced micro-interactions */
 .focus-ring {
   @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
@@ -357,7 +390,7 @@ button,
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
+  --muted-foreground: oklch(0.45 0.022 285.938);
   --accent: oklch(0.967 0.001 286.375);
   --accent-foreground: oklch(0.21 0.006 285.885);
   --destructive: oklch(0.577 0.245 27.325);
@@ -379,6 +412,15 @@ button,
   --sidebar-ring: oklch(0.705 0.015 286.067);
   /* Tab accent (emerald, not blue) */
   --tab-accent: #10b981;
+
+  /* High contrast mode overrides */
+  @media (prefers-contrast: high) {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.05 0 0);
+    --muted-foreground: oklch(0.3 0.025 285.938);
+    --border: oklch(0.85 0.008 286.32);
+    --ring: oklch(0.6 0.025 286.067);
+  }
 }
 
 .dark {
@@ -413,19 +455,19 @@ button,
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
-  /* Enhanced Dark Mode Crypto Variables */
-  --crypto-green: #00ff88;
-  --crypto-red: #ff4444;
-  --crypto-blue: #0088ff;
-  --crypto-purple: #8b5cf6;
-  --crypto-cyan: #00ffbb;
+  /* Enhanced Dark Mode Crypto Variables - Better contrast for accessibility */
+  --crypto-green: #00ff99;
+  --crypto-red: #ff5555;
+  --crypto-blue: #0099ff;
+  --crypto-purple: #9966ff;
+  --crypto-cyan: #00ffcc;
 
-  /* Enhanced Neon Glows */
-  --neon-glow-green: 0 0 15px rgba(0, 255, 136, 0.4);
-  --neon-glow-red: 0 0 15px rgba(255, 68, 68, 0.4);
-  --neon-glow-blue: 0 0 15px rgba(0, 136, 255, 0.4);
-  --neon-glow-purple: 0 0 15px rgba(139, 92, 246, 0.4);
-  --neon-glow-cyan: 0 0 15px rgba(0, 255, 187, 0.4);
+  /* Enhanced Neon Glows - Stronger for better visibility */
+  --neon-glow-green: 0 0 18px rgba(0, 255, 153, 0.5);
+  --neon-glow-red: 0 0 18px rgba(255, 85, 85, 0.5);
+  --neon-glow-blue: 0 0 18px rgba(0, 153, 255, 0.5);
+  --neon-glow-purple: 0 0 18px rgba(153, 102, 255, 0.5);
+  --neon-glow-cyan: 0 0 18px rgba(0, 255, 204, 0.5);
 
   /* Dark Mode Specific Colors */
   --dark-crypto-bg: #0f172a;
@@ -443,6 +485,21 @@ button,
   --dark-neon-glow-cyan: 0 0 20px rgba(0, 255, 187, 0.5);
   /* Tab accent (emerald, not blue) */
   --tab-accent: #10b981;
+
+  /* High contrast mode overrides for dark theme */
+  @media (prefers-contrast: high) {
+    --background: oklch(0.08 0.01 285.823);
+    --foreground: oklch(1 0 0);
+    --card: oklch(0.15 0.015 285.885);
+    --muted-foreground: oklch(0.8 0.025 286.067);
+    --border: oklch(1 0 0 / 20%);
+    --ring: oklch(0.7 0.03 286.067);
+    --crypto-green: #11ff99;
+    --crypto-red: #ff6666;
+    --crypto-blue: #11aaff;
+    --crypto-purple: #aa77ff;
+    --crypto-cyan: #11ffdd;
+  }
 }
 
 @layer base {
@@ -770,5 +827,60 @@ button,
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  /* Enhanced contrast utilities for improved accessibility */
+  .contrast-enhanced {
+    filter: contrast(1.1) brightness(1.05);
+  }
+
+  .text-high-contrast {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .dark .text-high-contrast {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  /* Enhanced focus indicators for better accessibility */
+  .focus-enhanced {
+    @apply focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/60 focus-visible:ring-offset-2;
+    transition: all 0.2s ease;
+  }
+
+  /* High contrast mode adaptations */
+  @media (prefers-contrast: high) {
+    .glass-toolbar,
+    .glass-panel,
+    .glass-segmented {
+      backdrop-filter: none;
+      background: var(--background);
+      border: 2px solid var(--border);
+    }
+    
+    .crypto-glow-green,
+    .crypto-glow-red,
+    .crypto-glow-blue,
+    .crypto-glow-purple,
+    .crypto-glow-cyan {
+      box-shadow: none;
+      border: 2px solid currentColor;
+    }
+    
+    .crypto-text-green,
+    .crypto-text-red,
+    .crypto-text-cyan {
+      text-shadow: none;
+      font-weight: 600;
+    }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .crypto-hover-scale,
+    .interactive-element {
+      transform: none !important;
+      transition: background-color 0.2s ease !important;
+    }
   }
 }

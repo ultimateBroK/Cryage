@@ -137,7 +137,9 @@ export function useThreadAutoScroll() {
       handleUserScroll();
     };
 
-    if (!('onscrollend' in viewport)) {
+    // Type-safe check for scrollend support
+    const hasScrollEnd = 'onscrollend' in HTMLElement.prototype;
+    if (!hasScrollEnd) {
       viewport.addEventListener('scroll', handleScrollWithTimeout, { passive: true });
     }
 

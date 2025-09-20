@@ -133,7 +133,7 @@ function SettingsSidebar({
           data-slot="settings-sidebar"
           data-mobile="true"
           className={cn(
-            "fixed inset-y-0 right-0 z-50 glass-sidebar text-foreground flex flex-col border-l shadow-lg transition-transform duration-200 ease-linear",
+            "fixed inset-y-0 right-0 z-50 bg-background/60 backdrop-blur-md text-foreground flex flex-col border-l border-white/15 shadow-lg transition-transform duration-200 ease-linear",
             openMobile ? "translate-x-0" : "translate-x-full",
             // Mobile uses reduced width; sm and up use default width
             "w-[var(--settings-sidebar-width-mobile)] sm:w-(--settings-sidebar-width)",
@@ -176,7 +176,7 @@ function SettingsSidebar({
         <div
           data-sidebar="settings-sidebar"
           data-slot="settings-sidebar-inner"
-          className="glass-sidebar flex h-full w-full flex-col border-l"
+          className="bg-background/60 backdrop-blur-md flex h-full w-full flex-col border-l border-white/15"
         >
           {children}
         </div>
@@ -198,14 +198,14 @@ function SettingsSidebarTrigger({
       data-slot="settings-sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-7", className)}
+      className={cn("w-8 h-8 sm:w-9 sm:h-9", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
       }}
       {...props}
     >
-      <SettingsIcon />
+      <SettingsIcon className="w-4 h-4 sm:w-5 sm:h-5" />
       <span className="sr-only">Toggle Settings</span>
     </Button>
   )
@@ -216,7 +216,7 @@ function SettingsSidebarContent({ className, ...props }: React.ComponentProps<"d
     <div
       data-slot="settings-sidebar-content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-4 glass-panel rounded-lg m-2",
+        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-4 bg-background/40 backdrop-blur-md border border-white/15 rounded-lg m-2",
         className
       )}
       {...props}
@@ -228,7 +228,7 @@ function SettingsSidebarHeader({ className, ...props }: React.ComponentProps<"di
   return (
     <div
       data-slot="settings-sidebar-header"
-      className={cn("flex flex-col gap-2 p-4 pb-2 glass-panel rounded-lg m-2 mb-0", className)}
+      className={cn("flex flex-col gap-2 p-4 pb-2 bg-background/40 backdrop-blur-md border border-white/15 rounded-lg m-2 mb-0", className)}
       {...props}
     />
   )
