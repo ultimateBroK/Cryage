@@ -1,8 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import { MessageSquare, BarChart3 } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Brand } from "@/components/ui/brand";
 import { Settings } from "@/lib/dynamic-imports";
 import { HeaderSectionProps } from "@/types/components";
 
@@ -27,27 +25,9 @@ export const AppHeader: React.FC<HeaderSectionProps> = ({
 }) => {
   return (
     <header className="flex h-14 sm:h-16 shrink-0 items-center gap-2 sm:gap-3 bg-background/40 backdrop-blur-xl border-b border-white/20 pl-2 sm:pl-4 pr-0 sticky top-0 z-20 shadow-lg">
-      {/* Left side - Brand Logo + Sidebar Trigger */}
-      <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-shrink-0 w-[120px] sm:w-[140px] md:w-[160px]">
-        {/* Sidebar Trigger */}
-        <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9">
-          <SidebarTrigger className="h-5 w-5 sm:h-6 sm:w-6" />
-        </div>
-        
-        {/* Brand Logo - Always visible */}
-        <Link 
-          href="/" 
-          className="flex items-center min-w-0"
-          onClick={(e) => e.preventDefault()}
-        >
-          <Brand 
-            size="sm"
-            variant="header"
-            showText={true}
-            showSubtext={false}
-            className="min-w-0"
-          />
-        </Link>
+      {/* Left side - Sidebar Trigger */}
+      <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0">
+        <SidebarTrigger className="h-5 w-5 sm:h-6 sm:w-6" />
       </div>
       
       {/* Center - Tab Navigation */}
@@ -95,7 +75,7 @@ export const AppHeader: React.FC<HeaderSectionProps> = ({
       </div>
 
       {/* Right side - Settings */}
-      <div className="flex items-center justify-end h-8 sm:h-9 flex-shrink-0 w-[120px] sm:w-[140px] md:w-[160px] pr-2 sm:pr-4">
+      <div className="flex items-center justify-center h-8 sm:h-9 flex-shrink-0 pr-2 sm:pr-4">
         <div className="relative group">
           <Settings />
           {/* Settings background similar to sidebar */}
