@@ -36,7 +36,7 @@ const ThreadListNew: FC = () => {
     <ThreadListPrimitive.New asChild>
       <Button className="flex items-center justify-start gap-2 rounded-lg px-3 py-2 text-start text-muted-foreground hover:text-foreground border-dashed w-full h-auto" variant="outline">
         <PlusIcon className="size-4" />
-        New Thread
+        New Chat
       </Button>
     </ThreadListPrimitive.New>
   );

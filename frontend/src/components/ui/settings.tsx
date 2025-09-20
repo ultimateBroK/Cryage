@@ -392,11 +392,7 @@ export const Settings = () => {
         <TooltipTrigger asChild>
           <div className="relative">
             <SettingsSidebarTrigger
-              className={`group hover:bg-muted/50 transition-all duration-300 w-8 h-8 sm:w-9 sm:h-9 ${
-                hasApiKey 
-                  ? 'text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300' 
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className="group hover:bg-muted/50 transition-all duration-300 w-8 h-8 sm:w-9 sm:h-9 text-muted-foreground hover:text-foreground"
             />
             {/* Status indicators */}
             {needsAttention && (

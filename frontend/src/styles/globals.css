@@ -122,23 +122,188 @@
 /* StarBorder Animation Keyframes */
 @keyframes star-movement-bottom {
   0% {
-    transform: translate(0%, 0%);
+    transform: translate(0%, 0%) scale(1);
     opacity: 1;
   }
+  50% {
+    transform: translate(-50%, 0%) scale(1.1);
+    opacity: 0.8;
+  }
   100% {
-    transform: translate(-100%, 0%);
+    transform: translate(-100%, 0%) scale(0.9);
     opacity: 0;
   }
 }
 
 @keyframes star-movement-top {
   0% {
-    transform: translate(0%, 0%);
+    transform: translate(0%, 0%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(50%, 0%) scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(100%, 0%) scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* Enhanced StarBorder Animations */
+@keyframes pulse-glow {
+  0% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes glow-rotate {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 0.1;
+  }
+}
+
+/* Reasoning streaming animations */
+@keyframes reasoning-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes reasoning-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+  }
+}
+
+@keyframes typing-dots {
+  0%, 20% {
+    opacity: 0;
+  }
+  50% {
     opacity: 1;
   }
   100% {
-    transform: translate(100%, 0%);
     opacity: 0;
+  }
+}
+
+@keyframes text-stream {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* StarBorder rotating border animation */
+@keyframes star-border-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Border traveling glow animation */
+@keyframes border-travel {
+  0% {
+    background: conic-gradient(from 0deg, transparent 95%, var(--glow-color, #00ffbb) 98%, transparent 100%);
+  }
+  25% {
+    background: conic-gradient(from 90deg, transparent 95%, var(--glow-color, #00ffbb) 98%, transparent 100%);
+  }
+  50% {
+    background: conic-gradient(from 180deg, transparent 95%, var(--glow-color, #00ffbb) 98%, transparent 100%);
+  }
+  75% {
+    background: conic-gradient(from 270deg, transparent 95%, var(--glow-color, #00ffbb) 98%, transparent 100%);
+  }
+  100% {
+    background: conic-gradient(from 360deg, transparent 95%, var(--glow-color, #00ffbb) 98%, transparent 100%);
+  }
+}
+
+/* Smooth traveling glow */
+@keyframes smooth-border-glow {
+  0% {
+    background: conic-gradient(from 0deg, transparent 85%, var(--glow-color, #00ffbb)ff 92%, var(--glow-color, #00ffbb)aa 96%, transparent 100%);
+  }
+  100% {
+    background: conic-gradient(from 360deg, transparent 85%, var(--glow-color, #00ffbb)ff 92%, var(--glow-color, #00ffbb)aa 96%, transparent 100%);
+  }
+}
+
+/* StarBorder glow animation */
+@keyframes star-glow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.05);
+  }
+}
+
+/* Reasoning button highlight animations - simplified to prevent resize issues */
+@keyframes reasoning-subtle-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 255, 187, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(0, 255, 187, 0.3);
+  }
+}
+
+/* Enhanced reasoning button glow animation */
+@keyframes enhanced-reasoning-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(0, 255, 187, 0.4)) drop-shadow(0 0 16px rgba(16, 185, 129, 0.3));
+  }
+  33% {
+    filter: drop-shadow(0 0 12px rgba(0, 255, 187, 0.6)) drop-shadow(0 0 24px rgba(52, 211, 153, 0.4));
+  }
+  66% {
+    filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5)) drop-shadow(0 0 20px rgba(0, 255, 187, 0.3));
+  }
+}
+
+/* Pulsing border glow */
+@keyframes border-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 255, 187, 0.3), 0 0 15px rgba(0, 255, 187, 0.2), inset 0 0 5px rgba(0, 255, 187, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(0, 255, 187, 0.5), 0 0 25px rgba(0, 255, 187, 0.3), inset 0 0 10px rgba(0, 255, 187, 0.15);
   }
 }
 
@@ -159,6 +324,52 @@
 
 .animation-delay-500 {
   animation-delay: 0.5s;
+}
+
+/* Enhanced reasoning button animations */
+.animate-enhanced-reasoning-glow {
+  animation: enhanced-reasoning-glow 4s ease-in-out infinite;
+}
+
+.animate-border-pulse {
+  animation: border-pulse 2s ease-in-out infinite;
+}
+
+/* Utility classes for smooth animations */
+.animate-reasoning-glow {
+  animation: reasoning-glow 3s ease-in-out infinite;
+}
+
+/* Traveling border glow effect */
+.traveling-border-glow {
+  position: relative;
+  border-radius: 20px;
+}
+
+.traveling-border-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 20px;
+  background: conic-gradient(from 0deg, transparent 80%, #00ffbb 90%, #00ffbbcc 95%, transparent 100%);
+  animation: star-border-rotate 3s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+.traveling-border-glow::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 22px;
+  background: conic-gradient(from 0deg, transparent 85%, #00ffbb40 93%, transparent 100%);
+  animation: star-border-rotate 3s linear infinite;
+  filter: blur(4px);
+  z-index: -1;
+  opacity: 0.3;
 }
 
 /* Logo animations */

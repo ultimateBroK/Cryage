@@ -19,7 +19,7 @@ import { useAppShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { TabType } from "@/types/components";
 import { AppHeader } from "@/components/features/navigation/app-header";
 import { 
-  Aurora, 
+  LightRays, 
   AppSidebar, 
   SettingsSidebarPanel
 } from "@/lib/dynamic-imports";
@@ -119,7 +119,18 @@ export const Assistant: React.FC = () => {
             <div className="flex h-dvh w-full pr-0.5 relative overflow-hidden">
               <div className="pointer-events-none absolute inset-0 z-10 blur-2xl sm:blur-3xl opacity-40 sm:opacity-45 dark:opacity-35 sm:dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.12] sm:brightness-[1.15] dark:brightness-[1.15] sm:dark:brightness-[1.2] saturate-110 sm:saturate-125 contrast-[1.05] sm:contrast-[1.1]">
                 <Idle delayMs={1200}>
-                  <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={0.8} blend={0.38} speed={1.0} />
+                  <LightRays 
+                    colorStops={["#00ffbb", "#10b981", "#00ffbb"]} 
+                    amplitude={0.8} 
+                    blend={0.38} 
+                    raysSpeed={1.0}
+                    raysOrigin="top-center"
+                    lightSpread={1.2}
+                    rayLength={2.5}
+                    pulsating={true}
+                    followMouse={true}
+                    mouseInfluence={0.15}
+                  />
                 </Idle>
               </div>
               <AppSidebar activeTab={activeTab} />
