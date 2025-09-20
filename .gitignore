@@ -187,3 +187,15 @@ jspm_packages/
 
 # Nuxt.js build / generate output
 .nuxt
+
+# Docker
+docker-*.yml
+scripts/
+.dockerignore
+/backend/Dockerfile
+/backend/.dockerignore
+/frontend/Dockerfile
+/frontend/.dockerignore
+/nginx.conf
+/ssl/
+README-Docker.md

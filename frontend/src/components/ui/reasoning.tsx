@@ -9,6 +9,7 @@ import {
   MarkdownTextPrimitive,
   unstable_memoizeMarkdownComponents as memoizeMarkdownComponents,
 } from "@assistant-ui/react-markdown";
+import { useAutoScroll } from "@/hooks/use-auto-scroll";
 
 // Compact markdown components to reduce vertical spacing in reasoning
 const compactComponents = memoizeMarkdownComponents({
@@ -142,53 +143,21 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
   }, [open]);
 
   // Auto-scroll to bottom when content updates while running
+  const { scrollToBottom, resetScrollState } = useAutoScroll({
+    enabled: isRunning && open,
+    element: scrollRef.current,
+    behavior: 'smooth',
+    threshold: 10,
+    debounceDelay: 50,
+    fallbackInterval: 150
+  });
+
+  // Reset scroll state when reasoning opens
   useEffect(() => {
-    if (isRunning && open && scrollRef.current) {
-      const element = scrollRef.current;
-      const scrollToBottom = () => {
-        requestAnimationFrame(() => {
-          if (element) {
-            element.scrollTop = element.scrollHeight;
-          }
-        });
-      };
-      
-      // Scroll immediately
-      scrollToBottom();
-      
-      // Set up observer for content changes
-      const observer = new MutationObserver((mutations) => {
-        if (isRunning && element) {
-          // Check if there were actual content changes
-          const hasContentChanges = mutations.some(mutation => 
-            mutation.type === 'childList' || mutation.type === 'characterData'
-          );
-          if (hasContentChanges) {
-            scrollToBottom();
-          }
-        }
-      });
-      
-      observer.observe(element, {
-        childList: true,
-        subtree: true,
-        characterData: true,
-        attributes: false
-      });
-      
-      // Also use interval as fallback for streaming content
-      const intervalId = setInterval(() => {
-        if (isRunning && element) {
-          scrollToBottom();
-        }
-      }, 100);
-      
-      return () => {
-        observer.disconnect();
-        clearInterval(intervalId);
-      };
+    if (open && isRunning) {
+      resetScrollState();
     }
-  }, [isRunning, open]);
+  }, [open, isRunning, resetScrollState]);
 
   if (!ctx) return null;
 

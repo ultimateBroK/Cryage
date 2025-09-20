@@ -11,6 +11,7 @@ import {
   useComposerRuntime,
 } from "@assistant-ui/react";
 import { useAutoThreadTitle } from "@/hooks/use-auto-thread-title";
+import { useThreadAutoScroll } from "@/hooks/use-thread-auto-scroll";
 import type { FC } from "react";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -48,6 +49,9 @@ const API_KEY_STORAGE_KEY = "gemini-api-key";
 export const Thread: FC = () => {
   // Auto-generate thread titles when AI finishes responding
   useAutoThreadTitle();
+  
+  // Auto-scroll thread viewport as content updates
+  useThreadAutoScroll();
 
   // Prevent unwanted scroll behavior
   useEffect(() => {
