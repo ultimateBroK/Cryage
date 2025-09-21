@@ -843,6 +843,60 @@ button,
       min-height: 44px;
       min-width: 44px;
     }
+    
+    /* Mobile-specific spacing */
+    .mobile-padding {
+      padding: 0.5rem;
+    }
+    
+    .mobile-margin {
+      margin: 0.5rem;
+    }
+    
+    /* Mobile text scaling */
+    .mobile-text-sm {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+    
+    .mobile-text-xs {
+      font-size: 0.75rem;
+      line-height: 1rem;
+    }
+    
+    /* Mobile button sizing */
+    .mobile-button {
+      min-height: 44px;
+      padding: 0.75rem 1rem;
+    }
+    
+    /* Mobile card adjustments */
+    .mobile-card {
+      padding: 0.75rem;
+      margin: 0.25rem;
+    }
+    
+    /* Mobile grid adjustments */
+    .mobile-grid-1 {
+      grid-template-columns: 1fr;
+    }
+    
+    /* Mobile safe areas */
+    .mobile-safe-top {
+      padding-top: env(safe-area-inset-top);
+    }
+    
+    .mobile-safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .mobile-safe-left {
+      padding-left: env(safe-area-inset-left);
+    }
+    
+    .mobile-safe-right {
+      padding-right: env(safe-area-inset-right);
+    }
   }
 
   /* Enhanced Crypto Glamorous Utilities */

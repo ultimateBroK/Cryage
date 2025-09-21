@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, PieChart, Settings, ChevronDown, ChevronUp, Eye, EyeOff, MessageSquare } from "lucide-react";
 import { MotionDiv } from "@/components/common/motion";
+import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
 
 const CryptoDashboardComponent = () => {
   // Progressive disclosure state
@@ -17,6 +18,9 @@ const CryptoDashboardComponent = () => {
     news: true,
     quickActions: true
   });
+  
+  const isMobile = useIsMobile();
+  const deviceType = useDeviceType();
 
   // Toggle card expansion
   const toggleCardExpansion = useCallback((cardId: string) => {
@@ -103,12 +107,12 @@ const CryptoDashboardComponent = () => {
   ], []);
 
   return (
-    <div className="p-3 sm:p-4 space-y-4 sm:space-y-6 overflow-y-auto h-full">
+    <div className={`overflow-y-auto h-full ${isMobile ? 'p-2 space-y-3' : 'p-3 sm:p-4 space-y-4 sm:space-y-6'}`}>
       {/* Dashboard Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b">
+      <div className={`flex flex-wrap items-center justify-between gap-2 pb-2 border-b ${isMobile ? 'flex-col sm:flex-row' : ''}`}>
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold">Market Dashboard</h2>
-          <Badge variant="secondary" className="text-xs">
+          <h2 className={`font-semibold ${isMobile ? 'text-base' : 'text-lg'}`}>Market Dashboard</h2>
+          <Badge variant="secondary" className={`${isMobile ? 'text-[10px]' : 'text-xs'}`}>
             Live Data
           </Badge>
         </div>
@@ -117,9 +121,9 @@ const CryptoDashboardComponent = () => {
             variant="outline"
             size="sm"
             onClick={() => setShowDetailedView(!showDetailedView)}
-            className="text-xs"
+            className={`touch-target ${isMobile ? 'text-[10px] px-2 py-1' : 'text-xs'}`}
           >
-            {showDetailedView ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
+            {showDetailedView ? <EyeOff className={`mr-1 ${isMobile ? 'w-3 h-3' : 'w-4 h-4'}`} /> : <Eye className={`mr-1 ${isMobile ? 'w-3 h-3' : 'w-4 h-4'}`} />}
             {showDetailedView ? 'Simple' : 'Detailed'}
           </Button>
         </div>
@@ -128,8 +132,8 @@ const CryptoDashboardComponent = () => {
       {/* Enhanced Market Overview Cards */}
       <div className={`grid gap-3 sm:gap-4 ${
         showDetailedView
-          ? 'grid-cols-1 sm:grid-cols-2'
-          : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+          ? isMobile ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'
+          : isMobile ? 'grid-cols-1' : deviceType === 'tablet' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
       }`}>
         {marketData.map((coin, index) => {
           const IconComponent = coin.icon;

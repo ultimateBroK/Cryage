@@ -16,6 +16,7 @@ import { Idle } from "@/components/common/idle";
 import { MainLayout } from "@/components/layouts/main-layout";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useAppShortcuts } from "@/hooks/use-keyboard-shortcuts";
+import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
 import { TabType } from "@/types/components";
 import { AppHeader } from "@/components/features/navigation/app-header";
 import { 
@@ -43,6 +44,7 @@ const API_KEY_STORAGE_KEY = "gemini-api-key";
 export const Assistant: React.FC = () => {
   const runtime = useChatRuntime();
   const [activeTab, setActiveTab] = React.useState<TabType>("chat");
+  const isMobile = useIsMobile();
   
   // Notification counts for header display
   const { unreadNotifications } = useNotifications();
@@ -116,20 +118,20 @@ export const Assistant: React.FC = () => {
       <AssistantRuntimeProvider runtime={runtime}>
         <SidebarProvider>
           <SettingsSidebarProvider>
-            <div className="flex h-dvh w-full pr-0.5 relative overflow-hidden">
-              <div className="pointer-events-none absolute inset-0 z-10 blur-2xl sm:blur-3xl opacity-40 sm:opacity-45 dark:opacity-35 sm:dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.12] sm:brightness-[1.15] dark:brightness-[1.15] sm:dark:brightness-[1.2] saturate-110 sm:saturate-125 contrast-[1.05] sm:contrast-[1.1]">
+            <div className={`flex h-dvh w-full relative overflow-hidden ${isMobile ? 'pr-0' : 'pr-0.5'}`}>
+              <div className={`pointer-events-none absolute inset-0 z-10 ${isMobile ? 'blur-lg opacity-58 dark:opacity-46' : 'blur-2xl sm:blur-3xl opacity-46 sm:opacity-52 dark:opacity-40 sm:dark:opacity-46'} mix-blend-multiply dark:mix-blend-screen brightness-[1.12] sm:brightness-[1.15] dark:brightness-[1.15] sm:dark:brightness-[1.2] saturate-110 sm:saturate-125 contrast-[1.05] sm:contrast-[1.1]`}>
                 <Idle delayMs={1200}>
                   <LightRays 
                     colorStops={["#00ffbb", "#10b981", "#00ffbb"]} 
-                    amplitude={0.8} 
-                    blend={0.38} 
-                    raysSpeed={1.0}
+                    amplitude={isMobile ? 0.92 : 0.92} 
+                    blend={isMobile ? 0.52 : 0.44} 
+                    raysSpeed={isMobile ? 0.8 : 1.0}
                     raysOrigin="top-center"
-                    lightSpread={1.2}
-                    rayLength={2.5}
+                    lightSpread={isMobile ? 1.3 : 1.2}
+                    rayLength={isMobile ? 2.8 : 2.5}
                     pulsating={true}
-                    followMouse={true}
-                    mouseInfluence={0.15}
+                    followMouse={!isMobile}
+                    mouseInfluence={isMobile ? 0.1 : 0.15}
                   />
                 </Idle>
               </div>

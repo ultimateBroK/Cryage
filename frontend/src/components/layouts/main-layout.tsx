@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { MainLayoutProps, TabType } from "@/types/components";
 import { Thread, CryptoDashboard } from "@/lib/dynamic-imports";
 import { ThreadLoadingSkeleton, DashboardLoadingSkeleton } from "@/components/common/loading-skeletons";
+import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
 
 /**
  * MainLayout Component
@@ -19,12 +20,14 @@ import { ThreadLoadingSkeleton, DashboardLoadingSkeleton } from "@/components/co
 
 const MainLayoutComponent: React.FC<MainLayoutProps> = ({ 
   activeTab = "chat", 
-  onTabChange: _onTabChange, 
-  unreadMessageCount: _unreadMessageCount = 0, 
-  systemNotificationCount: _systemNotificationCount = 0 
+  onTabChange, 
+  unreadMessageCount = 0, 
+  systemNotificationCount = 0 
 }) => {
   const [preloadedTabs, setPreloadedTabs] = useState<Set<TabType>>(new Set(["chat"]));
   const [isClient, setIsClient] = useState(false);
+  const isMobile = useIsMobile();
+  const deviceType = useDeviceType();
 
   // Ensure we're on the client side for proper hydration
   useEffect(() => {
@@ -52,10 +55,12 @@ const MainLayoutComponent: React.FC<MainLayoutProps> = ({
 
   // Render appropriate content based on active tab
   const renderTabContent = () => {
+    const containerClasses = `flex-1 overflow-hidden ${isMobile ? 'px-2' : 'px-4'} ${deviceType === 'tablet' ? 'px-3' : ''}`;
+    
     switch (activeTab) {
       case "chat":
         return (
-          <div className="flex-1 overflow-hidden">
+          <div className={containerClasses}>
             <Suspense fallback={<ThreadLoadingSkeleton />}>
               <Thread />
             </Suspense>
@@ -63,7 +68,7 @@ const MainLayoutComponent: React.FC<MainLayoutProps> = ({
         );
       case "dashboard":
         return (
-          <div className="flex-1 overflow-hidden">
+          <div className={containerClasses}>
             <Suspense fallback={<DashboardLoadingSkeleton />}>
               <CryptoDashboard />
             </Suspense>
@@ -71,7 +76,7 @@ const MainLayoutComponent: React.FC<MainLayoutProps> = ({
         );
       default:
         return (
-          <div className="flex-1 overflow-hidden">
+          <div className={containerClasses}>
             <ThreadLoadingSkeleton />
           </div>
         );

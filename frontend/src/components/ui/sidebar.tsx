@@ -63,9 +63,11 @@ function SidebarProvider({
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
-  // Debug log for mobile state
+  // Debug log for mobile state (only in development)
   React.useEffect(() => {
-    console.log('Sidebar Mobile Debug:', { isMobile });
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Sidebar Mobile Debug:', { isMobile });
+    }
   }, [isMobile]);
 
   // This is the internal state of the sidebar.
