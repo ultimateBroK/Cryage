@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, JetBrains_Mono } from "next/font/google";
 import "../styles/globals.css";
 import { PageTransitionWrapper } from "@/components/common/page-transition-wrapper";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -39,7 +39,7 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
   themeColor: "#00f7be",
-  colorScheme: "dark light",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -48,9 +48,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
+        className={`${geist.variable} ${jetbrainsMono.variable} antialiased font-sans`}
       >
         <PageTransitionWrapper>{children}</PageTransitionWrapper>
       </body>

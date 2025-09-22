@@ -1,14 +1,16 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useRef, useState, type FC, type PropsWithChildren } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type FC, type PropsWithChildren, memo } from "react";
 import { PlusIcon, MinusIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useThreadRuntime } from "@assistant-ui/react";
-import StarBorder from "@/blocks/Animations/StarBorder/StarBorder";
+import StarBorder from "@/blocks/Animations/StarBorder";
 import {
   MarkdownTextPrimitive,
   unstable_memoizeMarkdownComponents as memoizeMarkdownComponents,
 } from "@assistant-ui/react-markdown";
+import { useAutoScroll } from "@/hooks/use-auto-scroll";
+import TypingIndicator from "./typing-indicator";
 
 // Compact markdown components to reduce vertical spacing in reasoning
 const compactComponents = memoizeMarkdownComponents({
@@ -108,20 +110,26 @@ export const ReasoningTrigger: FC<PropsWithChildren<{ className?: string }>> = (
       as="button"
       onClick={() => setOpen(!open)}
       aria-label="Toggle reasoning"
-      color={isDark ? "#00ffbb" : "#00bfa5"}
-      speed="6s"
-      thickness={1}
-      className={cn("mb-2 backdrop-blur-md/0", className)}
-      unstyledInner
-      innerClassName="relative z-1 rounded-xl px-3 py-1.5 text-xs font-medium text-foreground/90 bg-background/35 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] flex items-center justify-center gap-1.5"
+      color={isDark ? "#00d4ff" : "#06b6d4"}
+      speed="3s"
+      thickness={0.5}
+      autoContrast={true}
+      className={cn(
+        "mb-2 transition-all duration-300 hover:scale-105",
+        className
+      )}
     >
-      {open ? <MinusIcon className="size-4" /> : <PlusIcon className="size-4" />}
-      <span className="font-medium">{children ?? "Reasoning"}</span>
+      <div className="flex items-center justify-center gap-2 text-xs font-semibold tracking-wide">
+        {open ? <MinusIcon className="size-3.5" /> : <PlusIcon className="size-3.5" />}
+        <span className="bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
+          {children ?? "Reasoning"}
+        </span>
+      </div>
     </StarBorder>
   );
 };
 
-export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; className?: string }>> = ({
+export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; className?: string }>> = memo(({
   markdown = true,
   className,
   children,
@@ -130,6 +138,8 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
   const threadRuntime = useThreadRuntime();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [fm, setFm] = useState<null | typeof import('framer-motion')>(null);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [lastContentLength, setLastContentLength] = useState(0);
 
   const open = ctx?.open ?? false;
   const isRunning = threadRuntime?.getState().isRunning ?? false;
@@ -142,53 +152,35 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
   }, [open]);
 
   // Auto-scroll to bottom when content updates while running
+  const { resetScrollState } = useAutoScroll({
+    enabled: isRunning && open,
+    element: scrollRef.current,
+    behavior: 'smooth',
+    threshold: 10,
+    debounceDelay: 50,
+    fallbackInterval: 150
+  });
+
+  // Reset scroll state when reasoning opens
   useEffect(() => {
-    if (isRunning && open && scrollRef.current) {
-      const element = scrollRef.current;
-      const scrollToBottom = () => {
-        requestAnimationFrame(() => {
-          if (element) {
-            element.scrollTop = element.scrollHeight;
-          }
-        });
-      };
-      
-      // Scroll immediately
-      scrollToBottom();
-      
-      // Set up observer for content changes
-      const observer = new MutationObserver((mutations) => {
-        if (isRunning && element) {
-          // Check if there were actual content changes
-          const hasContentChanges = mutations.some(mutation => 
-            mutation.type === 'childList' || mutation.type === 'characterData'
-          );
-          if (hasContentChanges) {
-            scrollToBottom();
-          }
-        }
-      });
-      
-      observer.observe(element, {
-        childList: true,
-        subtree: true,
-        characterData: true,
-        attributes: false
-      });
-      
-      // Also use interval as fallback for streaming content
-      const intervalId = setInterval(() => {
-        if (isRunning && element) {
-          scrollToBottom();
-        }
-      }, 100);
-      
-      return () => {
-        observer.disconnect();
-        clearInterval(intervalId);
-      };
+    if (open && isRunning) {
+      resetScrollState();
     }
-  }, [isRunning, open]);
+  }, [open, isRunning, resetScrollState]);
+
+  // Track streaming state for visual feedback
+  useEffect(() => {
+    if (scrollRef.current && isRunning) {
+      const currentLength = scrollRef.current.textContent?.length || 0;
+      if (currentLength > lastContentLength) {
+        setIsStreaming(true);
+        setLastContentLength(currentLength);
+        // Reset streaming state after a delay
+        const timer = setTimeout(() => setIsStreaming(false), 1000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [isRunning, lastContentLength]);
 
   if (!ctx) return null;
 
@@ -206,15 +198,24 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
       >
         <div
           ref={scrollRef}
-            className={cn(
-              "inline-block rounded-xl bg-background/40 backdrop-blur-md border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] p-3 text-left mx-auto",
-              isRunning ? "max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent scroll-smooth" : ""
-            )}
+          className={cn(
+            "inline-block rounded-xl bg-background/40 backdrop-blur-md border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] p-3 text-left mx-auto transition-all duration-300",
+            isRunning ? "max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent scroll-smooth" : "",
+            isStreaming && "animate-reasoning-glow"
+          )}
         >
           {markdown ? (
             <MarkdownTextPrimitive className="aui-md" components={compactComponents} />
           ) : (
             <div>{children}</div>
+          )}
+          {isRunning && (
+            <TypingIndicator
+              className="mt-2"
+              size="sm"
+              label="Reasoning"
+              color="currentColor"
+            />
           )}
         </div>
       </div>
@@ -228,17 +229,32 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
     <AnimatePresence initial={false}>
       {open && (
         <MotionDiv
-          initial={{ height: 0, opacity: 0, overflow: "hidden", marginTop: 0, marginBottom: 0 }}
+          initial={{ 
+            height: 0, 
+            opacity: 0, 
+            overflow: "hidden", 
+            marginTop: 0, 
+            marginBottom: 0,
+            scale: 0.95
+          }}
           animate={{
             height: "auto",
             opacity: 1,
             overflow: isRunning ? "hidden" : "visible",
             marginTop: 8, // mt-2
             marginBottom: 12, // mb-3
+            scale: 1
           }}
-          exit={{ height: 0, opacity: 0, overflow: "hidden", marginTop: 0, marginBottom: 0 }}
+          exit={{ 
+            height: 0, 
+            opacity: 0, 
+            overflow: "hidden", 
+            marginTop: 0, 
+            marginBottom: 0,
+            scale: 0.95
+          }}
           transition={{
-            duration: 0.3,
+            duration: 0.4,
             ease: [0.4, 0.0, 0.2, 1], // Custom easing for smoother animation
             layout: { duration: 0.3 }
           }}
@@ -251,23 +267,52 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
           role="status"
           aria-live="polite"
         >
-          <div
+          <MotionDiv
             ref={scrollRef}
             className={cn(
-              "inline-block rounded-xl bg-background/40 backdrop-blur-md border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] p-3 text-left mx-auto",
-              isRunning ? "max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent scroll-smooth" : ""
+              "inline-block rounded-xl bg-background/40 backdrop-blur-md border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] p-3 text-left mx-auto transition-all duration-300",
+              isRunning ? "max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent scroll-smooth" : "",
+              isStreaming && "animate-reasoning-glow"
             )}
+            animate={isStreaming ? {
+              scale: [1, 1.01, 1],
+              boxShadow: [
+                "0 0 5px rgba(255, 255, 255, 0.1)",
+                "0 0 20px rgba(255, 255, 255, 0.3)",
+                "0 0 5px rgba(255, 255, 255, 0.1)"
+              ]
+            } : {}}
+            transition={{
+              duration: 0.6,
+              ease: "easeInOut"
+            }}
           >
             {markdown ? (
               <MarkdownTextPrimitive className="aui-md" components={compactComponents} />
             ) : (
               <div>{children}</div>
             )}
-          </div>
+            {isRunning && (
+              <MotionDiv
+                className="mt-2"
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <TypingIndicator
+                  size="sm"
+                  label="Reasoning"
+                  color="currentColor"
+                />
+              </MotionDiv>
+            )}
+          </MotionDiv>
         </MotionDiv>
       )}
     </AnimatePresence>
   );
-};
+});
+
+ReasoningContent.displayName = "ReasoningContent";
 
 

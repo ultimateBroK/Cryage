@@ -11,6 +11,8 @@ import {
   useComposerRuntime,
 } from "@assistant-ui/react";
 import { useAutoThreadTitle } from "@/hooks/use-auto-thread-title";
+import { useThreadAutoScroll } from "@/hooks/use-thread-auto-scroll";
+import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
 import type { FC } from "react";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -48,6 +50,12 @@ const API_KEY_STORAGE_KEY = "gemini-api-key";
 export const Thread: FC = () => {
   // Auto-generate thread titles when AI finishes responding
   useAutoThreadTitle();
+  
+  // Auto-scroll thread viewport as content updates
+  useThreadAutoScroll();
+  
+  const isMobile = useIsMobile();
+  const deviceType = useDeviceType();
 
   // Prevent unwanted scroll behavior
   useEffect(() => {
@@ -88,13 +96,13 @@ export const Thread: FC = () => {
       // aui-thread-root
       className="bg-background flex h-full flex-col"
       style={{
-        ["--thread-max-width" as string]: "52rem",
-        ["--thread-padding-x" as string]: "2rem",
+        ["--thread-max-width" as string]: isMobile ? "100%" : deviceType === 'tablet' ? "48rem" : "52rem",
+        ["--thread-padding-x" as string]: isMobile ? "1rem" : deviceType === 'tablet' ? "1.5rem" : "2rem",
       }}
     >
       {/* aui-thread-viewport */}
       <ThreadPrimitive.Viewport 
-        className="relative flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto min-h-0 pb-2 md:pb-4"
+        className={`relative flex min-w-0 flex-1 flex-col gap-4 sm:gap-6 overflow-y-auto min-h-0 pb-2 md:pb-4 ${isMobile ? 'gap-3' : ''}`}
         data-viewport="true"
         style={{
           // Ensure viewport stays stable and scrollable
@@ -180,6 +188,9 @@ const ThreadScrollToBottom: FC = () => {
 };
 
 const ThreadWelcome: FC = () => {
+  const isMobile = useIsMobile();
+  const deviceType = useDeviceType();
+  
   return (
     <ThreadPrimitive.Empty>
       {/* aui-thread-welcome-root */}
@@ -187,14 +198,14 @@ const ThreadWelcome: FC = () => {
         {/* aui-thread-welcome-center */}
         <div className="flex w-full flex-grow flex-col items-center justify-center">
           {/* aui-thread-welcome-message */}
-          <div className="flex size-full flex-col justify-center px-4 sm:px-6 md:px-8 md:mt-20">
+          <div className={`flex size-full flex-col justify-center px-4 sm:px-6 md:px-8 ${isMobile ? 'mt-8' : 'md:mt-20'}`}>
             <MotionDiv
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: 0.5 }}
               // aui-thread-welcome-message-motion-1
-              className="text-xl sm:text-2xl font-semibold"
+              className={`font-semibold ${isMobile ? 'text-lg' : deviceType === 'tablet' ? 'text-xl' : 'text-xl sm:text-2xl'}`}
             >
               Hello there!
             </MotionDiv>
@@ -204,7 +215,7 @@ const ThreadWelcome: FC = () => {
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: 0.6 }}
               // aui-thread-welcome-message-motion-2
-              className="text-muted-foreground/65 text-lg sm:text-xl md:text-2xl"
+              className={`text-muted-foreground/65 ${isMobile ? 'text-base' : deviceType === 'tablet' ? 'text-lg' : 'text-lg sm:text-xl md:text-2xl'}`}
             >
               How can I help you today?
             </MotionDiv>
@@ -216,9 +227,12 @@ const ThreadWelcome: FC = () => {
 };
 
 const ThreadWelcomeSuggestions: FC = () => {
+  const isMobile = useIsMobile();
+  const deviceType = useDeviceType();
+  
   return (
     // aui-thread-welcome-suggestions
-    <div className="grid w-full gap-2 sm:grid-cols-2">
+    <div className={`grid w-full gap-2 ${isMobile ? 'grid-cols-1' : 'sm:grid-cols-2'}`}>
       {[
         {
           title: "What are the advantages",
@@ -248,7 +262,7 @@ const ThreadWelcomeSuggestions: FC = () => {
           transition={{ delay: 0.05 * index }}
           key={`suggested-action-${suggestedAction.title}-${index}`}
           // aui-thread-welcome-suggestion-display
-          className="[&:nth-child(n+3)]:hidden sm:[&:nth-child(n+3)]:block"
+          className={`${isMobile ? 'block' : '[&:nth-child(n+3)]:hidden sm:[&:nth-child(n+3)]:block'}`}
         >
           <ThreadPrimitive.Suggestion
             prompt={suggestedAction.action}
@@ -259,7 +273,9 @@ const ThreadWelcomeSuggestions: FC = () => {
             <Button
               variant="ghost"
               // aui-thread-welcome-suggestion
-              className="dark:hover:bg-accent/60 h-auto w-full flex-1 flex-wrap items-start justify-start gap-1 rounded-xl border px-4 py-3.5 text-left text-sm sm:flex-col"
+              className={`dark:hover:bg-accent/60 h-auto w-full flex-1 items-start justify-start gap-1 rounded-xl border px-4 py-3.5 text-left touch-target ${
+                isMobile ? 'flex-col text-sm' : 'flex-wrap sm:flex-col text-sm'
+              }`}
               aria-label={suggestedAction.action}
             >
               {/* aui-thread-welcome-suggestion-text-1 */}
@@ -281,6 +297,8 @@ const Composer: FC = () => {
     message: '',
     type: 'info'
   });
+  const isMobile = useIsMobile();
+  const deviceType = useDeviceType();
 
   // Check API key on mount and when storage changes
   useEffect(() => {
@@ -378,21 +396,23 @@ const Composer: FC = () => {
       )}
 
       {/* aui-composer-wrapper */}
-      <div className="bg-background relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-4 px-[var(--thread-padding-x)] pb-4 md:pb-6 mb-4 sm:mb-6 safe-area-inset-bottom">
+      <div className={`bg-background relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-4 px-[var(--thread-padding-x)] pb-4 md:pb-6 mb-4 sm:mb-6 safe-area-inset-bottom ${isMobile ? 'gap-3' : ''}`}>
         <ThreadScrollToBottom />
         <ThreadPrimitive.Empty>
           <ThreadWelcomeSuggestions />
         </ThreadPrimitive.Empty>
         {/* aui-composer-root */}
         <ComposerPrimitive.Root 
-          className="focus-within:ring-offset-2 relative flex w-full flex-col rounded-2xl bg-background/40 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white"
+          className={`focus-within:ring-offset-2 relative flex w-full flex-col rounded-2xl bg-background/40 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white ${isMobile ? 'rounded-xl' : ''}`}
           onSubmit={handleSubmit}
         >
           {/* aui-composer-input */}
           <ComposerPrimitive.Input
             placeholder={hasApiKey ? "Send a message..." : "Please add API key in Settings to start chatting..."}
             className={cn(
-              "bg-transparent focus:outline-primary placeholder:text-muted-foreground max-h-[40vh] min-h-16 w-full resize-none rounded-t-2xl px-4 pt-2 pb-3 text-base outline-none",
+              `bg-transparent focus:outline-primary placeholder:text-muted-foreground max-h-[40vh] w-full resize-none outline-none ${
+                isMobile ? 'min-h-12 px-3 pt-2 pb-2 text-sm rounded-t-xl' : 'min-h-16 px-4 pt-2 pb-3 text-base rounded-t-2xl'
+              }`,
               !hasApiKey && "cursor-not-allowed opacity-60"
             )}
             rows={1}
@@ -420,6 +440,8 @@ const Composer: FC = () => {
 };
 
 const ComposerAction: FC<{ hasApiKey: boolean }> = ({ hasApiKey }) => {
+  const isMobile = useIsMobile();
+  
   // Handle send attempt without API key
   const handleSendAttempt = useCallback((e: React.MouseEvent) => {
     if (!hasApiKey) {
@@ -436,16 +458,16 @@ const ComposerAction: FC<{ hasApiKey: boolean }> = ({ hasApiKey }) => {
   }, [hasApiKey]);
 
   return (
-    <div className="relative flex items-center justify-between rounded-b-2xl border-t border-black/10 dark:border-white/10 bg-background/30 backdrop-blur-md p-2">
+    <div className={`relative flex items-center justify-between border-t border-black/10 dark:border-white/10 bg-background/30 backdrop-blur-md p-2 ${isMobile ? 'rounded-b-xl' : 'rounded-b-2xl'}`}>
         <TooltipIconButton
         tooltip="Attach file"
         variant="ghost"
         // aui-composer-attachment-button
-        className="hover:bg-foreground/15 dark:hover:bg-background/50 scale-115 p-3.5 touch-target"
+        className={`hover:bg-foreground/15 dark:hover:bg-background/50 scale-115 touch-target ${isMobile ? 'p-2.5' : 'p-3.5'}`}
         onClick={() => {}}
         disabled={!hasApiKey}
       >
-        <PlusIcon />
+        <PlusIcon className={isMobile ? 'w-4 h-4' : 'w-5 h-5'} />
       </TooltipIconButton>
 
       <ThreadPrimitive.If running={false}>
@@ -455,7 +477,7 @@ const ComposerAction: FC<{ hasApiKey: boolean }> = ({ hasApiKey }) => {
             variant="default"
             // aui-composer-send
             className={cn(
-              "size-8 sm:size-9 rounded-full border touch-target",
+              `rounded-full border touch-target ${isMobile ? 'size-8' : 'size-8 sm:size-9'}`,
               hasApiKey 
                 ? "dark:border-muted-foreground/90 border-muted-foreground/60 hover:bg-primary/75" 
                 : "border-muted-foreground/30 bg-muted-foreground/20 text-muted-foreground/60 cursor-not-allowed hover:bg-muted-foreground/20"
@@ -465,7 +487,7 @@ const ComposerAction: FC<{ hasApiKey: boolean }> = ({ hasApiKey }) => {
             onClick={handleSendAttempt}
           >
             {/* aui-composer-send-icon */}
-            <ArrowUpIcon className="size-5" />
+            <ArrowUpIcon className={isMobile ? 'size-4' : 'size-5'} />
           </Button>
         </ComposerPrimitive.Send>
       </ThreadPrimitive.If>
@@ -476,11 +498,11 @@ const ComposerAction: FC<{ hasApiKey: boolean }> = ({ hasApiKey }) => {
             type="button"
             variant="default"
             // aui-composer-cancel
-            className="dark:border-muted-foreground/90 border-muted-foreground/60 hover:bg-primary/75 size-8 rounded-full border"
+            className={`dark:border-muted-foreground/90 border-muted-foreground/60 hover:bg-primary/75 rounded-full border ${isMobile ? 'size-8' : 'size-8'}`}
             aria-label="Stop generating"
           >
             {/* aui-composer-cancel-icon */}
-            <Square className="size-3.5 fill-white dark:size-4 dark:fill-black" />
+            <Square className={`fill-white dark:fill-black ${isMobile ? 'size-3' : 'size-3.5 dark:size-4'}`} />
           </Button>
         </ComposerPrimitive.Cancel>
       </ThreadPrimitive.If>
@@ -501,24 +523,27 @@ const MessageError: FC = () => {
 };
 
 const AssistantMessage: FC = () => {
+  const isMobile = useIsMobile();
+  const deviceType = useDeviceType();
+  
   return (
     <MessagePrimitive.Root asChild>
       <MotionDiv
         // aui-assistant-message-root
-        className="relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4"
+        className={`relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4 ${isMobile ? 'py-3' : ''}`}
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         data-role="assistant"
       >
         {/* Main message container */}
-        <div className="flex gap-4 sm:gap-6">
+        <div className={`flex ${isMobile ? 'gap-3' : 'gap-4 sm:gap-6'}`}>
           {/* aui-assistant-message-avatar */}
-          <div className="ring-border bg-background flex size-8 shrink-0 items-center justify-center rounded-full ring-1 shadow-sm">
-            <CryageLogo size={16} />
+          <div className={`ring-border bg-background flex shrink-0 items-center justify-center rounded-full ring-1 shadow-sm ${isMobile ? 'size-7' : 'size-8'}`}>
+            <CryageLogo size={isMobile ? 14 : 16} />
           </div>
 
           {/* aui-assistant-message-content */}
-          <div className="text-foreground flex-1 leading-7 break-words overflow-hidden min-w-0 pr-2 sm:pr-4">
+          <div className={`text-foreground flex-1 leading-7 break-words overflow-hidden min-w-0 ${isMobile ? 'pr-1' : 'pr-2 sm:pr-4'}`}>
             <MessagePrimitive.Content
               components={{
                 Text: MarkdownText,
@@ -531,7 +556,7 @@ const AssistantMessage: FC = () => {
         </div>
 
         {/* Actions and branch picker below content */}
-        <div className="ml-12 sm:ml-14 flex flex-col gap-2">
+        <div className={`flex flex-col gap-2 ${isMobile ? 'ml-10' : 'ml-12 sm:ml-14'}`}>
           <AssistantActionBar />
           <BranchPicker className="" />
         </div>
@@ -606,11 +631,14 @@ const AssistantActionBar: FC = () => {
 };
 
 const UserMessage: FC = () => {
+  const isMobile = useIsMobile();
+  const deviceType = useDeviceType();
+  
   return (
     <MessagePrimitive.Root asChild>
       <MotionDiv
         // aui-user-message-root
-        className="mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4"
+        className={`mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4 ${isMobile ? 'py-3' : ''}`}
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         data-role="user"
@@ -618,7 +646,9 @@ const UserMessage: FC = () => {
         {/* Main message container */}
         <div className="flex justify-end">
           {/* aui-user-message-content */}
-          <div className="bg-muted text-foreground rounded-3xl px-4 sm:px-6 py-3 break-words max-w-[85%] sm:max-w-[75%] overflow-hidden min-w-0 shadow-sm">
+          <div className={`bg-muted text-foreground rounded-3xl py-3 break-words overflow-hidden min-w-0 shadow-sm ${
+            isMobile ? 'px-4 max-w-[90%]' : deviceType === 'tablet' ? 'px-5 max-w-[80%]' : 'px-4 sm:px-6 max-w-[85%] sm:max-w-[75%]'
+          }`}>
             <MessagePrimitive.Content components={{ Text: MarkdownText }} />
           </div>
         </div>

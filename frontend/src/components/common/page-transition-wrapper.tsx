@@ -1,28 +1,40 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
+import { PageTransitionWrapperProps } from "@/types/components";
 
-interface PageTransitionWrapperProps {
-  children: ReactNode;
-}
+/**
+ * PageTransitionWrapper Component
+ * 
+ * Provides smooth page transitions using Framer Motion.
+ * Handles SSR compatibility and client-side hydration properly.
+ */
+
+// Dynamic imports for framer-motion to avoid SSR issues
+const MotionDiv = dynamic(
+  () => import('framer-motion').then(mod => ({ default: mod.motion.div })),
+  { ssr: false }
+);
+
+const AnimatePresence = dynamic(
+  () => import('framer-motion').then(mod => ({ default: mod.AnimatePresence })),
+  { ssr: false }
+);
 
 export function PageTransitionWrapper({ children }: PageTransitionWrapperProps) {
   const pathname = usePathname();
-  const [fm, setFm] = useState<null | typeof import('framer-motion')>(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Lazy load framer-motion for page transitions
-    import('framer-motion').then(setFm);
+    setIsClient(true);
   }, []);
 
-  // If framer-motion hasn't loaded, render without animation
-  if (!fm) {
+  // During SSR and initial hydration, render without animation
+  if (!isClient) {
     return <div className="min-h-screen">{children}</div>;
   }
-
-  const AnimatePresence = fm.AnimatePresence;
-  const MotionDiv = fm.motion.div;
 
   return (
     <AnimatePresence mode="wait">

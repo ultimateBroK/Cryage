@@ -14,6 +14,7 @@ export function useAutoThreadTitle() {
   const { setTitle, getTitle } = useThreadTitle();
   const hasGeneratedInitialTitle = useRef(false);
   const lastMessageCount = useRef(0);
+  const lastThreadId = useRef<string | null>(null);
 
   useEffect(() => {
     if (!threadRuntime) return;
@@ -116,6 +117,15 @@ export function useAutoThreadTitle() {
     const unsubscribe = threadRuntime.subscribe(() => {
       const state = threadRuntime.getState();
       const currentMessageCount = state.messages.length;
+      const currentThreadId = state.threadId;
+
+      // Check if thread ID has changed (new chat)
+      if (currentThreadId !== lastThreadId.current) {
+        // Reset flags for new thread
+        hasGeneratedInitialTitle.current = false;
+        lastMessageCount.current = 0;
+        lastThreadId.current = currentThreadId;
+      }
 
       // Generate title when AI finishes responding and we have messages
       if (!state.isRunning && currentMessageCount > 0) {
@@ -140,9 +150,10 @@ export function useAutoThreadTitle() {
     };
   }, [threadRuntime, setTitle, getTitle]);
 
-  // Reset flags when thread changes
+  // Reset flags when thread runtime changes (fallback)
   useEffect(() => {
     hasGeneratedInitialTitle.current = false;
     lastMessageCount.current = 0;
+    lastThreadId.current = null;
   }, [threadRuntime]);
 }

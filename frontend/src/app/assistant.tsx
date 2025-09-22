@@ -3,12 +3,9 @@
 import React, { useCallback } from "react";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
-import dynamic from "next/dynamic";
-import { MessageSquare, BarChart3 } from "lucide-react";
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   SettingsSidebarProvider,
@@ -19,113 +16,37 @@ import { Idle } from "@/components/common/idle";
 import { MainLayout } from "@/components/layouts/main-layout";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useAppShortcuts } from "@/hooks/use-keyboard-shortcuts";
+import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
+import { TabType } from "@/types/components";
+import { AppHeader } from "@/components/features/navigation/app-header";
+import { 
+  LightRays, 
+  AppSidebar, 
+  SettingsSidebarPanel
+} from "@/lib/dynamic-imports";
 
-// Thread is now imported in MainLayout component
-
-// Defer Aurora (and its ogl dep) to browser idle to keep first load JS small
-const Aurora = dynamic(
-  () => import("@/blocks/Backgrounds/Aurora/Aurora"),
-  { ssr: false, loading: () => <div className="absolute inset-0" /> }
-);
-
-const AppSidebar = dynamic(
-  () => import("@/components/features/navigation/app-sidebar").then(m => ({ default: m.AppSidebar })), 
-  { ssr: false, loading: () => <div className="w-64 border-r" /> }
-);
-
-const Settings = dynamic(
-  () => import("@/components/ui/settings"),
-  { ssr: false, loading: () => <div className="w-10 h-10" /> }
-);
-
-const SettingsSidebarPanel = dynamic(
-  () => import("@/components/ui/settings").then(m => ({ default: m.SettingsSidebarPanel })),
-  { ssr: false, loading: () => null }
-);
-
-const ThemeToggle = dynamic(
-  () => import("@/components/ui/theme-toggle"), 
-  { ssr: false, loading: () => <div className="w-10 h-10" /> }
-);
-
-// App title removed from header per design request
+/**
+ * Assistant Component
+ * 
+ * Main application component that provides the chat interface with AI capabilities.
+ * Features tab-based navigation, dynamic imports for performance, and proper SSR handling.
+ */
 
 const API_KEY_STORAGE_KEY = "gemini-api-key";
 
-// Optimized header with integrated tabs for better space utilization
-interface HeaderSectionProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-  unreadMessageCount: number;
-  systemNotificationCount: number;
-}
 
-const HeaderSection: React.FC<HeaderSectionProps> = ({ 
-  activeTab, 
-  onTabChange, 
-  unreadMessageCount, 
-  systemNotificationCount 
-}) => {
-  return (
-    <header className="flex h-12 sm:h-14 shrink-0 items-center gap-2 glass-toolbar-transparent px-2 sm:px-4 sticky top-0 z-20">
-      <SidebarTrigger />
-      
-      {/* Integrated Tab Navigation with Scale Animation */}
-      <div className="flex-1 flex justify-center">
-        <div className="flex items-center bg-background/40 backdrop-blur-md border border-white/15 rounded-xl p-1 gap-1">
-          <button
-            onClick={() => onTabChange("chat")}
-            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out transform-gpu w-28 sm:w-32 ${
-              activeTab === "chat" 
-                ? "bg-primary text-primary-foreground shadow-lg scale-110 z-10" 
-                : "text-muted-foreground hover:text-foreground hover:bg-background/60 scale-90 hover:scale-95"
-            }`}
-            style={{
-              transformOrigin: 'center',
-            }}
-          >
-            <MessageSquare className={`w-4 h-4 transition-all duration-300 ${activeTab === "chat" ? "scale-110" : "scale-90"}`} />
-            <span className="hidden sm:inline whitespace-nowrap">Chat</span>
-            {unreadMessageCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-                {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => onTabChange("dashboard")}
-            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out transform-gpu w-28 sm:w-32 relative ${
-              activeTab === "dashboard" 
-                ? "bg-primary text-primary-foreground shadow-lg scale-110 z-10" 
-                : "text-muted-foreground hover:text-foreground hover:bg-background/60 scale-90 hover:scale-95"
-            }`}
-            style={{
-              transformOrigin: 'center',
-            }}
-          >
-            <BarChart3 className={`w-4 h-4 transition-all duration-300 ${activeTab === "dashboard" ? "scale-110" : "scale-90"}`} />
-            <span className="hidden sm:inline whitespace-nowrap">Dashboard</span>
-            {systemNotificationCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-                {systemNotificationCount > 9 ? '9+' : systemNotificationCount}
-              </span>
-            )}
-          </button>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-1 sm:gap-2">
-        <Settings />
-        <ThemeToggle />
-      </div>
-    </header>
-  );
-};
-
-export const Assistant = () => {
+/**
+ * Main Assistant Component
+ * 
+ * Provides the complete chat interface with AI capabilities, sidebar navigation,
+ * and settings panel. Handles API key management and keyboard shortcuts.
+ */
+export const Assistant: React.FC = () => {
   const runtime = useChatRuntime();
-  const [activeTab, setActiveTab] = React.useState("chat");
-  // Notification counts to pass into layout
+  const [activeTab, setActiveTab] = React.useState<TabType>("chat");
+  const isMobile = useIsMobile();
+  
+  // Notification counts for header display
   const { unreadNotifications } = useNotifications();
   const unreadMessageCount = unreadNotifications.filter(n => n.type === 'message').length;
   const systemNotificationCount = unreadNotifications.filter(n => n.type === 'system').length;
@@ -197,27 +118,38 @@ export const Assistant = () => {
       <AssistantRuntimeProvider runtime={runtime}>
         <SidebarProvider>
           <SettingsSidebarProvider>
-            <div className="flex h-dvh w-full pr-0.5 relative overflow-hidden">
-              <div className="pointer-events-none absolute inset-0 z-10 blur-2xl sm:blur-3xl opacity-40 sm:opacity-45 dark:opacity-35 sm:dark:opacity-40 mix-blend-multiply dark:mix-blend-screen brightness-[1.12] sm:brightness-[1.15] dark:brightness-[1.15] sm:dark:brightness-[1.2] saturate-110 sm:saturate-125 contrast-[1.05] sm:contrast-[1.1]">
+            <div className={`flex h-dvh w-full relative overflow-hidden ${isMobile ? 'pr-0' : 'pr-0.5'}`}>
+              <div className={`pointer-events-none absolute inset-0 z-10 ${isMobile ? 'blur-lg opacity-58 dark:opacity-46' : 'blur-2xl sm:blur-3xl opacity-46 sm:opacity-52 dark:opacity-40 sm:dark:opacity-46'} mix-blend-multiply dark:mix-blend-screen brightness-[1.12] sm:brightness-[1.15] dark:brightness-[1.15] sm:dark:brightness-[1.2] saturate-110 sm:saturate-125 contrast-[1.05] sm:contrast-[1.1]`}>
                 <Idle delayMs={1200}>
-                  <Aurora colorStops={["#00ffbb", "#10b981", "#00ffbb"]} amplitude={0.8} blend={0.38} speed={1.0} />
+                  <LightRays 
+                    colorStops={["#00ffbb", "#10b981", "#00ffbb"]} 
+                    amplitude={isMobile ? 0.92 : 0.92} 
+                    blend={isMobile ? 0.52 : 0.44} 
+                    raysSpeed={isMobile ? 0.8 : 1.0}
+                    raysOrigin="top-center"
+                    lightSpread={isMobile ? 1.3 : 1.2}
+                    rayLength={isMobile ? 2.8 : 2.5}
+                    pulsating={true}
+                    followMouse={!isMobile}
+                    mouseInfluence={isMobile ? 0.1 : 0.15}
+                  />
                 </Idle>
               </div>
               <AppSidebar activeTab={activeTab} />
                <SidebarInset>
-                 <HeaderSection 
+                 <AppHeader 
                    activeTab={activeTab}
-                   onTabChange={setActiveTab}
+                   onTabChange={(tab: string) => setActiveTab(tab as TabType)}
                    unreadMessageCount={unreadMessageCount}
                    systemNotificationCount={systemNotificationCount}
                  />
                   <SettingsSidebarInset>
-                    <MainLayout
-                      activeTab={activeTab}
-                      onTabChange={setActiveTab}
-                      unreadMessageCount={unreadMessageCount}
-                      systemNotificationCount={systemNotificationCount}
-                    />
+                  <MainLayout
+                    activeTab={activeTab}
+                    onTabChange={(tab: string) => setActiveTab(tab as TabType)}
+                    unreadMessageCount={unreadMessageCount}
+                    systemNotificationCount={systemNotificationCount}
+                  />
                   </SettingsSidebarInset>
                </SidebarInset>
               <SettingsSidebarPanel />

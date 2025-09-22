@@ -12,37 +12,29 @@ import {
   TrendingDown,
   Activity
 } from "lucide-react";
-import dynamic from "next/dynamic";
 import { MotionDiv, Presence } from "@/components/common/motion";
+import { ContextualSidebarProps, TabType } from "@/types/components";
+import { ThreadList } from "@/lib/dynamic-imports";
 
-// Dynamic imports for performance with loading state
-const ThreadList = dynamic(() => import("../assistant/thread-list").then(m => ({ default: m.ThreadList })), { 
-  ssr: false, 
-  loading: () => (
-    <div className="flex flex-col gap-2 p-3">
-      {/* New Thread Button Skeleton */}
-      <div className="h-9 rounded-lg border border-dashed bg-muted/20 animate-pulse" />
-      {/* Thread Items Skeleton */}
-      {[...Array(3)].map((_, i) => (
-        <div key={i} className="h-10 rounded-lg bg-muted/20 animate-pulse" />
-      ))}
-    </div>
-  )
-});
-
-interface ContextualSidebarProps {
-  activeTab: string;
-}
-
+/**
+ * ContextualSidebar Component
+ * 
+ * Renders different sidebar content based on the active tab.
+ * Provides smooth transitions between different sidebar states.
+ */
 export const ContextualSidebar: React.FC<ContextualSidebarProps> = ({ activeTab }) => {
-  let content: React.ReactNode;
-  if (activeTab === 'chat') {
-    content = <ChatSidebar />;
-  } else if (activeTab === 'dashboard') {
-    content = <DashboardSidebar />;
-  } else {
-    content = <SettingsSidebar />;
-  }
+  const renderSidebarContent = (): React.ReactNode => {
+    switch (activeTab) {
+      case 'chat':
+        return <ChatSidebar />;
+      case 'dashboard':
+        return <DashboardSidebar />;
+      case 'settings':
+        return <SettingsSidebar />;
+      default:
+        return <ChatSidebar />;
+    }
+  };
 
   return (
     <Presence>
@@ -54,7 +46,7 @@ export const ContextualSidebar: React.FC<ContextualSidebarProps> = ({ activeTab 
         transition={{ duration: 0.2, ease: "easeInOut" }}
         className="h-full"
       >
-        {content}
+        {renderSidebarContent()}
       </MotionDiv>
     </Presence>
   );

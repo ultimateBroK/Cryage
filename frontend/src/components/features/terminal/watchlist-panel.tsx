@@ -51,8 +51,8 @@ export function WatchlistPanel(): React.ReactElement {
                   <div className="text-xs text-muted-foreground truncate">{item.name}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-semibold">{item.price}</div>
-                  <div className={`text-xs ${item.isPositive ? "crypto-text-green-dark" : "crypto-text-red-dark"}`}>
+                  <div className="text-sm font-semibold trading-price">{item.price}</div>
+                  <div className={`text-xs ${item.isPositive ? "crypto-text-green-dark" : "crypto-text-red-dark"} trading-change`}>
                     {item.change}
                   </div>
                 </div>

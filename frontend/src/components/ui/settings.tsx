@@ -370,8 +370,16 @@ export const Settings = () => {
       }
     };
 
+    // Listen for custom API key update events
+    const handleApiKeyUpdate = () => checkStatus();
+
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('apiKeyUpdated', handleApiKeyUpdate);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('apiKeyUpdated', handleApiKeyUpdate);
+    };
   }, []);
 
   const hasActiveAlerts = activeAlerts.length > 0;
@@ -384,16 +392,25 @@ export const Settings = () => {
         <TooltipTrigger asChild>
           <div className="relative">
             <SettingsSidebarTrigger
-              className="group hover:bg-muted/50 transition-colors size-8"
+              className="group hover:bg-muted/50 transition-all duration-300 w-8 h-8 sm:w-9 sm:h-9 text-muted-foreground hover:text-foreground"
             />
+            {/* Status indicators */}
             {needsAttention && (
               <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+            )}
+            {hasApiKey && !hasActiveAlerts && (
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             )}
           </div>
         </TooltipTrigger>
         <TooltipContent side="bottom" className="max-w-xs">
           <div className="space-y-1">
             <p className="font-medium">Settings & Preferences</p>
+            {hasApiKey && !hasActiveAlerts && (
+              <p className="text-xs text-green-400">
+                ✓ API key configured
+              </p>
+            )}
             {attentionCount > 0 && (
               <p className="text-xs text-red-400">
                 {attentionCount} item{attentionCount > 1 ? 's' : ''} need{attentionCount > 1 ? '' : 's'} attention
