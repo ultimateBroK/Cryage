@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useScrollIsolation } from './use-scroll-isolation';
 
 /**
  * Hook for auto-scrolling the main thread viewport
@@ -10,6 +11,8 @@ export function useThreadAutoScroll() {
     userInterrupted: false,
     lastMessageCount: 0
   });
+  
+  const { canChatScroll } = useScrollIsolation();
 
   useEffect(() => {
     const viewport = document.querySelector('[data-viewport="true"]') as HTMLElement;
@@ -18,11 +21,11 @@ export function useThreadAutoScroll() {
     const scrollState = scrollStateRef.current;
 
     const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
-      if (scrollState.isScrolling) return;
+      if (scrollState.isScrolling || !canChatScroll()) return;
       
       scrollState.isScrolling = true;
       requestAnimationFrame(() => {
-        if (viewport && !scrollState.userInterrupted) {
+        if (viewport && !scrollState.userInterrupted && canChatScroll()) {
           viewport.scrollTo({
             top: viewport.scrollHeight,
             behavior
@@ -55,37 +58,40 @@ export function useThreadAutoScroll() {
       }, 100);
     };
 
-    // Observer for new messages or content changes
+    // Optimized observer for new messages or content changes
+    let lastObserverTime = 0;
+    const OBSERVER_THROTTLE_MS = 8; // ~120fps for mutations
+    
     const observer = new MutationObserver((mutations) => {
       try {
+        const now = Date.now();
+        if (now - lastObserverTime < OBSERVER_THROTTLE_MS) return;
+        lastObserverTime = now;
+
         let shouldScroll = false;
 
-        mutations.forEach((mutation) => {
+        // Use a more efficient approach to check mutations
+        for (const mutation of mutations) {
           // Check for new message elements
-          if (mutation.type === 'childList') {
-            const addedElements = Array.from(mutation.addedNodes).filter(
-              node => node.nodeType === Node.ELEMENT_NODE
-            ) as Element[];
-            
-            // Look for message containers or reasoning panels
-            const hasNewMessage = addedElements.some(element => {
-              try {
-                return element.matches('[data-role="assistant"], [data-role="user"]') ||
-                       element.querySelector('[data-role="assistant"], [data-role="user"]') ||
-                       element.matches('[data-role="reasoning"]') ||
-                       element.querySelector('[data-role="reasoning"]');
-              } catch {
-                return false;
+          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            // Quick check for message-related elements
+            for (let i = 0; i < mutation.addedNodes.length; i++) {
+              const node = mutation.addedNodes[i];
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const element = node as Element;
+                // Use more efficient selectors
+                if (element.hasAttribute('data-role') || 
+                    element.querySelector('[data-role]')) {
+                  shouldScroll = true;
+                  break;
+                }
               }
-            });
-
-            if (hasNewMessage) {
-              shouldScroll = true;
             }
+            if (shouldScroll) break;
           }
           
           // Check for text content changes in existing messages
-          if (mutation.type === 'characterData' || mutation.type === 'childList') {
+          if (mutation.type === 'characterData' && mutation.target.textContent !== mutation.oldValue) {
             const target = mutation.target;
             let elementToCheck: Element | null = null;
             
@@ -97,10 +103,11 @@ export function useThreadAutoScroll() {
                 elementToCheck = (target as Text).parentElement;
               }
               
-              if (elementToCheck && typeof elementToCheck.closest === 'function') {
-                const isInMessage = elementToCheck.closest('[data-role="assistant"], [data-role="user"], [data-role="reasoning"]');
+              if (elementToCheck && elementToCheck.closest) {
+                const isInMessage = elementToCheck.closest('[data-role]');
                 if (isInMessage) {
                   shouldScroll = true;
+                  break;
                 }
               }
             } catch (error) {
@@ -108,7 +115,7 @@ export function useThreadAutoScroll() {
               console.debug('Thread auto-scroll: ignoring mutation observer error', error);
             }
           }
-        });
+        }
 
         if (shouldScroll && !scrollState.userInterrupted) {
           scrollToBottom();
@@ -153,7 +160,7 @@ export function useThreadAutoScroll() {
       viewport.removeEventListener('scroll', handleScrollWithTimeout);
       clearTimeout(scrollTimeout);
     };
-  }, []);
+  }, [canChatScroll]);
 
   return {
     /**

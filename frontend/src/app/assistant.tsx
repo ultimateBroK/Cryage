@@ -16,7 +16,7 @@ import { Idle } from "@/components/common/idle";
 import { MainLayout } from "@/components/layouts/main-layout";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useAppShortcuts } from "@/hooks/use-keyboard-shortcuts";
-import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { TabType } from "@/types/components";
 import { AppHeader } from "@/components/features/navigation/app-header";
 import { 

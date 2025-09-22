@@ -176,7 +176,7 @@
   }
 }
 
-/* Reasoning streaming animations */
+/* Real-time optimized streaming animations */
 @keyframes reasoning-pulse {
   0%, 100% {
     opacity: 0.6;
@@ -184,19 +184,38 @@
   }
   50% {
     opacity: 1;
-    transform: scale(1.02);
+    transform: scale(1.005);
   }
 }
 
 @keyframes reasoning-glow {
-  0% {
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.15);
   }
   50% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
   }
-  100% {
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes streaming-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.005);
+  }
+}
+
+@keyframes smooth-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -335,9 +354,28 @@
   animation: border-pulse 2s ease-in-out infinite;
 }
 
-/* Utility classes for smooth animations */
+/* Real-time optimized utility classes for smooth animations */
 .animate-reasoning-glow {
-  animation: reasoning-glow 3s ease-in-out infinite;
+  animation: reasoning-glow 1s ease-in-out infinite;
+}
+
+.animate-streaming-pulse {
+  animation: streaming-pulse 2s ease-in-out infinite;
+}
+
+.animate-smooth-fade-in {
+  animation: smooth-fade-in 0.3s ease-out;
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Traveling border glow effect */

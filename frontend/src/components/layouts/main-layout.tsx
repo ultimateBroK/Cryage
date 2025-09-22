@@ -19,10 +19,7 @@ import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
  */
 
 const MainLayoutComponent: React.FC<MainLayoutProps> = ({ 
-  activeTab = "chat", 
-  onTabChange, 
-  unreadMessageCount = 0, 
-  systemNotificationCount = 0 
+  activeTab = "chat"
 }) => {
   const [preloadedTabs, setPreloadedTabs] = useState<Set<TabType>>(new Set(["chat"]));
   const [isClient, setIsClient] = useState(false);

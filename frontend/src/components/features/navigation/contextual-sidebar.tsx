@@ -13,7 +13,7 @@ import {
   Activity
 } from "lucide-react";
 import { MotionDiv, Presence } from "@/components/common/motion";
-import { ContextualSidebarProps, TabType } from "@/types/components";
+import { ContextualSidebarProps } from "@/types/components";
 import { ThreadList } from "@/lib/dynamic-imports";
 
 /**

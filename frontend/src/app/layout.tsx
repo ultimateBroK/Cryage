@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
 import "../styles/globals.css";
 import { PageTransitionWrapper } from "@/components/common/page-transition-wrapper";
+import { NotificationProvider } from "@/components/providers/notification-provider";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -52,7 +53,9 @@ export default function RootLayout({
       <body
         className={`${geist.variable} ${jetbrainsMono.variable} antialiased font-sans`}
       >
-        <PageTransitionWrapper>{children}</PageTransitionWrapper>
+        <NotificationProvider>
+          <PageTransitionWrapper>{children}</PageTransitionWrapper>
+        </NotificationProvider>
       </body>
     </html>
   );

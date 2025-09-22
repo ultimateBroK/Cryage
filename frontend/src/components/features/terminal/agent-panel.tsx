@@ -4,7 +4,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Activity, TrendingUp, TrendingDown } from "lucide-react";
+import { MessageSquare, TrendingUp, TrendingDown } from "lucide-react";
 
 export function AgentPanel(): React.ReactElement {
 	return (
