@@ -8,8 +8,6 @@ type StarBorderProps<T extends React.ElementType> = React.ComponentPropsWithoutR
   speed?: React.CSSProperties['animationDuration'];
   thickness?: number;
   autoContrast?: boolean;
-  roundedClass?: string; // allow customizing shape
-  unstyled?: boolean; // when true, do not apply default inner bg/text styles
 };
 
 const StarBorder = <T extends React.ElementType = 'button'>({
@@ -19,8 +17,6 @@ const StarBorder = <T extends React.ElementType = 'button'>({
   speed = '6s',
   thickness = 1,
   autoContrast = true,
-  roundedClass = 'rounded-full',
-  unstyled = false,
   children,
   ...rest
 }: StarBorderProps<T>) => {
@@ -123,7 +119,7 @@ const StarBorder = <T extends React.ElementType = 'button'>({
 
   return (
     <Component
-      className={`relative inline-block overflow-hidden ${roundedClass} ${className}`}
+      className={`relative inline-block overflow-hidden rounded-full ${className}`}
       {...(rest as React.ComponentPropsWithoutRef<T>)}
       style={{
         padding: `${thickness}px 0`,
@@ -160,8 +156,8 @@ const StarBorder = <T extends React.ElementType = 'button'>({
       
       {/* Main button content */}
       <div 
-        className={`relative z-10 text-center text-sm font-medium ${roundedClass} transition-all duration-300 ${unstyled ? '' : 'backdrop-blur-sm py-2 px-6 shadow-lg hover:shadow-xl hover:scale-105'} ${unstyled ? '' : contrastStyles.textColor}`}
-        style={unstyled ? undefined : {
+        className={`relative z-10 backdrop-blur-sm text-center text-sm font-medium py-2 px-6 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 ${contrastStyles.textColor}`}
+        style={{
           background: `linear-gradient(to right, ${contrastLevel === 'low' ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.6)'}, ${contrastLevel === 'low' ? 'rgba(240,240,240,0.95)' : 'rgba(30,30,30,0.7)'}, ${contrastLevel === 'low' ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.6)'})`,
           borderColor: `rgba(255,255,255,${contrastStyles.borderOpacity})`,
           boxShadow: `0 0 25px ${color}${contrastStyles.shadowIntensity}, inset 0 1px 0 ${contrastLevel === 'low' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)'}`
