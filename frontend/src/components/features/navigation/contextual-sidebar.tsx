@@ -119,35 +119,35 @@ const DashboardSidebar: React.FC = () => {
       >
         <Card className="relative overflow-hidden bg-gradient-to-br from-blue-50/80 to-cyan-50/80 dark:from-slate-900/60 dark:to-blue-900/30 border-blue-200/60 dark:border-blue-800/40 shadow-md transition-all duration-300 group">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/3 to-cyan-500/3 dark:from-blue-400/3 dark:to-cyan-400/3" />
-          <CardHeader className="py-2 relative">
-          <CardTitle className="text-[13px] md:text-base flex items-center justify-start gap-1.5 text-blue-700 dark:text-blue-300 font-medium">
+          <CardHeader className="py-3 relative">
+          <CardTitle className="text-[13px] md:text-sm flex items-center justify-start gap-1.5 text-blue-700 dark:text-blue-300 font-medium">
               <div className="p-1 sm:p-1.5 rounded-lg bg-blue-100/80 dark:bg-blue-900/50 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
                 <Globe className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400" />
               </div>
               <span className="truncate">Market Overview</span>
           </CardTitle>
         </CardHeader>
-          <CardContent className="space-y-2 relative">
-            <div className="grid grid-cols-2 gap-1.5">
-              <div className="text-center p-1.5 rounded-lg bg-white/60 dark:bg-slate-800/30 border border-blue-100/50 dark:border-blue-800/20">
-                <div className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mb-0.5 truncate">Global Cap</div>
+          <CardContent className="space-y-2 py-2 relative">
+            <div className="grid grid-cols-2 gap-2">
+              <div className="text-center px-2 py-2.5 rounded-lg bg-white/60 dark:bg-slate-800/30 border border-blue-100/50 dark:border-blue-800/20">
+                <div className="text-xs md:text-xs text-slate-600 dark:text-slate-400 mb-0.5 truncate">Global Cap</div>
                 <div className="text-sm font-bold text-blue-800 dark:text-blue-300 truncate">{marketStats.globalCap}</div>
               </div>
-              <div className="text-center p-1.5 rounded-lg bg-white/60 dark:bg-slate-800/30 border border-blue-100/50 dark:border-blue-800/20">
-                <div className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mb-0.5 truncate">24h Volume</div>
+              <div className="text-center px-2 py-2.5 rounded-lg bg-white/60 dark:bg-slate-800/30 border border-blue-100/50 dark:border-blue-800/20">
+                <div className="text-xs md:text-xs text-slate-600 dark:text-slate-400 mb-0.5 truncate">24h Volume</div>
                 <div className="text-sm font-bold text-blue-800 dark:text-blue-300 truncate">{marketStats.dailyVolume}</div>
               </div>
           </div>
-            <div className="flex justify-between items-center p-1.5 rounded-lg bg-white/60 dark:bg-slate-800/30 border border-blue-100/50 dark:border-blue-800/20">
-              <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 truncate">BTC Dominance</span>
+            <div className="flex justify-between items-center px-2 py-2.5 rounded-lg bg-white/60 dark:bg-slate-800/30 border border-blue-100/50 dark:border-blue-800/20">
+              <span className="text-xs md:text-xs text-slate-600 dark:text-slate-400 truncate">BTC Dominance</span>
               <span className="text-sm font-bold text-blue-800 dark:text-blue-300">{marketStats.btcDominance}</span>
           </div>
             
             {/* Fear & Greed Index with visual indicator */}
             <div className="p-2 rounded-lg bg-white/60 dark:bg-slate-800/30 border border-blue-100/50 dark:border-blue-800/20 space-y-1.5">
           <div className="flex justify-between items-center">
-                <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400">Fear & Greed</span>
-                <span className="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400">{getFearGreedLabel(marketStats.fearGreedIndex)}</span>
+                <span className="text-xs md:text-xs text-slate-600 dark:text-slate-400">Fear & Greed</span>
+                <span className="text-xs md:text-xs font-medium text-slate-500 dark:text-slate-400">{getFearGreedLabel(marketStats.fearGreedIndex)}</span>
           </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-1.5 sm:h-2 bg-slate-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -177,9 +177,9 @@ const DashboardSidebar: React.FC = () => {
             ? 'bg-gradient-to-br from-green-500/3 to-emerald-500/3 dark:from-green-400/3 dark:to-emerald-400/3' 
             : 'bg-gradient-to-br from-red-500/3 to-rose-500/3 dark:from-red-400/3 dark:to-rose-400/3'
           }`} />
-          <CardHeader className="py-2 relative">
+          <CardHeader className="py-3 relative">
             <div className="flex items-center justify-between gap-1">
-              <CardTitle className={`text-sm md:text-base flex items-center gap-1.5 ${showMovers 
+              <CardTitle className={`text-sm md:text-sm flex items-center gap-1.5 ${showMovers 
                 ? 'text-green-700 dark:text-green-300' 
                 : 'text-red-700 dark:text-red-300'
               } font-medium`}>
@@ -199,7 +199,7 @@ const DashboardSidebar: React.FC = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowMovers(!showMovers)}
-                className={`h-7 px-2 text-xs md:text-sm font-medium transition-all duration-200 flex-shrink-0 ${showMovers 
+                className={`h-7 px-2 text-xs md:text-xs font-medium transition-all duration-200 flex-shrink-0 ${showMovers 
                   ? 'hover:bg-green-100 dark:hover:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200/60 dark:border-green-800/30' 
                   : 'hover:bg-red-100 dark:hover:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200/60 dark:border-red-800/30'
                 }`}
@@ -208,14 +208,14 @@ const DashboardSidebar: React.FC = () => {
               </Button>
             </div>
         </CardHeader>
-          <CardContent className="space-y-2 relative">
+          <CardContent className="space-y-2 py-2 relative">
             {currentData.map((mover, index) => (
               <MotionDiv
                 key={mover.symbol}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, delay: 0.2 + index * 0.05 }}
-                className={`flex justify-between items-center p-1.5 rounded-lg transition-all duration-200 cursor-pointer group/item border ${showMovers 
+                className={`flex justify-between items-center px-2 py-2.5 rounded-lg transition-all duration-200 cursor-pointer group/item border ${showMovers 
                   ? 'bg-white/60 dark:bg-slate-800/30 hover:bg-green-50/80 dark:hover:bg-green-900/10 border-green-100/50 dark:border-green-800/20' 
                   : 'bg-white/60 dark:bg-slate-800/30 hover:bg-red-50/80 dark:hover:bg-red-900/10 border-red-100/50 dark:border-red-800/20'
                 }`}
@@ -229,8 +229,8 @@ const DashboardSidebar: React.FC = () => {
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 min-w-[45px] text-right truncate">{mover.price}</span>
-                  <span className={`text-xs md:text-sm font-semibold px-1.5 py-0.5 rounded-full min-w-[45px] text-center ${
+                  <span className="text-xs md:text-xs text-slate-600 dark:text-slate-400 min-w-[45px] text-right truncate">{mover.price}</span>
+                  <span className={`text-xs md:text-xs font-semibold px-1.5 py-0.5 rounded-full min-w-[45px] text-center ${
                     mover.isPositive 
                       ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border border-green-200/50 dark:border-green-800/30' 
                       : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border border-red-200/50 dark:border-red-800/30'
@@ -253,44 +253,44 @@ const DashboardSidebar: React.FC = () => {
       >
           <Card className="relative overflow-hidden bg-gradient-to-br from-orange-50/80 to-red-50/80 dark:from-slate-900/60 dark:to-orange-900/30 border-orange-200/60 dark:border-orange-800/40 shadow-md transition-all duration-300 group">
             <div className="absolute inset-0 bg-gradient-to-br from-orange-500/3 to-red-500/3 dark:from-orange-400/3 dark:to-red-400/3" />
-            <CardHeader className="py-2 relative">
-              <CardTitle className="text-sm md:text-base flex items-center justify-start gap-1.5 text-orange-800 dark:text-orange-300 font-medium">
+            <CardHeader className="py-3 relative">
+              <CardTitle className="text-sm md:text-sm flex items-center justify-start gap-1.5 text-orange-800 dark:text-orange-300 font-medium">
                 <div className="p-1 sm:p-1.5 rounded-lg bg-orange-100/80 dark:bg-orange-900/50 group-hover:scale-110 group-hover:animate-pulse transition-all duration-200 flex-shrink-0">
                   <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 text-orange-600 dark:text-orange-400" />
                 </div>
                 <span className="truncate">Active Alerts</span>
-                <Badge variant="destructive" className="text-xs md:text-sm px-1.5 py-0.5 bg-orange-600 text-white dark:bg-orange-600 border border-orange-200/60 dark:border-orange-800/30 flex-shrink-0">
+                <Badge variant="destructive" className="text-xs md:text-xs px-1.5 py-0.5 bg-orange-600 text-white dark:bg-orange-600 border border-orange-200/60 dark:border-orange-800/30 flex-shrink-0">
                   {marketStats.activeAlerts}
                 </Badge>
             </CardTitle>
           </CardHeader>
-            <CardContent className="space-y-1.5 relative">
+            <CardContent className="space-y-2 py-2 relative">
               <MotionDiv
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, delay: 0.4 }}
-                className="flex items-center gap-2 p-1.5 rounded-lg bg-white/60 dark:bg-slate-800/30 hover:bg-orange-50/80 dark:hover:bg-orange-900/10 transition-all duration-200 cursor-pointer border border-orange-100/50 dark:border-orange-800/20"
+                className="flex items-center gap-2 px-2 py-2.5 rounded-lg bg-white/60 dark:bg-slate-800/30 hover:bg-orange-50/80 dark:hover:bg-orange-900/10 transition-all duration-200 cursor-pointer border border-orange-100/50 dark:border-orange-800/20"
               >
                 <Activity className="w-3 h-3 sm:w-4 sm:h-4 text-green-600 dark:text-green-400 animate-pulse flex-shrink-0" />
-                <span className="text-xs md:text-sm text-orange-800 dark:text-orange-300 font-medium truncate">BTC above $45,000</span>
+                <span className="text-xs md:text-xs text-orange-800 dark:text-orange-300 font-medium truncate">BTC above $45,000</span>
               </MotionDiv>
               <MotionDiv
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, delay: 0.45 }}
-                className="flex items-center gap-2 p-1.5 rounded-lg bg-white/60 dark:bg-slate-800/30 hover:bg-orange-50/80 dark:hover:bg-orange-900/10 transition-all duration-200 cursor-pointer border border-orange-100/50 dark:border-orange-800/20"
+                className="flex items-center gap-2 px-2 py-2.5 rounded-lg bg-white/60 dark:bg-slate-800/30 hover:bg-orange-50/80 dark:hover:bg-orange-900/10 transition-all duration-200 cursor-pointer border border-orange-100/50 dark:border-orange-800/20"
               >
                 <Activity className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-600 dark:text-yellow-400 animate-pulse flex-shrink-0" />
-                <span className="text-xs md:text-sm text-orange-800 dark:text-orange-300 font-medium truncate">ETH RSI oversold</span>
+                <span className="text-xs md:text-xs text-orange-800 dark:text-orange-300 font-medium truncate">ETH RSI oversold</span>
               </MotionDiv>
               <MotionDiv
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, delay: 0.5 }}
-                className="flex items-center gap-2 p-1.5 rounded-lg bg-white/60 dark:bg-slate-800/30 hover:bg-orange-50/80 dark:hover:bg-orange-900/10 transition-all duration-200 cursor-pointer border border-orange-100/50 dark:border-orange-800/20"
+                className="flex items-center gap-2 px-2 py-2.5 rounded-lg bg-white/60 dark:bg-slate-800/30 hover:bg-orange-50/80 dark:hover:bg-orange-900/10 transition-all duration-200 cursor-pointer border border-orange-100/50 dark:border-orange-800/20"
               >
                 <Activity className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400 animate-pulse flex-shrink-0" />
-                <span className="text-xs md:text-sm text-orange-800 dark:text-orange-300 font-medium truncate">SOL volume spike</span>
+                <span className="text-xs md:text-xs text-orange-800 dark:text-orange-300 font-medium truncate">SOL volume spike</span>
               </MotionDiv>
          </CardContent>
        </Card>
