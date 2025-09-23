@@ -10,6 +10,7 @@ import {
   unstable_memoizeMarkdownComponents as memoizeMarkdownComponents,
 } from "@assistant-ui/react-markdown";
 import { useAutoScroll } from "@/hooks/use-auto-scroll";
+import { useScrollIsolation } from "@/hooks/use-scroll-isolation";
 import TypingIndicator from "./typing-indicator";
 
 // Compact markdown components to reduce vertical spacing in reasoning
@@ -83,7 +84,7 @@ export const Reasoning: FC<PropsWithChildren<{ defaultOpen?: boolean; className?
 
   return (
     <ReasoningContext.Provider value={value}>
-      <div className={cn("mt-3 text-sm", className)}>{children}</div>
+      <div className={cn("mt-2 text-sm", className)}>{children}</div>
     </ReasoningContext.Provider>
   );
 };
@@ -91,6 +92,7 @@ export const Reasoning: FC<PropsWithChildren<{ defaultOpen?: boolean; className?
 export const ReasoningTrigger: FC<PropsWithChildren<{ className?: string }>> = ({ className, children }) => {
   const ctx = useContext(ReasoningContext);
   const [isDark, setIsDark] = useState<boolean>(false);
+  const { disableChatScroll, enableChatScroll } = useScrollIsolation();
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -105,17 +107,34 @@ export const ReasoningTrigger: FC<PropsWithChildren<{ className?: string }>> = (
   if (!ctx) return null;
   const { open, setOpen } = ctx;
 
+  const handleToggle = (event: React.MouseEvent) => {
+    // Prevent any potential scroll behavior from the click event
+    event.preventDefault();
+    event.stopPropagation();
+    
+    // Temporarily disable chat scroll during reasoning toggle to prevent conflicts
+    if (!open) {
+      disableChatScroll();
+      // Re-enable after a short delay to allow reasoning to settle
+      setTimeout(() => {
+        enableChatScroll();
+      }, 300);
+    }
+    
+    setOpen(!open);
+  };
+
   return (
     <StarBorder
       as="button"
-      onClick={() => setOpen(!open)}
+      onClick={handleToggle}
       aria-label="Toggle reasoning"
       color={isDark ? "#00d4ff" : "#06b6d4"}
       speed="3s"
       thickness={0.5}
       autoContrast={true}
       className={cn(
-        "mb-2 transition-all duration-300 hover:scale-105",
+        "mb-1 transition-all duration-300 hover:scale-105",
         className
       )}
     >
@@ -140,25 +159,31 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
   const [fm, setFm] = useState<null | typeof import('framer-motion')>(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const [lastContentLength, setLastContentLength] = useState(0);
+  const streamingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const observerRef = useRef<MutationObserver | null>(null);
 
   const open = ctx?.open ?? false;
   const isRunning = threadRuntime?.getState().isRunning ?? false;
+  const { canReasoningScroll } = useScrollIsolation();
 
-  // Lazy load framer-motion
+  // Lazy load framer-motion - load when component mounts
   useEffect(() => {
-    if (open) {
+    // Small delay to ensure smooth animation on first activation
+    const timer = setTimeout(() => {
       import('framer-motion').then(setFm);
-    }
-  }, [open]);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
-  // Auto-scroll to bottom when content updates while running
+  // Real-time auto-scroll for reasoning content
   const { resetScrollState } = useAutoScroll({
-    enabled: isRunning && open,
+    enabled: isRunning && open && canReasoningScroll(),
     element: scrollRef.current,
     behavior: 'smooth',
-    threshold: 10,
-    debounceDelay: 50,
-    fallbackInterval: 150
+    threshold: 1, // Very precise threshold for real-time scrolling
+    debounceDelay: 8, // 120fps throttling for real-time feel
+    fallbackInterval: 16, // 60fps fallback for smooth experience
+    aggressiveMode: true // Aggressive mode for real-time scrolling
   });
 
   // Reset scroll state when reasoning opens
@@ -168,41 +193,90 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
     }
   }, [open, isRunning, resetScrollState]);
 
-  // Track streaming state for visual feedback
+  // Real-time streaming state tracking with minimal throttling
   useEffect(() => {
-    if (scrollRef.current && isRunning) {
-      const currentLength = scrollRef.current.textContent?.length || 0;
-      if (currentLength > lastContentLength) {
-        setIsStreaming(true);
-        setLastContentLength(currentLength);
-        // Reset streaming state after a delay
-        const timer = setTimeout(() => setIsStreaming(false), 1000);
-        return () => clearTimeout(timer);
-      }
+    if (!isRunning || !open || !scrollRef.current) return;
+
+    // Clear existing observer
+    if (observerRef.current) {
+      observerRef.current.disconnect();
     }
-  }, [isRunning, lastContentLength]);
+
+    // Clear existing timeout
+    if (streamingTimeoutRef.current) {
+      clearTimeout(streamingTimeoutRef.current);
+    }
+
+    let lastUpdateTime = 0;
+    const THROTTLE_MS = 4; // 240fps for real-time feel
+
+    const observer = new MutationObserver(() => {
+      const now = Date.now();
+      if (now - lastUpdateTime < THROTTLE_MS) return;
+      lastUpdateTime = now;
+
+      if (scrollRef.current) {
+        const currentLength = scrollRef.current.textContent?.length || 0;
+        if (currentLength > lastContentLength) {
+          setIsStreaming(true);
+          setLastContentLength(currentLength);
+          
+          // Clear previous timeout
+          if (streamingTimeoutRef.current) {
+            clearTimeout(streamingTimeoutRef.current);
+          }
+          
+          // Set new timeout with very short delay for real-time responsiveness
+          streamingTimeoutRef.current = setTimeout(() => {
+            setIsStreaming(false);
+            streamingTimeoutRef.current = null;
+          }, 100); // Reduced from 200ms to 100ms
+        }
+      }
+    });
+
+    observerRef.current = observer;
+    observer.observe(scrollRef.current, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+
+    return () => {
+      observer.disconnect();
+      if (streamingTimeoutRef.current) {
+        clearTimeout(streamingTimeoutRef.current);
+      }
+    };
+  }, [isRunning, open, lastContentLength]);
 
   if (!ctx) return null;
 
-  // If framer-motion hasn't loaded yet, render static content
+  // If framer-motion hasn't loaded yet, render with CSS animation fallback
   if (!fm) {
     return open ? (
       <div
         className={cn(
-          "w-full flex justify-center",
+          "w-full flex justify-center animate-smooth-fade-in",
           isRunning ? "sticky bottom-4 z-40" : "",
           className,
         )}
         role="status"
         aria-live="polite"
+        style={{
+          animation: "smooth-fade-in 0.4s ease-out"
+        }}
       >
         <div
           ref={scrollRef}
           className={cn(
-            "inline-block rounded-xl bg-background/40 backdrop-blur-md border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] p-3 text-left mx-auto transition-all duration-300",
+            "inline-block rounded-xl bg-background/40 backdrop-blur-md border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] p-3 text-left mx-auto transition-all duration-400",
             isRunning ? "max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent scroll-smooth" : "",
             isStreaming && "animate-reasoning-glow"
           )}
+          style={{
+            animation: "smooth-fade-in 0.4s ease-out"
+          }}
         >
           {markdown ? (
             <MarkdownTextPrimitive className="aui-md" components={compactComponents} />
@@ -226,9 +300,10 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
   const MotionDiv = fm.motion.div;
 
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence initial={true} mode="wait">
       {open && (
         <MotionDiv
+          key="reasoning-content"
           initial={{ 
             height: 0, 
             opacity: 0, 
@@ -242,7 +317,7 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
             opacity: 1,
             overflow: isRunning ? "hidden" : "visible",
             marginTop: 8, // mt-2
-            marginBottom: 12, // mb-3
+            marginBottom: 8, // mb-2
             scale: 1
           }}
           exit={{ 
@@ -254,9 +329,9 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
             scale: 0.95
           }}
           transition={{
-            duration: 0.4,
-            ease: [0.4, 0.0, 0.2, 1], // Custom easing for smoother animation
-            layout: { duration: 0.3 }
+            duration: 0.4, // Slightly longer for smoother animation
+            ease: [0.25, 0.1, 0.25, 1], // Improved easing curve for smoother feel
+            layout: { duration: 0.3, ease: "easeOut" } // Slightly longer layout transitions
           }}
           layout
           className={cn(
@@ -270,21 +345,23 @@ export const ReasoningContent: FC<PropsWithChildren<{ markdown?: boolean; classN
           <MotionDiv
             ref={scrollRef}
             className={cn(
-              "inline-block rounded-xl bg-background/40 backdrop-blur-md border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] p-3 text-left mx-auto transition-all duration-300",
-              isRunning ? "max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent scroll-smooth" : "",
+              "inline-block rounded-xl bg-background/40 backdrop-blur-md border border-white/15 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)] p-3 text-left mx-auto transition-all duration-200",
+              isRunning ? "max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent scroll-smooth scrollbar-thumb-opacity-50 hover:scrollbar-thumb-opacity-75" : "",
               isStreaming && "animate-reasoning-glow"
             )}
             animate={isStreaming ? {
-              scale: [1, 1.01, 1],
+              scale: [1, 1.001, 1], // Very subtle scale for real-time feel
               boxShadow: [
-                "0 0 5px rgba(255, 255, 255, 0.1)",
-                "0 0 20px rgba(255, 255, 255, 0.3)",
-                "0 0 5px rgba(255, 255, 255, 0.1)"
+                "0 0 8px rgba(59, 130, 246, 0.15)",
+                "0 0 20px rgba(59, 130, 246, 0.25)",
+                "0 0 8px rgba(59, 130, 246, 0.15)"
               ]
             } : {}}
             transition={{
-              duration: 0.6,
-              ease: "easeInOut"
+              duration: 0.2, // Even faster animation for real-time feel
+              ease: "easeInOut",
+              repeat: isStreaming ? Infinity : 0,
+              repeatType: "reverse"
             }}
           >
             {markdown ? (

@@ -1,15 +1,18 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 export interface Notification {
   id: string;
   type: 'message' | 'system' | 'alert';
   title: string;
-  message: string;
+  message?: string;
   isRead: boolean;
   createdAt: Date;
   actionUrl?: string;
+  priority?: 'low' | 'medium' | 'high';
+  autoExpire?: boolean;
+  expiresAt?: Date;
 }
 
 const NOTIFICATIONS_STORAGE_KEY = 'cryage-notifications';
@@ -50,6 +53,9 @@ export const useNotifications = () => {
       id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       createdAt: new Date(),
       isRead: false,
+      priority: notification.priority || 'medium',
+      autoExpire: notification.autoExpire ?? true,
+      expiresAt: notification.autoExpire !== false ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) : undefined, // 7 days default
     };
     const updatedNotifications = [newNotification, ...notifications];
     saveNotifications(updatedNotifications);
@@ -85,11 +91,42 @@ export const useNotifications = () => {
     saveNotifications([]);
   }, [saveNotifications]);
 
-  // Get unread count
-  const unreadCount = notifications.filter(notif => !notif.isRead).length;
+  // Clean up expired notifications
+  const cleanupExpiredNotifications = useCallback(() => {
+    const now = new Date();
+    const validNotifications = notifications.filter(notif => {
+      if (!notif.autoExpire || !notif.expiresAt) return true;
+      return notif.expiresAt > now;
+    });
+    
+    if (validNotifications.length !== notifications.length) {
+      saveNotifications(validNotifications);
+    }
+  }, [notifications, saveNotifications]);
 
-  // Get unread notifications
-  const unreadNotifications = notifications.filter(notif => !notif.isRead);
+  // Auto-cleanup expired notifications
+  useEffect(() => {
+    const interval = setInterval(cleanupExpiredNotifications, 60 * 60 * 1000); // Check every hour
+    return () => clearInterval(interval);
+  }, [cleanupExpiredNotifications]);
+
+  // Get unread count (memoized)
+  const unreadCount = useMemo(() => 
+    notifications.filter(notif => !notif.isRead).length, 
+    [notifications]
+  );
+
+  // Get unread notifications (memoized)
+  const unreadNotifications = useMemo(() => 
+    notifications.filter(notif => !notif.isRead), 
+    [notifications]
+  );
+
+  // Get notifications by type (memoized)
+  const getNotificationsByType = useCallback((type: Notification['type']) => 
+    notifications.filter(notif => notif.type === type),
+    [notifications]
+  );
 
   return {
     notifications,
@@ -100,5 +137,7 @@ export const useNotifications = () => {
     markAllAsRead,
     removeNotification,
     clearAll,
+    getNotificationsByType,
+    cleanupExpiredNotifications,
   };
 };

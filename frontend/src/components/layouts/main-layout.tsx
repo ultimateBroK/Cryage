@@ -19,10 +19,7 @@ import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
  */
 
 const MainLayoutComponent: React.FC<MainLayoutProps> = ({ 
-  activeTab = "chat", 
-  onTabChange, 
-  unreadMessageCount = 0, 
-  systemNotificationCount = 0 
+  activeTab = "chat"
 }) => {
   const [preloadedTabs, setPreloadedTabs] = useState<Set<TabType>>(new Set(["chat"]));
   const [isClient, setIsClient] = useState(false);
@@ -55,7 +52,7 @@ const MainLayoutComponent: React.FC<MainLayoutProps> = ({
 
   // Render appropriate content based on active tab
   const renderTabContent = () => {
-    const containerClasses = `flex-1 overflow-hidden ${isMobile ? 'px-2' : 'px-4'} ${deviceType === 'tablet' ? 'px-3' : ''}`;
+    const containerClasses = `flex-1 overflow-hidden ${isMobile ? 'px-1' : 'px-4'} ${deviceType === 'tablet' ? 'px-3' : ''}`;
     
     switch (activeTab) {
       case "chat":

@@ -25,6 +25,10 @@ export interface UseAutoScrollOptions {
    * Fallback interval check frequency in ms
    */
   fallbackInterval?: number;
+  /**
+   * Whether to use more aggressive scrolling for streaming content
+   */
+  aggressiveMode?: boolean;
 }
 
 /**
@@ -38,13 +42,15 @@ export function useAutoScroll(options: UseAutoScrollOptions) {
     behavior = 'smooth',
     threshold = 10,
     debounceDelay = 50,
-    fallbackInterval = 150
+    fallbackInterval = 150,
+    aggressiveMode = false
   } = options;
 
   const scrollStateRef = useRef({
     isScrolling: false,
     lastScrollHeight: 0,
-    userScrolledUp: false
+    userScrolledUp: false,
+    lastScrollTime: 0
   });
 
   useEffect(() => {
@@ -55,6 +61,12 @@ export function useAutoScroll(options: UseAutoScrollOptions) {
 
     const scrollToBottom = () => {
       if (scrollState.isScrolling) return;
+      
+      const now = Date.now();
+      // Throttle scroll operations to 60fps max
+      if (now - scrollState.lastScrollTime < 16) return;
+      scrollState.lastScrollTime = now;
+      
       scrollState.isScrolling = true;
 
       requestAnimationFrame(() => {
@@ -65,12 +77,15 @@ export function useAutoScroll(options: UseAutoScrollOptions) {
           const isNearBottom = (currentScrollHeight - (scrollTop + clientHeight)) <= threshold;
 
           // Only auto-scroll if user hasn't manually scrolled up or if content height changed
-          if (!scrollState.userScrolledUp || isNearBottom || scrollState.lastScrollHeight !== currentScrollHeight) {
+          // In aggressive mode, always scroll regardless of user interaction
+          if (aggressiveMode || !scrollState.userScrolledUp || isNearBottom || scrollState.lastScrollHeight !== currentScrollHeight) {
             element.scrollTo({
               top: currentScrollHeight,
               behavior: behavior
             });
-            scrollState.userScrolledUp = false;
+            if (!aggressiveMode) {
+              scrollState.userScrolledUp = false;
+            }
           }
 
           scrollState.lastScrollHeight = currentScrollHeight;
@@ -94,10 +109,17 @@ export function useAutoScroll(options: UseAutoScrollOptions) {
       scrollState.userScrolledUp = !isNearBottom;
     };
 
-    // Set up mutation observer with debouncing
+    // Set up mutation observer with real-time optimized debouncing
     let debounceTimer: NodeJS.Timeout;
+    let lastMutationTime = 0;
+    const MUTATION_THROTTLE_MS = aggressiveMode ? 4 : 8; // 240fps for aggressive, 120fps for normal
+    
     const mutationObserver = new MutationObserver((mutations) => {
       if (!enabled || !element) return;
+
+      const now = Date.now();
+      if (now - lastMutationTime < MUTATION_THROTTLE_MS) return;
+      lastMutationTime = now;
 
       const hasContentChanges = mutations.some(mutation => {
         if (mutation.type === 'childList') {
@@ -111,7 +133,12 @@ export function useAutoScroll(options: UseAutoScrollOptions) {
 
       if (hasContentChanges) {
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(scrollToBottom, debounceDelay);
+        // For aggressive mode, use immediate scroll with minimal debounce
+        if (aggressiveMode) {
+          debounceTimer = setTimeout(scrollToBottom, Math.min(debounceDelay, 4));
+        } else {
+          debounceTimer = setTimeout(scrollToBottom, debounceDelay);
+        }
       }
     });
 
@@ -124,21 +151,31 @@ export function useAutoScroll(options: UseAutoScrollOptions) {
 
     // Fallback interval for cases where mutation observer might miss updates
     const intervalId: NodeJS.Timeout = setInterval(() => {
-    let lastKnownHeight = element.scrollHeight;
+      let lastKnownHeight = element.scrollHeight;
 
       if (enabled && element) {
         const currentHeight = element.scrollHeight;
         if (currentHeight !== lastKnownHeight) {
-          scrollToBottom();
+          // For aggressive mode, use immediate scroll
+          if (aggressiveMode) {
+            requestAnimationFrame(scrollToBottom);
+          } else {
+            scrollToBottom();
+          }
           lastKnownHeight = currentHeight;
         }
       }
-    }, fallbackInterval);
+    }, aggressiveMode ? Math.min(fallbackInterval, 16) : fallbackInterval);
 
-    // ResizeObserver for layout changes
+    // ResizeObserver for layout changes with real-time optimization
     const resizeObserver = new ResizeObserver(() => {
       if (enabled && element) {
-        scrollToBottom();
+        // For aggressive mode, use immediate scroll
+        if (aggressiveMode) {
+          requestAnimationFrame(scrollToBottom);
+        } else {
+          scrollToBottom();
+        }
       }
     });
 
@@ -154,7 +191,7 @@ export function useAutoScroll(options: UseAutoScrollOptions) {
       clearTimeout(debounceTimer);
       element.removeEventListener('scroll', handleUserScroll);
     };
-  }, [enabled, element, behavior, threshold, debounceDelay, fallbackInterval]);
+  }, [enabled, element, behavior, threshold, debounceDelay, fallbackInterval, aggressiveMode]);
 
   return {
     /**

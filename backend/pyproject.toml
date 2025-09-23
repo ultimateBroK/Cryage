@@ -5,7 +5,9 @@ description = "Backend API for Cryage crypto agent"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.104.0",
-    "uvicorn[standard]>=0.24.0",
-    "python-multipart>=0.0.6",
+    "agno",
+    "fastapi",
+    "uvicorn",
+    "python-binance",
+    "pinecone-client",
 ]

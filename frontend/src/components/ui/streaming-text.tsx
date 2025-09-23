@@ -23,8 +23,10 @@ export const StreamingText: FC<StreamingTextProps> = ({
   const [showCursorState, setShowCursorState] = useState(true);
   const textRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLSpanElement>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const lastUpdateTimeRef = useRef(0);
 
-  // Cursor blinking animation
+  // Optimized cursor blinking animation
   useEffect(() => {
     if (!showCursor || !isStreaming) return;
 
@@ -35,24 +37,44 @@ export const StreamingText: FC<StreamingTextProps> = ({
     return () => clearInterval(interval);
   }, [showCursor, isStreaming, cursorBlinkSpeed]);
 
-  // Streaming text animation
+  // Optimized streaming text animation with requestAnimationFrame
   useEffect(() => {
     if (!isStreaming || !textRef.current) return;
 
     const fullText = textRef.current.textContent || "";
     if (displayedText.length >= fullText.length) return;
 
-    const timer = setTimeout(() => {
-      setDisplayedText(fullText.slice(0, displayedText.length + 1));
-    }, streamingSpeed);
+    const animate = (currentTime: number) => {
+      if (currentTime - lastUpdateTimeRef.current >= streamingSpeed) {
+        setDisplayedText(prev => {
+          const nextLength = prev.length + 1;
+          if (nextLength >= fullText.length) {
+            return fullText;
+          }
+          return fullText.slice(0, nextLength);
+        });
+        lastUpdateTimeRef.current = currentTime;
+      }
+      
+      if (displayedText.length < fullText.length) {
+        animationFrameRef.current = requestAnimationFrame(animate);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    animationFrameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
   }, [displayedText, isStreaming, streamingSpeed]);
 
   // Reset when streaming stops
   useEffect(() => {
     if (!isStreaming) {
       setDisplayedText("");
+      lastUpdateTimeRef.current = 0;
     }
   }, [isStreaming]);
 

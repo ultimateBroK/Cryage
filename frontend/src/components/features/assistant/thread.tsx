@@ -12,7 +12,7 @@ import {
 } from "@assistant-ui/react";
 import { useAutoThreadTitle } from "@/hooks/use-auto-thread-title";
 import { useThreadAutoScroll } from "@/hooks/use-thread-auto-scroll";
-import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import type { FC } from "react";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -55,7 +55,6 @@ export const Thread: FC = () => {
   useThreadAutoScroll();
   
   const isMobile = useIsMobile();
-  const deviceType = useDeviceType();
 
   // Prevent unwanted scroll behavior
   useEffect(() => {
@@ -96,19 +95,20 @@ export const Thread: FC = () => {
       // aui-thread-root
       className="bg-background flex h-full flex-col"
       style={{
-        ["--thread-max-width" as string]: isMobile ? "100%" : deviceType === 'tablet' ? "48rem" : "52rem",
-        ["--thread-padding-x" as string]: isMobile ? "1rem" : deviceType === 'tablet' ? "1.5rem" : "2rem",
+        ["--thread-max-width" as string]: isMobile ? "100%" : "52rem",
+        ["--thread-padding-x" as string]: isMobile ? "1rem" : "2rem",
       }}
     >
       {/* aui-thread-viewport */}
-      <ThreadPrimitive.Viewport 
-        className={`relative flex min-w-0 flex-1 flex-col gap-4 sm:gap-6 overflow-y-auto min-h-0 pb-2 md:pb-4 ${isMobile ? 'gap-3' : ''}`}
+        <ThreadPrimitive.Viewport 
+        className={`relative flex min-w-0 flex-1 flex-col gap-3 sm:gap-4 overflow-y-auto min-h-0 pb-2 md:pb-4 smooth-scroll gpu-accelerated ${isMobile ? 'gap-2' : ''}`}
         data-viewport="true"
         style={{
           // Ensure viewport stays stable and scrollable
           scrollBehavior: 'smooth',
           overscrollBehavior: 'contain',
           maxHeight: '100%',
+          willChange: 'scroll-position',
         }}
       >
         <ThreadWelcome />
@@ -189,7 +189,6 @@ const ThreadScrollToBottom: FC = () => {
 
 const ThreadWelcome: FC = () => {
   const isMobile = useIsMobile();
-  const deviceType = useDeviceType();
   
   return (
     <ThreadPrimitive.Empty>
@@ -205,7 +204,7 @@ const ThreadWelcome: FC = () => {
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: 0.5 }}
               // aui-thread-welcome-message-motion-1
-              className={`font-semibold ${isMobile ? 'text-lg' : deviceType === 'tablet' ? 'text-xl' : 'text-xl sm:text-2xl'}`}
+              className={`font-semibold ${isMobile ? 'text-lg' : 'text-xl sm:text-2xl'}`}
             >
               Hello there!
             </MotionDiv>
@@ -215,7 +214,7 @@ const ThreadWelcome: FC = () => {
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: 0.6 }}
               // aui-thread-welcome-message-motion-2
-              className={`text-muted-foreground/65 ${isMobile ? 'text-base' : deviceType === 'tablet' ? 'text-lg' : 'text-lg sm:text-xl md:text-2xl'}`}
+              className={`text-muted-foreground/65 ${isMobile ? 'text-base' : 'text-lg sm:text-xl md:text-2xl'}`}
             >
               How can I help you today?
             </MotionDiv>
@@ -228,7 +227,6 @@ const ThreadWelcome: FC = () => {
 
 const ThreadWelcomeSuggestions: FC = () => {
   const isMobile = useIsMobile();
-  const deviceType = useDeviceType();
   
   return (
     // aui-thread-welcome-suggestions
@@ -298,7 +296,6 @@ const Composer: FC = () => {
     type: 'info'
   });
   const isMobile = useIsMobile();
-  const deviceType = useDeviceType();
 
   // Check API key on mount and when storage changes
   useEffect(() => {
@@ -524,26 +521,26 @@ const MessageError: FC = () => {
 
 const AssistantMessage: FC = () => {
   const isMobile = useIsMobile();
-  const deviceType = useDeviceType();
   
   return (
     <MessagePrimitive.Root asChild>
       <MotionDiv
         // aui-assistant-message-root
-        className={`relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4 ${isMobile ? 'py-3' : ''}`}
+        className={`relative mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-3 gpu-accelerated animate-smooth-fade-in ${isMobile ? 'py-2 gap-1' : ''}`}
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         data-role="assistant"
       >
         {/* Main message container */}
-        <div className={`flex ${isMobile ? 'gap-3' : 'gap-4 sm:gap-6'}`}>
+        <div className={`flex ${isMobile ? 'gap-4' : 'gap-5 sm:gap-6'}`}>
           {/* aui-assistant-message-avatar */}
-          <div className={`ring-border bg-background flex shrink-0 items-center justify-center rounded-full ring-1 shadow-sm ${isMobile ? 'size-7' : 'size-8'}`}>
-            <CryageLogo size={isMobile ? 14 : 16} />
+          <div className={`ring-border bg-background flex shrink-0 items-center justify-center rounded-full ring-1 shadow-sm ${isMobile ? 'size-8' : 'size-9'}`}>
+            <CryageLogo size={isMobile ? 16 : 18} />
           </div>
 
           {/* aui-assistant-message-content */}
-          <div className={`text-foreground flex-1 leading-7 break-words overflow-hidden min-w-0 ${isMobile ? 'pr-1' : 'pr-2 sm:pr-4'}`}>
+          <div className={`text-foreground flex-1 leading-7 break-words overflow-hidden min-w-0 ${isMobile ? 'pr-2' : 'pr-3 sm:pr-5'}`}>
             <MessagePrimitive.Content
               components={{
                 Text: MarkdownText,
@@ -556,7 +553,7 @@ const AssistantMessage: FC = () => {
         </div>
 
         {/* Actions and branch picker below content */}
-        <div className={`flex flex-col gap-2 ${isMobile ? 'ml-10' : 'ml-12 sm:ml-14'}`}>
+        <div className={`flex flex-col gap-2 ${isMobile ? 'ml-12' : 'ml-14 sm:ml-16'}`}>
           <AssistantActionBar />
           <BranchPicker className="" />
         </div>
@@ -632,22 +629,22 @@ const AssistantActionBar: FC = () => {
 
 const UserMessage: FC = () => {
   const isMobile = useIsMobile();
-  const deviceType = useDeviceType();
   
   return (
     <MessagePrimitive.Root asChild>
       <MotionDiv
         // aui-user-message-root
-        className={`mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-4 ${isMobile ? 'py-3' : ''}`}
+        className={`mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-2 px-[var(--thread-padding-x)] py-3 gpu-accelerated animate-smooth-fade-in ${isMobile ? 'py-2 gap-1' : ''}`}
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         data-role="user"
       >
         {/* Main message container */}
         <div className="flex justify-end">
           {/* aui-user-message-content */}
-          <div className={`bg-muted text-foreground rounded-3xl py-3 break-words overflow-hidden min-w-0 shadow-sm ${
-            isMobile ? 'px-4 max-w-[90%]' : deviceType === 'tablet' ? 'px-5 max-w-[80%]' : 'px-4 sm:px-6 max-w-[85%] sm:max-w-[75%]'
+          <div className={`bg-muted text-foreground rounded-3xl py-4 break-words overflow-hidden min-w-0 shadow-sm ${
+            isMobile ? 'px-5 max-w-[90%]' : 'px-5 sm:px-7 max-w-[85%] sm:max-w-[75%]'
           }`}>
             <MessagePrimitive.Content components={{ Text: MarkdownText }} />
           </div>

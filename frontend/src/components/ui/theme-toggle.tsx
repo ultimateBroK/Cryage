@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 const STORAGE_KEY = "theme";
 
 export const ThemeToggle = () => {
-  const [isDark, setIsDark] = useState<boolean>(true);
+  const [, setIsDark] = useState<boolean>(true);
 
   useEffect(() => {
     // Force dark mode only

@@ -11,5 +11,8 @@ export * from './layouts';
 // Common components
 export * from './common';
 
+// Providers
+export * from './providers/notification-provider';
+
 // UI components are typically imported directly from './ui/component-name'
 // to maintain explicit imports and better tree-shaking
