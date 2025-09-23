@@ -10,4 +10,12 @@ dependencies = [
     "uvicorn",
     "python-binance",
     "pinecone-client",
+    "google-genai",
+    "sentence-transformers",
+    "pydantic",
+    "python-multipart",
+    "httpx",
+    "numpy",
+    "pandas",
+    "scikit-learn",
 ]
