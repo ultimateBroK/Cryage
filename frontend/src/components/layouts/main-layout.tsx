@@ -52,7 +52,13 @@ const MainLayoutComponent: React.FC<MainLayoutProps> = ({
 
   // Render appropriate content based on active tab
   const renderTabContent = () => {
-    const containerClasses = `flex-1 overflow-hidden ${isMobile ? 'px-1' : 'px-4'} ${deviceType === 'tablet' ? 'px-3' : ''}`;
+    const containerClasses = `flex-1 overflow-hidden ${
+      isMobile 
+        ? 'px-1 py-1' 
+        : deviceType === 'tablet' 
+          ? 'px-2 sm:px-3 py-2' 
+          : 'px-3 sm:px-4 lg:px-6 py-2 sm:py-3'
+    }`;
     
     switch (activeTab) {
       case "chat":

@@ -15,9 +15,9 @@ export function AppSidebar({ activeTab = "chat", ...props }: AppSidebarProps) {
   const collapsibleMode = (activeTab === "chat" || activeTab === "dashboard") ? "offcanvas" : "icon" as const;
   return (
     <Sidebar collapsible={collapsibleMode} className="border-0 bg-background/60 backdrop-blur-md" {...props}>
-      <SidebarContent className="p-0">
-        {/* Brand Logo at top */}
-        <div className="w-full">
+      <SidebarContent className="p-0 flex flex-col h-full">
+        {/* Brand Logo at top - sticky */}
+        <div className="w-full flex-shrink-0 sticky top-0 z-10 bg-background/60 backdrop-blur-md border-b border-white/10">
           <Link 
             href="/" 
             className="flex items-center pl-4 sm:pl-6 py-4"
@@ -33,7 +33,8 @@ export function AppSidebar({ activeTab = "chat", ...props }: AppSidebarProps) {
           </Link>
         </div>
         
-        <div className="pt-0">
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-y-auto pt-0">
           <div className="group-data-[collapsible=icon]:hidden">
             <ContextualSidebar activeTab={activeTab} />
           </div>

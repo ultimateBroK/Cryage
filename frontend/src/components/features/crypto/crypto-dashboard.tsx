@@ -130,10 +130,10 @@ const CryptoDashboardComponent = () => {
       </div>
 
       {/* Enhanced Market Overview Cards */}
-      <div className={`grid gap-3 sm:gap-4 ${
+      <div className={`grid gap-2 sm:gap-3 md:gap-4 ${
         showDetailedView
           ? isMobile ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'
-          : isMobile ? 'grid-cols-1' : deviceType === 'tablet' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+          : isMobile ? 'grid-cols-1' : deviceType === 'tablet' ? 'grid-cols-2 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
       }`}>
         {marketData.map((coin, index) => {
           const IconComponent = coin.icon;
@@ -145,12 +145,12 @@ const CryptoDashboardComponent = () => {
                 transition={{ duration: 0.2, delay: index * 0.05 }}
               >
               <Card className="hover:shadow-lg transition-all duration-200 hover:scale-[1.02] border-l-4 border-l-primary/20 touch-manipulation">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3">
-                <div className="flex items-center gap-2">
-                  <IconComponent className="h-5 w-5 sm:h-5 sm:w-5 text-primary" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1.5 sm:pb-2 md:pb-3">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <IconComponent className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   <div className="min-w-0 flex-1">
-                    <CardTitle className="text-sm font-semibold truncate">{coin.symbol}</CardTitle>
-                    <p className="text-xs text-muted-foreground truncate">{coin.name}</p>
+                    <CardTitle className="text-xs sm:text-sm font-semibold truncate">{coin.symbol}</CardTitle>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{coin.name}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
