@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
 import "../styles/globals.css";
 import { PageTransitionWrapper } from "@/components/common/page-transition-wrapper";
-import { NotificationProvider } from "@/components/providers/notification-provider";
+import { NotificationProvider } from "@/stores/notification-provider";
 
 const geist = Geist({
   variable: "--font-geist",

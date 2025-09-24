@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from "@/components/ui";
 import {
   AlertTriangle,
   Globe,
@@ -14,7 +12,7 @@ import {
 } from "lucide-react";
 import { MotionDiv, Presence } from "@/components/common/motion";
 import { ContextualSidebarProps } from "@/types/components";
-import { ThreadList } from "@/lib/dynamic-imports";
+import { ThreadList } from "@/services/dynamic-imports";
 
 /**
  * ContextualSidebar Component

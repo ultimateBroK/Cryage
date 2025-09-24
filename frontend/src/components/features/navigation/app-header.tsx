@@ -1,7 +1,7 @@
 import React from "react";
 import { MessageSquare, BarChart3 } from "lucide-react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Settings } from "@/lib/dynamic-imports";
+import { SidebarTrigger } from "@/components/ui";
+import { Settings } from "@/services/dynamic-imports";
 import { HeaderSectionProps } from "@/types/components";
 import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
 

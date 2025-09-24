@@ -12,7 +12,7 @@ export function useThreadAutoScroll() {
     lastMessageCount: 0
   });
   
-  const { canChatScroll } = useScrollIsolation();
+  const { canChatScroll, isReasoningAnimating } = useScrollIsolation();
 
   useEffect(() => {
     const viewport = document.querySelector('[data-viewport="true"]') as HTMLElement;
@@ -64,6 +64,11 @@ export function useThreadAutoScroll() {
     
     const observer = new MutationObserver((mutations) => {
       try {
+        // Completely block auto-scroll during reasoning animations
+        if (isReasoningAnimating()) {
+          return;
+        }
+        
         const now = Date.now();
         if (now - lastObserverTime < OBSERVER_THROTTLE_MS) return;
         lastObserverTime = now;
@@ -72,6 +77,17 @@ export function useThreadAutoScroll() {
 
         // Use a more efficient approach to check mutations
         for (const mutation of mutations) {
+          // Skip mutations that are from reasoning components
+          if (mutation.target && (mutation.target as Element).closest) {
+            const target = mutation.target as Element;
+            const isReasoningElement = target.closest('[data-reasoning]') || 
+                                     target.closest('[role="status"]') ||
+                                     target.closest('.reasoning-content');
+            if (isReasoningElement) {
+              continue; // Skip reasoning-related mutations
+            }
+          }
+          
           // Check for new message elements
           if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
             // Quick check for message-related elements
@@ -79,7 +95,13 @@ export function useThreadAutoScroll() {
               const node = mutation.addedNodes[i];
               if (node.nodeType === Node.ELEMENT_NODE) {
                 const element = node as Element;
-                // Use more efficient selectors
+                // Skip reasoning elements
+                if (element.hasAttribute('data-reasoning') || 
+                    element.getAttribute('role') === 'status' ||
+                    element.classList.contains('reasoning-content')) {
+                  continue;
+                }
+                // Use more efficient selectors for message elements
                 if (element.hasAttribute('data-role') || 
                     element.querySelector('[data-role]')) {
                   shouldScroll = true;
@@ -117,7 +139,7 @@ export function useThreadAutoScroll() {
           }
         }
 
-        if (shouldScroll && !scrollState.userInterrupted) {
+        if (shouldScroll && !scrollState.userInterrupted && !isReasoningAnimating()) {
           scrollToBottom();
         }
       } catch (error) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import { MainLayoutProps, TabType } from "@/types/components";
-import { Thread, CryptoDashboard } from "@/lib/dynamic-imports";
+import { Thread, CryptoDashboard } from "@/services/dynamic-imports";
 import { ThreadLoadingSkeleton, DashboardLoadingSkeleton } from "@/components/common/loading-skeletons";
 import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
 

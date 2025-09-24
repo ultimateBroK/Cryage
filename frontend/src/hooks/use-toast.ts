@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from 'react';
-import { ToastNotification } from '@/components/ui/notification-toast';
+import { ToastNotification } from '@/components/ui/feedback/notification-toast';
 
 export const useToast = () => {
   const [toasts, setToasts] = useState<ToastNotification[]>([]);

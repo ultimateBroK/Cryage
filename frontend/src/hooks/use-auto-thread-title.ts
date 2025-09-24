@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useThreadRuntime } from "@assistant-ui/react";
-import { useThreadTitle } from "@/lib/thread-title-context";
+import { useThreadTitle } from "@/stores/thread-title-context";
 
 interface MessageContentPart {
   type: string;

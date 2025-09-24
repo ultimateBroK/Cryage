@@ -3,8 +3,8 @@ import Link from "next/link"
 import {
   Sidebar,
   SidebarContent,
-} from "@/components/ui/sidebar"
-import { Brand } from "@/components/ui/brand"
+} from "@/components/ui"
+import { Brand } from "@/components/ui/layout/brand"
 import { ContextualSidebar } from "./contextual-sidebar"
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {

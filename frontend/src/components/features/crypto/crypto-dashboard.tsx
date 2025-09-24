@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from "@/components/ui";
 import { TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, PieChart, Settings, ChevronDown, ChevronUp, Eye, EyeOff, MessageSquare } from "lucide-react";
 import { MotionDiv } from "@/components/common/motion";
 import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";

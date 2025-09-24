@@ -6,12 +6,12 @@ import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import {
   SidebarInset,
   SidebarProvider,
-} from "@/components/ui/sidebar";
+} from "@/components/ui";
 import {
   SettingsSidebarProvider,
   SettingsSidebarInset,
-} from "@/components/ui/settings-sidebar";
-import { ThreadTitleProvider } from "@/lib/thread-title-context";
+} from "@/components/ui/navigation/settings-sidebar";
+import { ThreadTitleProvider } from "@/stores/thread-title-context";
 import { Idle } from "@/components/common/idle";
 import { MainLayout } from "@/components/layouts/main-layout";
 import { useNotifications } from "@/hooks/use-notifications";
@@ -23,7 +23,7 @@ import {
   LightRays, 
   AppSidebar, 
   SettingsSidebarPanel
-} from "@/lib/dynamic-imports";
+} from "@/services/dynamic-imports";
 
 /**
  * Assistant Component
