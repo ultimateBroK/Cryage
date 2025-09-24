@@ -13,9 +13,11 @@ const baseConfig: NextConfig = {
   // Tắt x-powered-by header
   poweredByHeader: false,
   
-  // Fix cross-origin warning và tối ưu dev server
+  // Development optimizations for faster compilation
   ...(process.env.NODE_ENV === "development" && {
-    allowedDevOrigins: ["192.168.1.25", "localhost", "127.0.0.1"],
+    eslint: {
+      ignoreDuringBuilds: true,
+    },
   }),
 
   // Tối ưu ảnh: ưu tiên AVIF, sau đó WebP; cân nhắc TTL theo đặc thù dữ liệu
@@ -35,6 +37,19 @@ const baseConfig: NextConfig = {
   },
 
   // SWC minification is enabled by default in Next.js 15
+  
+  // Turbopack configuration (moved from experimental.turbo)
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+    resolveAlias: {
+      '@': './src',
+    },
+  },
   
   // Tối ưu TypeScript checking
   typescript: {
@@ -64,8 +79,6 @@ const baseConfig: NextConfig = {
       "ogl",
     ],
     
-    // Turbo config moved to stable turbopack config
-    
     // Tối ưu CSS loading (tạm tắt vì cần critters package)
     // optimizeCss: process.env.NODE_ENV === "production",
     
@@ -75,13 +88,16 @@ const baseConfig: NextConfig = {
     // Tối ưu font loading  
     optimizeServerReact: true,
     
-    // Cải thiện performance với Partial Prerendering
-    // serverComponentsExternalPackages: [], // Chỉ định package nào chạy server-side
+    // Development-only optimizations
+    ...(process.env.NODE_ENV === 'development' && {
+      webpackBuildWorker: true,
+    }),
   },
 };
 
 const nextConfig: NextConfig = {
   ...baseConfig,
+
 
   // Chỉ áp dụng webpack config cho production build
   ...(process.env.NODE_ENV === "production" && {

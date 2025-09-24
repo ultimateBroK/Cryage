@@ -485,6 +485,28 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Gentle reasoning scroll management - minimal visual impact */
+.reasoning-scroll-locked {
+  scroll-behavior: auto !important;
+  overscroll-behavior: none !important;
+  /* Minimal changes to prevent visual shaking */
+}
+
+/* Very subtle scrollbar indication during reasoning */
+.reasoning-scroll-locked::-webkit-scrollbar-thumb {
+  opacity: 0.3 !important;
+  transition: opacity 0.2s ease;
+}
+
+/* Ensure reasoning doesn't cause layout shifts */
+[data-reasoning="true"] {
+  contain: layout style paint;
+}
+
+.reasoning-content {
+  contain: layout;
+}
+
 /* Custom scrollbar with smooth animations */
 ::-webkit-scrollbar {
   width: 8px;

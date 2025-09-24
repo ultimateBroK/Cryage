@@ -134,11 +134,13 @@ temp/
 # uv.lock - keep
 
 # Documentation and notes
-CRUSH.md*
 AGENTS.md*
 CLAUDE.md*
-TODO.md
+CRUSH.md*
 NOTES.md
+TODO.md
+WARP.md*
+QWEN.md*
 .scratch/
 
 # Performance monitoring

@@ -8,7 +8,9 @@ export function useScrollIsolation() {
   const isolationRef = useRef({
     chatScrollEnabled: true,
     reasoningScrollEnabled: true,
-    lastScrollTime: 0
+    lastScrollTime: 0,
+    reasoningAnimating: false,
+    chatScrollPosition: 0
   });
 
   useEffect(() => {
@@ -41,8 +43,43 @@ export function useScrollIsolation() {
         isolation.reasoningScrollEnabled = false;
       },
       
-      canChatScroll: () => isolation.chatScrollEnabled,
+      setReasoningAnimating: (animating: boolean) => {
+        isolation.reasoningAnimating = animating;
+        // Disable chat scroll during reasoning animations
+        if (animating) {
+          const viewport = document.querySelector('[data-viewport="true"]') as HTMLElement;
+          if (viewport) {
+            isolation.chatScrollPosition = viewport.scrollTop;
+          }
+          isolation.chatScrollEnabled = false;
+        }
+      },
+      
+      restoreChatScrollAfterReasoning: () => {
+        setTimeout(() => {
+          isolation.reasoningAnimating = false;
+          isolation.chatScrollEnabled = true;
+          
+          // Optionally restore scroll position if it changed during reasoning
+          const viewport = document.querySelector('[data-viewport="true"]') as HTMLElement;
+          if (viewport && isolation.chatScrollPosition > 0) {
+            const currentScroll = viewport.scrollTop;
+            const scrollDiff = Math.abs(currentScroll - isolation.chatScrollPosition);
+            
+            // If scroll changed significantly during reasoning animation
+            if (scrollDiff > 100) {
+              viewport.scrollTo({
+                top: isolation.chatScrollPosition,
+                behavior: 'smooth'
+              });
+            }
+          }
+        }, 100);
+      },
+      
+      canChatScroll: () => isolation.chatScrollEnabled && !isolation.reasoningAnimating,
       canReasoningScroll: () => isolation.reasoningScrollEnabled,
+      isReasoningAnimating: () => isolation.reasoningAnimating,
       
       throttledScroll
     };
@@ -57,11 +94,28 @@ export function useScrollIsolation() {
   }, []);
 
   return {
-    canChatScroll: () => isolationRef.current.chatScrollEnabled,
+    canChatScroll: () => isolationRef.current.chatScrollEnabled && !isolationRef.current.reasoningAnimating,
     canReasoningScroll: () => isolationRef.current.reasoningScrollEnabled,
     enableChatScroll: () => { isolationRef.current.chatScrollEnabled = true; },
     disableChatScroll: () => { isolationRef.current.chatScrollEnabled = false; },
     enableReasoningScroll: () => { isolationRef.current.reasoningScrollEnabled = true; },
-    disableReasoningScroll: () => { isolationRef.current.reasoningScrollEnabled = false; }
+    disableReasoningScroll: () => { isolationRef.current.reasoningScrollEnabled = false; },
+    setReasoningAnimating: (animating: boolean) => {
+      isolationRef.current.reasoningAnimating = animating;
+      if (animating) {
+        const viewport = document.querySelector('[data-viewport="true"]') as HTMLElement;
+        if (viewport) {
+          isolationRef.current.chatScrollPosition = viewport.scrollTop;
+        }
+        isolationRef.current.chatScrollEnabled = false;
+      }
+    },
+    restoreChatScrollAfterReasoning: () => {
+      setTimeout(() => {
+        isolationRef.current.reasoningAnimating = false;
+        isolationRef.current.chatScrollEnabled = true;
+      }, 100);
+    },
+    isReasoningAnimating: () => isolationRef.current.reasoningAnimating
   };
 }

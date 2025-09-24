@@ -1,5 +1,12 @@
-import { Assistant } from "./assistant";
+"use client";
+
+import dynamic from "next/dynamic";
 import { ErrorBoundary } from "@/components/common/error-boundary";
+
+const Assistant = dynamic(() => import("./assistant").then(m => ({ default: m.Assistant })), {
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center min-h-screen">Loading...</div>
+});
 
 /**
  * Home Page Component

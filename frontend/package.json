@@ -6,6 +6,8 @@
     "dev": "next dev --turbopack",
     "dev:webpack": "next dev",
     "dev:fast": "next dev --turbopack --experimental-debug",
+    "dev:turbo": "TURBOPACK=1 next dev --turbopack --experimental-debug --no-open",
+    "dev:ultra": "NODE_ENV=development TURBOPACK=1 next dev --port 3000",
     "build": "next build",
     "build:analyze": "ANALYZE=true next build",
     "build:fast": "next build --no-lint",

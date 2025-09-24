@@ -56,52 +56,71 @@ cryage/
 │   │   │   ├── api/         # Backend API endpoints
 │   │   │   │   ├── chat/        # ✅ AI chat functionality
 │   │   │   │   └── generate-title/ # ✅ Auto thread titles
-│   │   │   ├── assistant.tsx    # Main chat interface
-│   │   │   ├── globals.css      # Global styles
-│   │   │   ├── layout.tsx       # Root layout
-│   │   │   └── terminal/        # Trading terminal page (scaffolded)
+│   │   │   ├── assistant.tsx    # ✅ Main chat interface
+│   │   │   ├── globals.css      # ✅ Global styles
+│   │   │   ├── layout.tsx       # ✅ Root layout
+│   │   │   ├── page.tsx         # ✅ Home page
+│   │   │   ├── loading.tsx      # ✅ Loading component
+│   │   │   ├── error.tsx        # ✅ Error boundary
+│   │   │   └── terminal/        # 🚧 Trading terminal page (scaffolded)
 │   │   ├── components/     # Reusable React components
 │   │   │   ├── features/   # Feature-specific components
 │   │   │   │   ├── assistant/    # ✅ Chat interface components
 │   │   │   │   │   ├── thread.tsx       # ✅ Chat thread management
 │   │   │   │   │   ├── thread-list.tsx   # ✅ Thread history
-│   │   │   │   │   └── markdown-text.tsx # ✅ Message rendering
-│   │   │   │   ├── crypto/       # Crypto dashboard components
-│   │   │   │   ├── navigation/   # Navigation components
-│   │   │   │   │   └── app-sidebar.tsx  # ✅ Main navigation
-│   │   │   │   ├── settings/     # Settings components
+│   │   │   │   │   ├── markdown-text.tsx # ✅ Message rendering
+│   │   │   │   │   └── tooltip-icon-button.tsx # ✅ UI helpers
+│   │   │   │   ├── crypto/       # ✅ Crypto dashboard components
+│   │   │   │   │   └── crypto-dashboard.tsx # ✅ Full dashboard
+│   │   │   │   ├── navigation/   # ✅ Navigation components
+│   │   │   │   │   ├── app-sidebar.tsx  # ✅ Main navigation
+│   │   │   │   │   ├── app-header.tsx   # ✅ App header
+│   │   │   │   │   └── contextual-sidebar.tsx # ✅ Context sidebar
+│   │   │   │   ├── settings/     # ✅ Settings components
 │   │   │   │   │   └── settings-panel.tsx # ✅ API key management
-│   │   │   │   └── terminal/     # Trading terminal panels (scaffolded)
-│   │   │   ├── ui/          # UI component library
-│   │   │   │   ├── button.tsx      # Styled buttons
-│   │   │   │   ├── sidebar.tsx     # Navigation sidebar
-│   │   │   │   ├── theme-toggle.tsx # ✅ Dark/light mode
-│   │   │   │   └── ...            # Other UI components
-│   │   │   ├── common/      # Common utilities
-│   │   │   └── layouts/     # Layout components
-│   │   ├── blocks/         # Advanced UI blocks
-│   │   │   ├── Backgrounds/
-│   │   │   │   └── Aurora/      # ✅ Beautiful animated background
-│   │   │   └── Animations/
-│   │   │       └── StarBorder/  # ✅ Star border animations
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── lib/            # Utility functions & contexts
-│   │   ├── styles/         # Global styles
-│   │   ├── types/          # TypeScript type definitions
-│   │   └── utils/          # Utility functions
-│   ├── public/             # Static assets
-│   ├── scripts/            # Build and analysis scripts
+│   │   │   │   └── trading/      # 🚧 Trading terminal panels
+│   │   │   │       ├── agent-panel.tsx      # 🚧 AI agent panel
+│   │   │   │       ├── chart-panel.tsx      # 🚧 Chart display
+│   │   │   │       ├── order-book-panel.tsx # 🚧 Order book
+│   │   │   │       ├── positions-panel.tsx  # 🚧 Trading positions
+│   │   │   │       ├── watchlist-panel.tsx  # 🚧 Watchlist
+│   │   │   │       └── layout.tsx          # 🚧 Terminal layout
+│   │   │   ├── ui/          # ✅ UI component library
+│   │   │   │   ├── base/        # ✅ Base components
+│   │   │   │   ├── feedback/    # ✅ Feedback components
+│   │   │   │   ├── forms/       # ✅ Form components
+│   │   │   │   ├── layout/      # ✅ Layout components
+│   │   │   │   └── navigation/  # ✅ Navigation components
+│   │   │   ├── common/      # ✅ Common utilities
+│   │   │   └── layouts/     # ✅ Layout components
+│   │   ├── hooks/          # ✅ Custom React hooks
+│   │   ├── services/       # ✅ Service layer
+│   │   ├── stores/         # ✅ Context providers
+│   │   ├── styles/         # ✅ Global styles
+│   │   ├── types/          # ✅ TypeScript type definitions
+│   │   └── utils/          # ✅ Utility functions
+│   ├── public/             # ✅ Static assets
+│   ├── scripts/            # ✅ Build and analysis scripts
 │   └── .next/              # Next.js build output
 │
 ├── 🐍 backend/             # FastAPI Python Backend
-│   ├── main.py            # 🚧 FastAPI application (basic structure)
-│   ├── pyproject.toml      # Python dependencies
-│   └── README.md           # Backend documentation
+│   ├── main.py            # ✅ FastAPI application (basic structure)
+│   ├── pyproject.toml      # ✅ Python dependencies
+│   ├── Dockerfile         # ✅ Docker configuration
+│   └── README.md           # ✅ Backend documentation
 │
-├── 📋 package.json         # Monorepo scripts
+├── 🐳 Docker Configuration
+│   ├── docker-compose.yml      # ✅ Production environment
+│   ├── docker-compose.dev.yml  # ✅ Development environment
+│   ├── nginx.conf              # ✅ Reverse proxy configuration
+│   └── scripts/                # ✅ Docker management scripts
+│
+├── 📋 package.json         # ✅ Monorepo scripts
 ├── 📖 README.md           # This file
-├── 🎯 CRUSH.md            # Development guidelines
-└── 🤖 CLAUDE.md           # AI assistant guidelines
+├── 📖 README-Docker.md    # ✅ Docker deployment guide
+├── 🎯 CRUSH.md            # ✅ Development guidelines
+├── 🤖 CLAUDE.md           # ✅ AI assistant guidelines
+└── 🚀 AGENTS.md           # ✅ Agent documentation
 ```
 
 ## 🏗️ Architecture Overview
@@ -129,7 +148,10 @@ graph LR
 | 🎭 **Theme Support** | ✅ **Live** | Dark/light mode toggle |
 | 🌟 **Animations** | ✅ **Live** | Star border and Aurora background effects |
 | 📱 **Mobile Responsive** | ✅ **Live** | Works seamlessly on all devices |
+| 📊 **Crypto Dashboard** | ✅ **Live** | Full-featured crypto dashboard with mock data |
 | 🏗️ **Terminal Scaffold** | ✅ **Live** | Trading terminal structure ready |
+| 🐳 **Docker Support** | ✅ **Live** | Full Docker deployment with dev/prod configs |
+| 🔧 **Development Tools** | ✅ **Live** | Comprehensive build, lint, and analysis scripts |
 
 ## 🎯 Roadmap - Coming Soon
 
@@ -145,12 +167,14 @@ graph LR
 ### Frontend Stack
 ```json
 {
-  "framework": "Next.js 15 with App Router",
-  "ui": "React 19 + TypeScript",
-  "styling": "Tailwind CSS + shadcn/ui",
-  "ai": "AI SDK + Assistant UI",
-  "animations": "Framer Motion + React Bits",
-  "performance": "Dynamic imports + Bundle optimization"
+  "framework": "Next.js 15.4.6 with App Router",
+  "ui": "React 19.1.1 + TypeScript 5",
+  "styling": "Tailwind CSS 4 + shadcn/ui",
+  "ai": "AI SDK 5.0.10 + Assistant UI 0.11.6",
+  "animations": "Framer Motion 12.23.12",
+  "performance": "Dynamic imports + Bundle optimization",
+  "runtime": "Bun 1.1.0+ (recommended)",
+  "bundler": "Turbopack (dev) + Webpack (prod)"
 }
 ```
 
@@ -158,10 +182,28 @@ graph LR
 ```json
 {
   "api": "FastAPI + Python 3.12+",
-  "ai": "Agno + Gemini",
+  "ai": "Agno + Gemini 2.5 Flash",
   "data": "Binance API (planned)",
   "storage": "SQLite (planned)",
-  "deployment": "uv + uvicorn"
+  "deployment": "uv + uvicorn",
+  "dependencies": [
+    "agno",
+    "fastapi", 
+    "uvicorn",
+    "python-binance",
+    "pinecone-client"
+  ]
+}
+```
+
+### Docker & DevOps
+```json
+{
+  "containerization": "Docker + Docker Compose",
+  "reverse_proxy": "Nginx",
+  "orchestration": "Multi-stage builds",
+  "monitoring": "Health checks + Resource limits",
+  "environments": ["Development", "Production"]
 }
 ```
 
@@ -196,9 +238,10 @@ POST /api/agent/analyze
 ## 🔧 Installation & Setup
 
 ### Prerequisites
-- **Node.js 18+** or **Bun** (recommended)
+- **Bun 1.1.0+** (recommended) or **Node.js 18+**
 - **Python 3.12+** 
 - **uv** (Python package manager)
+- **Docker & Docker Compose** (optional, for containerized deployment)
 
 ### Method 1: Quick Start (Recommended)
 ```bash
@@ -223,7 +266,20 @@ uv sync
 uv run uvicorn main:app --reload
 ```
 
-### Method 3: Development Mode
+### Method 3: Docker Deployment
+```bash
+# Development environment
+./scripts/docker-dev.sh
+
+# Production environment  
+./scripts/docker-prod.sh
+
+# Or manual Docker commands
+docker-compose -f docker-compose.dev.yml up --build  # Dev
+docker-compose up --build -d                        # Prod
+```
+
+### Method 4: Development Mode
 ```bash
 # Install dependencies
 bun run install:frontend
@@ -260,6 +316,22 @@ uv run uvicorn main:app --reload    # Development server
 uv sync                             # Install dependencies
 ```
 
+### 🐳 Docker Commands
+```bash
+# Development environment
+./scripts/docker-dev.sh            # Start dev environment
+docker-compose -f docker-compose.dev.yml up --build
+
+# Production environment
+./scripts/docker-prod.sh           # Start production environment
+docker-compose up --build -d
+
+# Management
+./scripts/docker-clean.sh          # Clean up containers and images
+docker-compose logs -f             # View logs
+docker-compose ps                  # Check container status
+```
+
 ### 📦 Monorepo Commands
 ```bash
 bun run dev:frontend     # Frontend only
@@ -272,6 +344,50 @@ bun run typecheck:frontend # Check TypeScript types
 bun run analyze          # Bundle analysis
 bun run perf             # Performance check
 ```
+
+## 🐳 Docker Deployment
+
+Cryage comes with comprehensive Docker support for both development and production environments.
+
+### Quick Docker Start
+```bash
+# Development (with hot reload)
+./scripts/docker-dev.sh
+
+# Production (optimized build)
+./scripts/docker-prod.sh
+```
+
+### Docker Features
+- **Multi-stage builds** for optimized image sizes
+- **Health checks** for automatic container recovery
+- **Resource limits** to prevent resource exhaustion
+- **Nginx reverse proxy** with security headers
+- **Development volumes** for hot reload
+- **Production optimizations** for performance
+
+### Access Points
+- **Frontend**: http://localhost:3000
+- **Backend**: http://localhost:8000
+- **Backend Docs**: http://localhost:8000/docs
+- **Health Check**: http://localhost:3000/api/health
+
+### Docker Management
+```bash
+# View logs
+docker-compose logs -f
+
+# Check status
+docker-compose ps
+
+# Clean up
+./scripts/docker-clean.sh
+
+# Scale services
+docker-compose up --scale frontend=3 --scale backend=2 -d
+```
+
+For detailed Docker configuration, see [README-Docker.md](README-Docker.md).
 
 ## 🤝 Contributing
 
@@ -315,14 +431,17 @@ We welcome contributions! Here's how to get started:
 
 ## 📈 Project Stats
 
-- 🎯 **Chat System**: 100% functional
+- 🎯 **Chat System**: 100% functional with Gemini 2.5 Flash
+- 📊 **Crypto Dashboard**: 100% functional with mock data
 - 🚀 **Performance Score**: 95+ (Lighthouse)
 - 🔒 **Security**: Hardened & validated
 - 📱 **Mobile Support**: Fully responsive
 - 🌙 **Dark Mode**: Built-in theme support
 - 🎨 **Animations**: Aurora + Star border effects
 - 🏗️ **Terminal**: Scaffolded and ready
+- 🐳 **Docker Support**: Full dev/prod deployment
 - 🧠 **AI Integration**: Gemini 2.5 Flash with reasoning
+- 🔧 **Development Tools**: Comprehensive build & analysis scripts
 
 ## ✨ Technologies
 
