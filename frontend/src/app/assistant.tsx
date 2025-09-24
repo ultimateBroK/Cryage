@@ -135,8 +135,8 @@ export const Assistant: React.FC = () => {
                   />
                 </Idle>
               </div>
-              <AppSidebar activeTab={activeTab} />
-               <SidebarInset>
+              {activeTab === "chat" && <AppSidebar activeTab={activeTab} />}
+               <SidebarInset className={activeTab === "dashboard" ? "w-full" : ""}>
                  <AppHeader 
                    activeTab={activeTab}
                    onTabChange={(tab: string) => setActiveTab(tab as TabType)}
