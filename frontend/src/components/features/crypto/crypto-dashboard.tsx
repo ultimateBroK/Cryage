@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from "@/components/ui";
-import { TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, PieChart, Settings, ChevronDown, ChevronUp, Eye, EyeOff, MessageSquare, Sparkles, Zap, Target, Shield, Clock, TrendingDown as TrendingDownIcon } from "lucide-react";
+import { TrendingUp, Activity, BarChart3, Settings, ChevronDown, ChevronUp, Eye, EyeOff, Sparkles, Zap, Target, Shield, Clock, MessageSquare, TrendingDown as TrendingDownIcon } from "lucide-react";
 import { MotionDiv } from "@/components/common/motion";
 import { useIsMobile, useDeviceType } from "@/hooks/use-mobile";
 
@@ -158,12 +158,7 @@ const CryptoDashboardComponent = () => {
     },
   ], []);
 
-  const indicators = useMemo(() => [
-    { name: "RSI (14)", value: "65.4", status: "neutral" as const, description: "Relative Strength Index" },
-    { name: "MACD", value: "+125.3", status: "positive" as const, description: "Moving Average Convergence Divergence" },
-    { name: "Volume (24h)", value: "$2.1B", status: "positive" as const, description: "Trading Volume" },
-    { name: "Market Cap", value: "$850B", status: "negative" as const, description: "Market Capitalization" },
-  ], []);
+  // Placeholder for future indicators data when needed on mobile/desktop views
 
   const marketMetrics = useMemo(() => [
     { name: "Fear & Greed", value: "65", status: "greed", icon: Target, description: "Market Sentiment Index" },
@@ -173,7 +168,7 @@ const CryptoDashboardComponent = () => {
   ], []);
 
   return (
-    <div className={`overflow-y-auto h-full ${isMobile ? 'p-2 space-y-3' : 'p-3 sm:p-4 space-y-4 sm:space-y-6'}`}>
+    <div className={`overflow-y-auto h-full ${isMobile ? 'p-3 space-y-4' : 'p-3 sm:p-4 space-y-4 sm:space-y-6'}`}>
       {/* Enhanced Header with Live Data */}
       <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b bg-gradient-to-r from-blue-50/5 to-purple-50/5 dark:from-blue-950/10 dark:to-purple-950/10 rounded-lg p-4 ${isMobile ? '' : ''}`}>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -210,39 +205,39 @@ const CryptoDashboardComponent = () => {
       </div>
 
       {/* Live Market Overview */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className={`grid gap-3 ${isMobile ? 'grid-cols-2' : 'sm:grid-cols-4'}`}>
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-200 dark:border-blue-800">
-          <CardContent className="p-3 text-center">
+          <CardContent className={`text-center ${isMobile ? 'p-2' : 'p-3'}`}>
             <div className="text-xs text-blue-600 dark:text-blue-400 font-medium">Market Cap</div>
-            <div className="text-lg font-bold text-blue-800 dark:text-blue-200">{liveData.marketCap}</div>
+            <div className={`font-bold text-blue-800 dark:text-blue-200 ${isMobile ? 'text-base' : 'text-lg'}`}>{liveData.marketCap}</div>
             <div className="text-xs text-blue-500 dark:text-blue-400">Global</div>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200 dark:border-green-800">
-          <CardContent className="p-3 text-center">
+          <CardContent className={`text-center ${isMobile ? 'p-2' : 'p-3'}`}>
             <div className="text-xs text-green-600 dark:text-green-400 font-medium">24h Volume</div>
-            <div className="text-lg font-bold text-green-800 dark:text-green-200">{liveData.volume24h}</div>
+            <div className={`font-bold text-green-800 dark:text-green-200 ${isMobile ? 'text-base' : 'text-lg'}`}>{liveData.volume24h}</div>
             <div className="text-xs text-green-500 dark:text-green-400">Trading</div>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900 border-purple-200 dark:border-purple-800">
-          <CardContent className="p-3 text-center">
+          <CardContent className={`text-center ${isMobile ? 'p-2' : 'p-3'}`}>
             <div className="text-xs text-purple-600 dark:text-purple-400 font-medium">BTC Dominance</div>
-            <div className="text-lg font-bold text-purple-800 dark:text-purple-200">{liveData.btcDominance}</div>
+            <div className={`font-bold text-purple-800 dark:text-purple-200 ${isMobile ? 'text-base' : 'text-lg'}`}>{liveData.btcDominance}</div>
             <div className="text-xs text-purple-500 dark:text-purple-400">Market Share</div>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900 border-orange-200 dark:border-orange-800">
-          <CardContent className="p-3 text-center">
+          <CardContent className={`text-center ${isMobile ? 'p-2' : 'p-3'}`}>
             <div className="text-xs text-orange-600 dark:text-orange-400 font-medium">Active Traders</div>
-            <div className="text-lg font-bold text-orange-800 dark:text-orange-200">{liveData.activeTraders.toLocaleString()}</div>
+            <div className={`font-bold text-orange-800 dark:text-orange-200 ${isMobile ? 'text-base' : 'text-lg'}`}>{liveData.activeTraders.toLocaleString()}</div>
             <div className="text-xs text-orange-500 dark:text-orange-400">Online</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Enhanced Scientific Market Cards */}
-      <div className={`grid gap-3 sm:gap-4 ${
+      <div className={`grid gap-4 ${
         showDetailedView
           ? isMobile ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'
           : isMobile ? 'grid-cols-1' : deviceType === 'tablet' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
@@ -261,7 +256,7 @@ const CryptoDashboardComponent = () => {
                   ? 'border-l-4 border-l-green-500/30 hover:border-l-green-500/50' 
                   : 'border-l-4 border-l-red-500/30 hover:border-l-red-500/50'
               }`}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3">
+              <CardHeader className={`flex flex-row items-center justify-between space-y-0 ${isMobile ? 'pb-2' : 'pb-2 sm:pb-3'}`}>
                 <div className="flex items-center gap-2">
                   <IconComponent />
                   <div className="min-w-0 flex-1">
@@ -289,7 +284,7 @@ const CryptoDashboardComponent = () => {
                   )}
                 </div>
               </CardHeader>
-              <CardContent className="space-y-2 sm:space-y-3">
+              <CardContent className={`${isMobile ? 'space-y-3 p-3' : 'space-y-2 sm:space-y-3'}`}>
                 {/* Main Price Display */}
                 <div className="flex items-baseline gap-2">
                   <div className={`text-xl sm:text-2xl font-bold trading-price ${
@@ -310,7 +305,7 @@ const CryptoDashboardComponent = () => {
                 </div>
 
                 {/* Scientific Metrics */}
-                <div className="grid grid-cols-2 gap-2">
+                <div className={`grid grid-cols-2 ${isMobile ? 'gap-3' : 'gap-2'}`}>
                   <div className="text-center p-2 bg-muted/30 rounded-lg">
                     <p className="text-xs text-muted-foreground">Volatility</p>
                     <p className={`text-xs font-medium ${
@@ -440,7 +435,7 @@ const CryptoDashboardComponent = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-80 bg-gradient-to-br from-muted/10 to-muted/20 rounded-lg flex items-center justify-center border-2 border-dashed border-blue-200/30 dark:border-blue-800/30 relative overflow-hidden">
+            <div className={`${isMobile ? 'h-64' : 'h-80'} bg-gradient-to-br from-muted/10 to-muted/20 rounded-lg flex items-center justify-center border-2 border-dashed border-blue-200/30 dark:border-blue-800/30 relative overflow-hidden`}>
               {/* Enhanced scientific chart visualization */}
               <div className="absolute inset-0 opacity-30">
                 <svg viewBox="0 0 400 200" className="w-full h-full">
@@ -505,7 +500,7 @@ const CryptoDashboardComponent = () => {
               Market Metrics
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className={`${isMobile ? 'space-y-4 p-3' : 'space-y-4'}`}>
             {marketMetrics.map((metric) => {
               const IconComponent = metric.icon;
               return (

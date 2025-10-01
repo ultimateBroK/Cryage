@@ -29,12 +29,14 @@ export const AppHeader: React.FC<HeaderSectionProps> = ({
 
   return (
     <header className="flex h-12 sm:h-16 shrink-0 items-center gap-1.5 sm:gap-3 bg-background/40 backdrop-blur-xl border-b border-white/20 pl-1.5 sm:pl-4 pr-0 sticky top-0 z-20 shadow-lg safe-area-inset-top">
-      {/* Left side - Sidebar Trigger (only for chat tab) */}
-      {activeTab === "chat" && (
-        <div className="flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 flex-shrink-0 touch-target">
+      {/* Left side - keeps fixed width to maintain centered tablist */}
+      <div className="flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 flex-shrink-0 touch-target">
+        {activeTab === "chat" ? (
           <SidebarTrigger className="h-4.5 w-4.5 sm:h-6 sm:w-6" />
-        </div>
-      )}
+        ) : (
+          <div aria-hidden className="h-4.5 w-4.5 sm:h-6 sm:w-6" />
+        )}
+      </div>
       
       {/* Center - Tab Navigation */}
       <div className="flex-1 flex justify-center items-center px-1 sm:px-4 min-w-0">
