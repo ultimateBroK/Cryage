@@ -132,7 +132,7 @@ function SettingsSidebar({
           data-slot="settings-sidebar"
           data-mobile="true"
           className={cn(
-            "fixed inset-y-0 right-0 z-50 bg-background/60 backdrop-blur-md text-foreground flex flex-col border-l border-white/15 shadow-lg transition-transform duration-200 ease-linear",
+            "fixed inset-y-0 right-0 z-50 bg-background/60 backdrop-blur-md text-foreground flex flex-col border-l border-white/15 shadow-lg transition-transform duration-200 ease-linear max-w-[320px]",
             openMobile ? "translate-x-0" : "translate-x-full",
             // Mobile uses reduced width; sm and up use default width
             "w-[var(--settings-sidebar-width-mobile)] sm:w-(--settings-sidebar-width)",
@@ -163,7 +163,7 @@ function SettingsSidebar({
       <div
         data-slot="settings-sidebar-container"
         className={cn(
-          "fixed inset-y-0 z-50 h-svh w-(--settings-sidebar-width) transition-transform duration-200 ease-linear",
+          "fixed inset-y-0 z-50 h-svh w-(--settings-sidebar-width) transition-transform duration-200 ease-linear max-w-[320px]",
           "right-0",
           open ? "translate-x-0" : "translate-x-full",
           "border-l shadow-lg",

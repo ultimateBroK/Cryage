@@ -9,5 +9,7 @@ dependencies = [
     "fastapi",
     "uvicorn",
     "python-binance",
-    "pinecone-client",
+    "pinecone[asyncio,grpc]",
+    "sqlalchemy",
+    "google-genai",
 ]

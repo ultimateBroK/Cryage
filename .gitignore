@@ -114,6 +114,7 @@ logs/
 # TypeScript
 *.tsbuildinfo
 /frontend/next-env.d.ts
+tsconfig.tsbuildinfo
 
 # Storybook build outputs
 storybook-static
@@ -128,6 +129,7 @@ temp/
 *.db
 *.sqlite
 *.sqlite3
+*.rdb
 
 # Lock files (keep these committed for consistency)
 # bun.lock - keep
@@ -141,6 +143,7 @@ NOTES.md
 TODO.md
 WARP.md*
 QWEN.md*
+GEMINI.md*
 .scratch/
 
 # Performance monitoring
@@ -201,3 +204,18 @@ scripts/
 /nginx.conf
 /ssl/
 README-Docker.md
+
+# Performance monitoring and analysis
+performance-results/
+*.tsbuildinfo
+
+# Keep important assets (explicitly track these)
+!frontend/public/*.svg
+!frontend/public/*.png
+!frontend/public/*.ico
+!frontend/public/manifest.json
+!frontend/public/ICONS-README.md
+
+# Keep lock files for dependency management
+!bun.lock
+!uv.lock

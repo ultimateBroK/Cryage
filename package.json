@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "concurrently \"bun run dev:frontend\" \"bun run dev:backend\"",
     "dev:frontend": "cd frontend && bun run dev",
-    "dev:backend": "cd backend && uv run uvicorn main:app --reload",
+    "dev:backend": "cd backend && source .venv/bin/activate && uv run uvicorn main:app --reload",
     "build": "cd frontend && bun run build",
     "build:frontend": "cd frontend && bun run build",
     "start": "bun run start:frontend",
@@ -21,7 +21,7 @@
     "analyze": "cd frontend && bun run analyze",
     "perf": "cd frontend && bun run perf",
     "install:frontend": "cd frontend && bun install",
-    "install:backend": "cd backend && uv sync"
+    "install:backend": "cd backend && source .venv/bin/activate && uv sync"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

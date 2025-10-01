@@ -897,6 +897,30 @@ button,
     padding-right: env(safe-area-inset-right);
   }
 
+  /* Sidebar overflow prevention */
+  .sidebar-container {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .sidebar-content {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Responsive sidebar adjustments */
+  @media (max-width: 768px) {
+    .sidebar-container {
+      max-width: 90vw;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sidebar-container {
+      max-width: 85vw;
+    }
+  }
+
   /* Enhanced touch targets for mobile */
   @media (max-width: 767px) {
     .touch-target {

@@ -22,15 +22,19 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: '/favicon.svg?v=6', type: 'image/svg+xml' },
-      { url: '/favicon.svg?v=6', type: 'image/svg+xml', sizes: '32x32' },
-      { url: '/favicon.svg?v=6', type: 'image/svg+xml', sizes: '16x16' },
+      { url: '/favicon-16x16.svg', type: 'image/svg+xml', sizes: '16x16' },
+      { url: '/favicon-32x32.svg', type: 'image/svg+xml', sizes: '32x32' },
+      { url: '/favicon-48x48.svg', type: 'image/svg+xml', sizes: '48x48' },
+      { url: '/favicon-64x64.svg', type: 'image/svg+xml', sizes: '64x64' },
     ],
-    shortcut: '/favicon.svg?v=6',
-    apple: '/favicon.svg?v=6',
+    shortcut: '/favicon-32x32.svg',
+    apple: [
+      { url: '/apple-touch-icon-152x152.svg', sizes: '152x152', type: 'image/svg+xml' },
+      { url: '/apple-touch-icon-180x180.svg', sizes: '180x180', type: 'image/svg+xml' },
+    ],
     other: [
-      { rel: 'icon', type: 'image/svg+xml', url: '/favicon.svg?v=6' },
-      { rel: 'mask-icon', url: '/favicon.svg?v=6', color: '#00f7be' },
+      { rel: 'icon', type: 'image/svg+xml', url: '/favicon-32x32.svg', sizes: '32x32' },
+      { rel: 'mask-icon', url: '/favicon-32x32.svg', color: '#00f7be' },
     ],
   },
 };
