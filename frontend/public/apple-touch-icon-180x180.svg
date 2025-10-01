@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="180" height="180">
   <defs>
     <!-- Main gradient for the C -->
     <linearGradient id="cGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -21,7 +21,7 @@
 
     <!-- Optimized glow effect for size -->
     <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
-      <feGaussianBlur stdDeviation="0.5" result="blur"/>
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
       <feComposite in="SourceGraphic" in2="blur" operator="over"/>
     </filter>
   </defs>
@@ -38,7 +38,7 @@
            C 19.5 24.5, 22 22.5, 22 19.5" 
         fill="none" 
         stroke="url(#cGradient)" 
-        stroke-width="2.8" 
+        stroke-width="3.8" 
         stroke-linecap="round"
         stroke-linejoin="round"/>
 
@@ -46,7 +46,7 @@
   <polyline points="13,18 17,17 20,14 24,10 27,7" 
           fill="none"
           stroke="url(#chartGradient)" 
-          stroke-width="1.1199999999999999"
+          stroke-width="1.5"
           stroke-linecap="round"
           stroke-linejoin="round"
           filter="url(#glow)" />
@@ -55,7 +55,7 @@
   <polyline points="27,7 25,7 27,7 27,9" 
           fill="none"
           stroke="#00ffcc" 
-          stroke-width="1.1199999999999999"
+          stroke-width="1.5"
           stroke-linecap="round"
           stroke-linejoin="round" />
 </svg>
