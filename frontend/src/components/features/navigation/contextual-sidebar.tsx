@@ -53,7 +53,7 @@ export const ContextualSidebar: React.FC<ContextualSidebarProps> = ({ activeTab 
 // Chat Sidebar - Thread management
 const ChatSidebar: React.FC = () => {
   return (
-    <div className="flex flex-col h-full min-h-0">
+    <div className="flex flex-col h-full min-h-0 sidebar-content">
       {/* Thread List */}
       <div className="flex-1 overflow-hidden p-2 sm:p-3 will-change-transform">
         <ThreadList />
@@ -108,7 +108,7 @@ const DashboardSidebar: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full min-h-0 space-y-2 p-2 sm:p-3 will-change-transform overflow-y-auto">
+    <div className="flex flex-col h-full min-h-0 space-y-2 p-2 sm:p-3 will-change-transform overflow-y-auto sidebar-content">
       {/* Market Overview */}
       <MotionDiv
         initial={{ opacity: 0, y: 20 }}
@@ -300,7 +300,7 @@ const DashboardSidebar: React.FC = () => {
 // Settings Sidebar - Quick settings access
 const SettingsSidebar: React.FC = () => {
   return (
-    <div className="flex flex-col h-full min-h-0 space-y-2.5 p-2 sm:p-3 will-change-transform overflow-y-auto">
+    <div className="flex flex-col h-full min-h-0 space-y-2.5 p-2 sm:p-3 will-change-transform overflow-y-auto sidebar-content">
       <Card className="crypto-card-cyan dark:crypto-card-glass-dark dark:shadow-lg flex-shrink-0">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm flex items-center justify-start gap-2 dark:text-slate-200">

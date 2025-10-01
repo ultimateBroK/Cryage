@@ -118,7 +118,7 @@ export const Assistant: React.FC = () => {
       <AssistantRuntimeProvider runtime={runtime}>
         <SidebarProvider>
           <SettingsSidebarProvider>
-            <div className={`flex h-dvh w-full relative overflow-hidden ${isMobile ? 'pr-0' : 'pr-0.5'}`}>
+            <div className={`flex h-dvh w-full relative overflow-hidden max-w-full ${isMobile ? 'pr-0' : 'pr-0.5'}`}>
               <div className={`pointer-events-none absolute inset-0 z-10 ${isMobile ? 'blur-lg opacity-58 dark:opacity-46' : 'blur-2xl sm:blur-3xl opacity-46 sm:opacity-52 dark:opacity-40 sm:dark:opacity-46'} mix-blend-multiply dark:mix-blend-screen brightness-[1.12] sm:brightness-[1.15] dark:brightness-[1.15] sm:dark:brightness-[1.2] saturate-110 sm:saturate-125 contrast-[1.05] sm:contrast-[1.1]`}>
                 <Idle delayMs={1200}>
                   <LightRays 
