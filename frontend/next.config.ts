@@ -13,10 +13,18 @@ const baseConfig: NextConfig = {
   // Tắt x-powered-by header
   poweredByHeader: false,
   
-  // Development optimizations for faster compilation
+  // Allow cross-origin requests in development
+  ...(process.env.NODE_ENV === "development" && {
+    allowedDevOrigins: ["192.168.1.19"],
+  }),
+  
+  // Aggressive development optimizations for sub-10s compile
   ...(process.env.NODE_ENV === "development" && {
     eslint: {
       ignoreDuringBuilds: true,
+    },
+    typescript: {
+      ignoreBuildErrors: true,
     },
   }),
 
@@ -38,7 +46,7 @@ const baseConfig: NextConfig = {
 
   // SWC minification is enabled by default in Next.js 15
   
-  // Turbopack configuration (moved from experimental.turbo)
+  // Turbopack configuration with aggressive optimizations
   turbopack: {
     rules: {
       '*.svg': {
@@ -48,6 +56,12 @@ const baseConfig: NextConfig = {
     },
     resolveAlias: {
       '@': './src',
+      '@/components': './src/components',
+      '@/lib': './src/lib',
+      '@/utils': './src/utils',
+      '@/hooks': './src/hooks',
+      '@/types': './src/types',
+      '@/stores': './src/stores',
     },
   },
   
@@ -92,6 +106,11 @@ const baseConfig: NextConfig = {
     ...(process.env.NODE_ENV === 'development' && {
       webpackBuildWorker: true,
     }),
+    
+    // Fast refresh optimizations
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
   },
 };
 

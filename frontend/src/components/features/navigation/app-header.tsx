@@ -28,7 +28,7 @@ export const AppHeader: React.FC<HeaderSectionProps> = ({
   const deviceType = useDeviceType();
 
   return (
-    <header className="flex h-12 sm:h-16 shrink-0 items-center gap-1.5 sm:gap-3 bg-background/40 backdrop-blur-xl border-b border-white/20 pl-1.5 sm:pl-4 pr-0 sticky top-0 z-20 shadow-lg safe-area-inset-top">
+    <header className="flex h-12 sm:h-16 shrink-0 items-center gap-1.5 sm:gap-3 glass-toolbar-transparent pl-1.5 sm:pl-4 pr-0 sticky top-0 z-20 safe-area-inset-top">
       {/* Left side - keeps fixed width to maintain centered tablist */}
       <div className="flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 flex-shrink-0 touch-target">
         {activeTab === "chat" ? (
@@ -40,7 +40,7 @@ export const AppHeader: React.FC<HeaderSectionProps> = ({
       
       {/* Center - Tab Navigation */}
       <div className="flex-1 flex justify-center items-center px-1 sm:px-4 min-w-0">
-        <div className="flex items-center bg-background/60 backdrop-blur-xl border border-white/25 rounded-lg p-0.5 sm:p-1.5 gap-1 sm:gap-2 shadow-lg">
+        <div className="flex items-center glass-refract rounded-lg p-0.5 sm:p-1.5 gap-1 sm:gap-2">
           <button
             onClick={() => onTabChange("chat")}
             className={`flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-md text-[13px] sm:text-base font-medium transition-all duration-300 ease-out transform-gpu touch-target relative ${
@@ -48,7 +48,7 @@ export const AppHeader: React.FC<HeaderSectionProps> = ({
             } ${
               activeTab === "chat"
                 ? "bg-primary text-primary-foreground shadow-lg scale-105 z-10 ring-2 ring-primary/20"
-                : "text-foreground/80 hover:text-foreground hover:bg-background/70 scale-95 hover:scale-100 backdrop-blur-sm"
+                : "text-foreground/80 hover:text-foreground hover:bg-background/70 scale-95 hover:scale-100"
             }`}
             style={{
               transformOrigin: 'center',
@@ -71,7 +71,7 @@ export const AppHeader: React.FC<HeaderSectionProps> = ({
             } ${
               activeTab === "dashboard"
                 ? "bg-primary text-primary-foreground shadow-lg scale-105 z-10 ring-2 ring-primary/20"
-                : "text-foreground/80 hover:text-foreground hover:bg-background/70 scale-95 hover:scale-100 backdrop-blur-sm"
+                : "text-foreground/80 hover:text-foreground hover:bg-background/70 scale-95 hover:scale-100"
             }`}
             style={{
               transformOrigin: 'center',
@@ -94,8 +94,7 @@ export const AppHeader: React.FC<HeaderSectionProps> = ({
       <div className="flex items-center justify-center h-7 sm:h-9 flex-shrink-0 pr-1.5 sm:pr-4">
         <div className="relative group touch-target flex items-center justify-center">
           <Settings />
-          {/* Settings background similar to sidebar */}
-          <div className="absolute inset-0 bg-background/60 backdrop-blur-xl border border-white/25 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10 shadow-lg" />
+          <div className="absolute inset-0 glass-frost rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10" />
         </div>
       </div>
     </header>

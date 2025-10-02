@@ -11,7 +11,7 @@
     "dev": "concurrently \"bun run dev:frontend\" \"bun run dev:backend\"",
     "dev:frontend": "cd frontend && bun run dev",
     "dev:backend": "cd backend && source .venv/bin/activate && uv run uvicorn main:app --reload",
-    "build": "cd frontend && bun run build",
+    "build": "bun run build:frontend",
     "build:frontend": "cd frontend && bun run build",
     "start": "bun run start:frontend",
     "start:frontend": "cd frontend && bun run start",
@@ -21,7 +21,7 @@
     "analyze": "cd frontend && bun run analyze",
     "perf": "cd frontend && bun run perf",
     "install:frontend": "cd frontend && bun install",
-    "install:backend": "cd backend && source .venv/bin/activate && uv sync"
+    "install:backend": "cd backend && source .venv/bin/activate && uv sync",
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

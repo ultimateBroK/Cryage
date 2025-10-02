@@ -50,9 +50,8 @@ const MainLayoutComponent: React.FC<MainLayoutProps> = ({
     return () => clearTimeout(preloadDashboard);
   }, [preloadedTabs, isClient]);
 
-  // Render appropriate content based on active tab
   const renderTabContent = () => {
-    const containerClasses = `flex-1 overflow-hidden ${isMobile ? 'px-1' : 'px-4'} ${deviceType === 'tablet' ? 'px-3' : ''}`;
+    const containerClasses = `flex-1 overflow-hidden ${isMobile ? 'px-1' : 'px-4'} ${deviceType === 'tablet' ? 'px-3' : ''} transform translate3d(0,0,0)`;
     
     switch (activeTab) {
       case "chat":

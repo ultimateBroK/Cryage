@@ -176,15 +176,15 @@
   }
 }
 
-/* Real-time optimized streaming animations */
+/* GPU-Optimized Streaming Animations */
 @keyframes reasoning-pulse {
   0%, 100% {
     opacity: 0.6;
-    transform: scale(1);
+    transform: translate3d(0,0,0) scale(1);
   }
   50% {
     opacity: 1;
-    transform: scale(1.005);
+    transform: translate3d(0,0,0) scale(1.005);
   }
 }
 
@@ -200,22 +200,22 @@
 @keyframes streaming-pulse {
   0%, 100% {
     opacity: 1;
-    transform: scale(1);
+    transform: translate3d(0,0,0) scale(1);
   }
   50% {
     opacity: 0.8;
-    transform: scale(1.005);
+    transform: translate3d(0,0,0) scale(1.005);
   }
 }
 
 @keyframes smooth-fade-in {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translate3d(0,4px,0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0,0,0);
   }
 }
 
@@ -410,7 +410,7 @@
   opacity: 0.3;
 }
 
-/* Logo animations */
+/* GPU-Accelerated Logo Animations */
 @keyframes logo-glow {
   0%, 100% {
     filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
@@ -422,21 +422,23 @@
 
 @keyframes logo-pulse {
   0%, 100% {
-    transform: scale(1);
+    transform: translate3d(0,0,0) scale(1);
     opacity: 1;
   }
   50% {
-    transform: scale(1.05);
+    transform: translate3d(0,0,0) scale(1.05);
     opacity: 0.9;
   }
 }
 
 .animate-logo {
   animation: logo-glow 3s ease-in-out infinite;
+  will-change: filter;
 }
 
 .animate-logo:hover {
   animation: logo-glow 1.5s ease-in-out infinite, logo-pulse 2s ease-in-out infinite;
+  will-change: filter, transform;
 }
 
 /* Enhanced micro-interactions */
@@ -618,34 +620,48 @@ html {
   }
 }
 
-/* Performance optimizations for animations */
+/* GPU-Accelerated Performance Optimization */
 .crypto-hover-scale,
 .crypto-card-glass,
 .crypto-glow-green,
 .crypto-glow-red,
 .crypto-glow-blue,
 .crypto-glow-purple,
-.crypto-glow-cyan {
-  will-change: transform, opacity, box-shadow;
+.crypto-glow-cyan,
+.glass-panel,
+.glass-toolbar,
+.glass-refract,
+.glass-frost {
+  transform: translate3d(0,0,0);
   backface-visibility: hidden;
   perspective: 1000px;
-  transform: translateZ(0);
 }
 
 .crypto-hover-scale:hover,
 .crypto-hover-scale:focus {
-  transform: translateZ(0) scale(1.02);
+  transform: translate3d(0,0,0) scale(1.02);
 }
 
-/* Optimize scrollbar animations */
 ::-webkit-scrollbar-thumb {
   will-change: background-color;
 }
 
-/* Optimize button transitions */
 button,
 .btn {
-  will-change: transform, background-color, box-shadow;
+  will-change: auto;
+  contain: layout style paint;
+}
+
+.glass-panel,
+.glass-toolbar,
+.glass-sidebar {
+  contain: layout style;
+}
+
+@media (hover: hover) {
+  .crypto-hover-scale:hover {
+    will-change: transform;
+  }
 }
 
 :root {
@@ -810,76 +826,119 @@ button,
 }
 
 @layer utilities {
-  /* Utility layer kept intentionally minimal for template */
-  /* Glass utilities for iOS-style liquid glass aesthetics */
+  /* Advanced Glassmorphism with Optical Properties */
+  
   .glass-toolbar {
-    backdrop-filter: blur(14px) saturate(120%);
-    -webkit-backdrop-filter: blur(14px) saturate(120%);
-    background: color-mix(in oklch, var(--background) 70%, transparent);
-    border-bottom: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+    backdrop-filter: blur(20px) saturate(180%) brightness(105%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(105%);
+    background: linear-gradient(135deg, 
+      color-mix(in oklch, var(--background) 75%, transparent),
+      color-mix(in oklch, var(--background) 65%, transparent));
+    border-bottom: 1px solid color-mix(in oklch, var(--border) 50%, transparent);
+    box-shadow: 0 8px 32px -8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
-  /* Transparent variant for top header */
   .glass-toolbar-transparent {
-    backdrop-filter: blur(10px) saturate(110%);
-    -webkit-backdrop-filter: blur(10px) saturate(110%);
-    background: transparent;
-    border-bottom: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    background: linear-gradient(180deg, 
+      color-mix(in oklch, var(--background) 40%, transparent),
+      transparent);
+    border-bottom: 1px solid color-mix(in oklch, var(--border) 30%, transparent);
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.1);
   }
 
   .glass-panel {
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-    background: color-mix(in oklch, var(--card) 80%, transparent);
-    border: 1px solid color-mix(in oklch, var(--border) 70%, transparent);
+    backdrop-filter: blur(24px) saturate(180%) brightness(108%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(108%);
+    background: linear-gradient(135deg,
+      color-mix(in oklch, var(--card) 85%, transparent),
+      color-mix(in oklch, var(--card) 75%, transparent));
+    border: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+    box-shadow: 0 8px 32px -4px rgba(0,0,0,0.1),
+                inset 0 1px 1px rgba(255,255,255,0.2),
+                inset 0 -1px 1px rgba(0,0,0,0.05);
+    position: relative;
+  }
+
+  .glass-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, 
+      rgba(255,255,255,0.1) 0%,
+      transparent 50%,
+      rgba(0,0,0,0.05) 100%);
+    pointer-events: none;
   }
 
   .glass-segmented {
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
-    background: color-mix(in oklch, var(--background) 65%, transparent);
-    border: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+    backdrop-filter: blur(18px) saturate(160%) brightness(106%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%) brightness(106%);
+    background: linear-gradient(145deg,
+      color-mix(in oklch, var(--background) 70%, transparent),
+      color-mix(in oklch, var(--background) 60%, transparent));
+    border: 1px solid color-mix(in oklch, var(--border) 50%, transparent);
+    box-shadow: 0 4px 24px -6px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.12);
   }
 
-  /* Glass sidebar background */
   .glass-sidebar {
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-    background: color-mix(in oklch, var(--sidebar) 35%, transparent);
+    backdrop-filter: blur(28px) saturate(180%) brightness(110%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(110%);
+    background: linear-gradient(120deg,
+      color-mix(in oklch, var(--sidebar) 42%, transparent),
+      color-mix(in oklch, var(--sidebar) 35%, transparent));
+    box-shadow: 2px 0 32px -8px rgba(0,0,0,0.12), inset -1px 0 0 rgba(255,255,255,0.08);
   }
 
-  /* Lighter effects on small screens for performance */
+  .glass-refract {
+    backdrop-filter: blur(32px) saturate(200%) brightness(112%);
+    -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(112%);
+    background: radial-gradient(circle at 30% 20%,
+      color-mix(in oklch, var(--card) 90%, transparent),
+      color-mix(in oklch, var(--card) 70%, transparent));
+    border: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
+    box-shadow: 0 12px 48px -12px rgba(0,0,0,0.15),
+                inset 0 2px 4px rgba(255,255,255,0.25),
+                inset 0 -2px 4px rgba(0,0,0,0.08);
+  }
+
+  .glass-frost {
+    backdrop-filter: blur(40px) saturate(220%) contrast(110%);
+    -webkit-backdrop-filter: blur(40px) saturate(220%) contrast(110%);
+    background: linear-gradient(155deg,
+      color-mix(in oklch, var(--card) 92%, transparent),
+      color-mix(in oklch, var(--card) 78%, transparent));
+    border: 1.5px solid color-mix(in oklch, var(--border) 65%, transparent);
+    box-shadow: 0 16px 64px -16px rgba(0,0,0,0.18),
+                inset 0 2px 2px rgba(255,255,255,0.3),
+                inset 0 -2px 2px rgba(0,0,0,0.1);
+  }
+
   @media (max-width: 767px) {
-    .glass-toolbar {
-      backdrop-filter: blur(8px) saturate(110%);
-      -webkit-backdrop-filter: blur(8px) saturate(110%);
+    .glass-toolbar,
+    .glass-toolbar-transparent,
+    .glass-panel,
+    .glass-segmented,
+    .glass-sidebar,
+    .glass-refract,
+    .glass-frost {
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+      transform: translate3d(0,0,0);
+      will-change: auto;
     }
-
-    .glass-toolbar-transparent {
-      backdrop-filter: blur(6px) saturate(105%);
-      -webkit-backdrop-filter: blur(6px) saturate(105%);
-      border-bottom: 1px solid color-mix(in oklch, var(--border) 35%, transparent);
-    }
-
-    .glass-panel {
-      backdrop-filter: blur(8px) saturate(110%);
-      -webkit-backdrop-filter: blur(8px) saturate(110%);
-    }
-
-    .glass-segmented {
-      backdrop-filter: blur(7px) saturate(108%);
-      -webkit-backdrop-filter: blur(7px) saturate(108%);
-    }
-
-    .glass-sidebar {
-      backdrop-filter: blur(8px) saturate(108%);
-      -webkit-backdrop-filter: blur(8px) saturate(108%);
-      background: color-mix(in oklch, var(--sidebar) 28%, transparent);
+    .glass-panel::before,
+    .crypto-card-glass::before,
+    .crypto-card-glass-dark::before {
+      display: none;
     }
   }
 
   .glass-divider {
-    border-color: color-mix(in oklch, var(--border) 70%, transparent);
+    border-color: color-mix(in oklch, var(--border) 50%, transparent);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   }
   .safe-area-inset-bottom {
     padding-bottom: env(safe-area-inset-bottom);
@@ -983,21 +1042,67 @@ button,
     }
   }
 
-  /* Enhanced Crypto Glamorous Utilities */
+  /* Advanced Optical Glass Effects */
   .crypto-gradient-bg {
     background: linear-gradient(135deg, var(--crypto-blue) 0%, var(--crypto-purple) 100%);
+    position: relative;
+  }
+
+  .crypto-gradient-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent 50%, rgba(0,0,0,0.1));
+    pointer-events: none;
   }
 
   .crypto-card-glass {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(24px) saturate(180%) brightness(110%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(110%);
+    background: linear-gradient(135deg,
+      rgba(255,255,255,0.12),
+      rgba(255,255,255,0.08));
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.25),
+                inset 0 -1px 0 rgba(0,0,0,0.08);
+    position: relative;
+  }
+
+  .crypto-card-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(145deg,
+      rgba(255,255,255,0.15) 0%,
+      transparent 40%,
+      rgba(0,0,0,0.05) 100%);
+    pointer-events: none;
   }
 
   .crypto-card-glass-dark {
-    backdrop-filter: blur(12px);
-    background: var(--dark-crypto-card);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(28px) saturate(200%) brightness(108%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(108%);
+    background: linear-gradient(135deg,
+      color-mix(in oklch, var(--dark-crypto-card) 95%, transparent),
+      color-mix(in oklch, var(--dark-crypto-card) 85%, transparent));
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.3),
+                inset 0 1px 1px rgba(255,255,255,0.15),
+                inset 0 -1px 1px rgba(0,0,0,0.15);
+    position: relative;
+  }
+
+  .crypto-card-glass-dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 30% 20%,
+      rgba(255,255,255,0.08),
+      transparent 70%);
+    pointer-events: none;
   }
 
   .crypto-glow-green {
